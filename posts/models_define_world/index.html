@@ -1,0 +1,843 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>The Models We Choose Define the Worlds We Can See</title>
+<meta name="description" content="How modeling choices constrain what dynamics we can express — demonstrated through epidemic modeling, agent-based simulation, and computational irreducibility.">
+<script>(function(){try{var t=localStorage.getItem("er-theme");if(t==="paper"||t==="ink")document.documentElement.setAttribute("data-theme",t)}catch(e){}})();</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" href="/feed.xml" title="RSS Feed">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/er/fonts.css">
+<link rel="stylesheet" href="/assets/er/tokens.css">
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  background: var(--er-bg);
+  color: var(--er-ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  display: flex; flex-direction: column; min-height: 100vh;
+  margin: 0;
+  background: var(--er-bg);
+  color: var(--er-ink);
+  font: var(--er-type-body);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--er-accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--er-accent); outline-offset: 2px; }
+::selection { background: var(--er-selected); color: var(--er-strong); }
+main { flex: 1 0 auto; }
+img, svg { max-width: 100%; }
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--er-space-4); top: -200px; z-index: 20;
+  padding: var(--er-space-3) var(--er-space-4);
+  background: var(--er-strong); color: var(--er-bg);
+  font: var(--er-type-ui); text-decoration: none;
+}
+.skip-link:focus { top: var(--er-space-2); }
+.wrap {
+  max-width: var(--er-page);
+  margin: 0 auto;
+  padding-left: var(--er-gutter);
+  padding-right: var(--er-gutter);
+}
+.kicker, .eyebrow {
+  margin: 0;
+  font: var(--er-type-eyebrow);
+  letter-spacing: var(--er-type-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--er-muted);
+}
+.kicker a, .eyebrow a { color: inherit; text-decoration: none; }
+.kicker a:hover, .eyebrow a:hover { text-decoration: underline; }
+
+/* Header: wordmark, nav, the theme toggle; a <details> menu at phone width. */
+.site-header { position: relative; border-bottom: var(--er-hairline) solid var(--er-rule); }
+.site-header-inner {
+  display: flex; align-items: center; gap: var(--er-space-6);
+  padding-top: 18px; padding-bottom: 18px;
+}
+.site-brand {
+  margin-right: auto;
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  font: var(--er-type-brand);
+  letter-spacing: var(--er-type-brand-tracking);
+  text-transform: uppercase;
+  color: var(--er-strong);
+  text-decoration: none;
+}
+.site-nav ul {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 28px;
+  margin: 0; padding: 0; list-style: none;
+  font: var(--er-type-ui);
+}
+.site-nav a, .site-menu a { color: var(--er-ink); text-decoration: none; }
+.site-nav a { display: inline-flex; align-items: center; min-height: var(--er-touch); }
+.site-nav a:hover, .site-menu a:hover { color: var(--er-strong); text-decoration: underline; }
+.site-nav a[aria-current="page"], .site-menu a[aria-current="page"] {
+  color: var(--er-strong);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px;
+}
+.theme-toggle {
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--er-touch); height: var(--er-touch); padding: 0;
+  border: var(--er-hairline) solid var(--er-rule); border-radius: var(--er-radius-pill);
+  background: transparent; color: var(--er-ink);
+  font: 400 18px/1 var(--er-font-sans);
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--er-muted); color: var(--er-strong); }
+.theme-toggle[hidden] { display: none; }
+.site-menu { display: none; }
+.site-menu > summary {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--er-touch); height: var(--er-touch);
+  list-style: none; cursor: pointer; color: var(--er-ink);
+}
+.site-menu > summary::-webkit-details-marker { display: none; }
+.site-menu[open] > summary { color: var(--er-strong); }
+.site-menu nav {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 10;
+  padding: var(--er-space-2) 0;
+  background: var(--er-surface);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+}
+.site-menu ul { margin: 0; padding: 0; list-style: none; font: var(--er-type-ui); }
+.site-menu a { display: flex; align-items: center; min-height: var(--er-touch); padding: 0 var(--er-gutter-phone); }
+
+/* Footer: attribution, the feed, the code. */
+.site-footer { margin-top: var(--er-space-11); border-top: var(--er-hairline) solid var(--er-rule); }
+.site-footer-inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-2) var(--er-space-4);
+  padding-top: var(--er-space-5); padding-bottom: var(--er-space-9);
+  font: var(--er-type-mono); color: var(--er-muted);
+}
+.site-footer-links { display: flex; flex-wrap: wrap; gap: var(--er-space-6); }
+.site-footer a {
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  color: var(--er-muted); text-decoration: none;
+}
+.site-footer a:hover { color: var(--er-strong); text-decoration: underline; }
+
+/* Landing */
+.landing { padding-top: var(--er-space-12); padding-bottom: var(--er-space-8); }
+.hero {
+  margin: 18px 0 0; max-width: 15ch;
+  font: var(--er-type-display-xl);
+  letter-spacing: var(--er-type-display-xl-tracking);
+  color: var(--er-strong);
+}
+.hero-sub { margin: 26px 0 0; max-width: 38rem; font-size: 22px; line-height: 1.5; color: var(--er-ink); }
+.site-intro { margin-top: var(--er-space-7); max-width: 38rem; font-size: 18px; line-height: 1.6; color: var(--er-ink); }
+.site-intro p { margin: 0 0 var(--er-space-4); }
+.site-intro ul { margin: 0 0 var(--er-space-4); padding-left: 1.25em; }
+.site-intro li { margin: 0 0 var(--er-space-2); }
+.site-intro li::marker { color: var(--er-muted); }
+.site-intro strong { font-weight: 600; color: var(--er-strong); }
+.landing-grid {
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--er-space-10);
+  margin-top: var(--er-space-12);
+}
+.recent { flex: 999 1 520px; min-width: 0; }
+.recent:only-child { max-width: 880px; }
+.recent > .eyebrow { margin-bottom: var(--er-space-2); font-weight: 500; }
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-row {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-2) var(--er-space-6);
+  padding: 22px 0;
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.post-row > time { flex: 0 0 17ch; font: 400 13px/2 var(--er-font-mono); color: var(--er-muted); }
+.post-row-main { flex: 1 1 320px; min-width: 0; }
+.post-row-title {
+  font: 600 23px/1.3 var(--er-font-serif);
+  color: var(--er-strong); text-decoration: none;
+}
+.post-row-title:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.post-row-tags {
+  margin: var(--er-space-2) 0 0;
+  font: var(--er-type-eyebrow); letter-spacing: 0.04em;
+  color: var(--er-accent);
+}
+.post-row-tags a { color: inherit; text-decoration: none; }
+.post-row-tags a:hover { text-decoration: underline; }
+.empty { color: var(--er-muted); font-style: italic; }
+.lab-card {
+  flex: 1 1 400px; min-width: 0;
+  border: var(--er-hairline) solid var(--er-rule);
+  background: var(--er-surface);
+}
+.instrument-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-2) var(--er-space-3);
+  padding: var(--er-space-3) var(--er-space-4);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.instrument-status { color: var(--er-live); }
+.lab-card-body { padding: var(--er-space-5) var(--er-space-4) var(--er-space-2); }
+.lab-card h2 { margin: 0; font: 600 26px/1.25 var(--er-font-serif); color: var(--er-strong); }
+.lab-card p { margin: 10px 0 0; font-size: 16.5px; line-height: 1.55; color: var(--er-muted); }
+.lab-card-actions {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-3);
+  margin-top: var(--er-space-3); padding: var(--er-space-4);
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.btn {
+  display: inline-flex; align-items: center; min-height: var(--er-touch); padding: 0 18px;
+  font: 500 15px/1.2 var(--er-font-sans); text-decoration: none;
+}
+.btn-primary { background: var(--er-strong); color: var(--er-bg); }
+.btn-primary:hover { text-decoration: underline; }
+.how {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--er-space-8);
+  margin-top: 88px; padding-top: var(--er-space-8);
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.how h3 { font-weight: 400; }
+.how p { margin: 10px 0 0; font-size: 18px; line-height: 1.55; }
+
+/* Listing pages: tags, a tag, the archive, errors */
+.listing { padding-top: var(--er-space-11); padding-bottom: var(--er-space-8); }
+.listing h1 {
+  margin: var(--er-space-4) 0 var(--er-space-8); max-width: 20ch;
+  font: var(--er-type-display-lg); letter-spacing: var(--er-type-display-lg-tracking);
+  color: var(--er-strong);
+  overflow-wrap: anywhere;
+}
+.listing > p { max-width: var(--er-measure); }
+.tag-list { display: flex; flex-wrap: wrap; gap: var(--er-space-3); margin: 0; padding: 0; list-style: none; }
+.tag-list a {
+  display: inline-flex; align-items: center; gap: var(--er-space-2);
+  min-height: var(--er-touch); padding: 0 var(--er-space-4);
+  border: var(--er-hairline) solid var(--er-rule); background: var(--er-surface);
+  font: var(--er-type-mono); color: var(--er-accent); text-decoration: none;
+}
+.tag-list a:hover { border-color: var(--er-accent); }
+.tag-list .count { color: var(--er-muted); }
+
+/* Post */
+.post-wrap { padding-top: var(--er-space-11); padding-bottom: var(--er-space-13); }
+.post-head { max-width: var(--er-measure); }
+.post-tags { color: var(--er-accent); letter-spacing: 0.14em; }
+.post-head h1 {
+  margin: var(--er-space-4) 0 0;
+  font: var(--er-type-display-lg); letter-spacing: var(--er-type-display-lg-tracking);
+  color: var(--er-strong);
+}
+.post-meta {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-2) 22px;
+  margin: var(--er-space-5) 0 0;
+  font: var(--er-type-mono); text-transform: uppercase; color: var(--er-muted);
+}
+.post-meta a { color: var(--er-accent); text-decoration: none; }
+.post-meta a:hover { text-decoration: underline; }
+
+/* Prose: the post body, a 680px measure. */
+.prose { display: flow-root; max-width: var(--er-measure); margin-top: var(--er-space-9); counter-reset: figure; }
+.prose > * { margin-top: 0; margin-bottom: 22px; }
+.prose > p:first-child { font: var(--er-type-lede); }
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { color: var(--er-strong); }
+.prose h1 { margin-bottom: var(--er-space-4); padding-top: 26px; font: var(--er-type-display-md); }
+.prose h2 { margin-bottom: var(--er-space-4); padding-top: 26px; font: var(--er-type-display-sm); }
+.prose h3 { margin-bottom: var(--er-space-3); padding-top: 14px; font: 600 22px/1.3 var(--er-font-serif); }
+.prose h4, .prose h5, .prose h6 { margin-bottom: var(--er-space-2); padding-top: var(--er-space-2); font: 600 19px/1.4 var(--er-font-serif); }
+.prose strong { font-weight: 600; color: var(--er-strong); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin-bottom: 6px; }
+.prose li > ul, .prose li > ol { margin-top: 6px; margin-bottom: 0; }
+.prose li::marker { color: var(--er-muted); }
+.prose hr {
+  height: 0; margin: 0 0 var(--er-space-8); padding-top: 26px;
+  border: 0; border-bottom: var(--er-hairline) solid var(--er-rule);
+}
+.prose hr + h1, .prose hr + h2, .prose hr + h3 { padding-top: 0; }
+.prose a[href^="#ref-"] {
+  font: 500 0.7em/1 var(--er-font-mono);
+  vertical-align: 0.4em;
+  text-decoration: none; white-space: nowrap;
+}
+.prose a[href^="#ref-"]:hover { text-decoration: underline; }
+.prose code {
+  padding: 0.1em 0.35em;
+  background: var(--er-surface); border: var(--er-hairline) solid var(--er-rule);
+  font-family: var(--er-font-mono); font-size: 0.84em;
+}
+.prose pre {
+  overflow-x: auto; padding: var(--er-space-4) 18px;
+  background: var(--er-surface); border: var(--er-hairline) solid var(--er-rule);
+  font: 400 14px/1.6 var(--er-font-mono); color: var(--er-ink);
+}
+.prose pre code { padding: 0; border: 0; background: none; font-size: inherit; }
+.prose blockquote {
+  margin-left: 0; margin-right: 0; padding: 2px 0 2px var(--er-space-5);
+  border-left: 2px solid var(--er-accent);
+  font-style: italic; color: var(--er-ink);
+}
+.prose details { padding: var(--er-space-3) var(--er-space-4); border: var(--er-hairline) solid var(--er-rule); background: var(--er-surface); }
+.prose summary { cursor: pointer; font-weight: 600; color: var(--er-strong); }
+.prose .task-list-item { list-style: none; }
+.prose input[type="checkbox"] { accent-color: var(--er-accent); }
+
+/* Tables: wide ones scroll (no-JS fallback); the fit script scales them on a narrow screen. */
+.table-scroll { overflow-x: auto; max-width: 100%; }
+.prose table { border-collapse: collapse; font: 400 15px/1.5 var(--er-font-sans); font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--er-space-2) var(--er-space-3); border: var(--er-hairline) solid var(--er-rule); text-align: left; vertical-align: top; }
+.prose thead th { background: var(--er-surface); color: var(--er-strong); font-weight: 600; }
+
+/* Display math scrolls rather than overflowing (katex sets nowrap); KaTeX inherits the ink. */
+.math-display {
+  box-sizing: content-box;
+  overflow-x: auto; overflow-y: hidden; max-width: 100%;
+  padding: var(--er-space-4) 0;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  color: var(--er-strong);
+}
+.math-display + .math-display { margin-top: -22px; border-top: 0; }
+.math-display .katex-display { margin: 0; }
+.katex { font-size: 1.05em; }
+
+/* Figures and embeds are numbered by one counter: "FIGURE N." on a caption, "FIG N" on an embed's bar. */
+.prose figure, .prose .embed-frame {
+  counter-increment: figure;
+  margin: var(--er-space-8) 0 var(--er-space-9);
+  border: var(--er-hairline) solid var(--er-rule);
+  background: var(--er-surface);
+}
+.prose figure > img, .prose figure > svg { display: block; height: auto; margin: 0 auto; padding: var(--er-space-4); }
+.prose figcaption {
+  padding: 14px 18px 18px;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-prose-sm); color: var(--er-ink); text-align: left;
+}
+.prose figcaption::before, .prose figure:not(:has(figcaption))::after {
+  content: "Figure " counter(figure) ".";
+  font: 500 12px/1.55 var(--er-font-mono);
+  letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-strong);
+}
+.prose figcaption::before { margin-right: 0.6em; }
+.prose figure:not(:has(figcaption))::after {
+  display: block; padding: 10px 18px;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  text-align: left;
+}
+.embed-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--er-space-1) var(--er-space-4);
+  padding: var(--er-space-3) 18px;
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.embed-bar::before { content: "Fig " counter(figure); font-weight: 500; color: var(--er-strong); }
+.embed { margin: 0; }
+.embed iframe { display: block; width: 100%; max-width: 100%; border: 0; background: var(--er-surface); }
+.embed--responsive { position: relative; height: 0; padding-bottom: 56.25%; overflow: hidden; }
+.embed--responsive iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.embed-play-button {
+  all: unset;
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--er-selected); color: var(--er-strong);
+  cursor: pointer;
+}
+.embed-play-button:hover { color: var(--er-accent); }
+.embed-play-button:focus-visible { outline: 2px solid var(--er-accent); outline-offset: -4px; }
+.embed-play-button svg { pointer-events: none; }
+
+/* Lab figures (CO-162): the instrument bar (what was computed, Run live, Open in Lab), the
+   baked SVG inline -- its colours are these same tokens -- then the caption. */
+.er-fig-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-1) var(--er-space-4);
+  margin: 0; padding: var(--er-space-2) 18px;
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.er-fig-bar-label { min-width: 0; overflow-wrap: anywhere; }
+.er-fig-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--er-space-1) var(--er-space-4); margin-left: auto; }
+.er-fig-run, .er-fig-open {
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  font: 500 12px/1.2 var(--er-font-mono); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.er-fig-run {
+  padding: 0 var(--er-space-3);
+  border: var(--er-hairline) solid var(--er-rule); border-radius: var(--er-radius-pill);
+  background: transparent; color: var(--er-strong); cursor: pointer;
+}
+.er-fig-run:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.er-fig-run[hidden] { display: none; }
+.er-fig-open { color: var(--er-accent); }
+.er-fig-open:hover { text-decoration: underline; }
+.er-fig-plot { padding: var(--er-space-4); }
+.er-fig-plot svg { display: block; width: 100%; max-width: 100%; height: auto; margin: 0 auto; }
+.er-fig-live iframe { display: block; width: 100%; height: 560px; max-height: 85vh; border: 0; background: var(--er-surface); }
+.er-fig-missing { padding: var(--er-space-7) var(--er-space-4); font: var(--er-type-mono); color: var(--er-muted); text-align: center; }
+.er-fig-problem { display: block; margin-top: var(--er-space-2); }
+
+/* References: the list keeps every entry; DOI links are pills. */
+.prose .references-heading {
+  font: var(--er-type-eyebrow); font-weight: 500;
+  letter-spacing: var(--er-type-eyebrow-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.prose .references { padding-left: 22px; font: var(--er-type-prose-sm); }
+.prose .references li { margin-bottom: 10px; }
+.prose .references li::marker { font-family: var(--er-font-mono); font-size: 12px; }
+.prose .references li:has(> a[id]:target) { background: var(--er-selected); }
+.prose a[href*="doi.org/"], .sidenote a[href*="doi.org/"] {
+  display: inline-block; padding: 2px 7px;
+  border: var(--er-hairline) solid var(--er-rule);
+  font: 400 11.5px/1.4 var(--er-font-mono);
+  color: var(--er-accent); text-decoration: none; white-space: nowrap;
+}
+
+/* Sidenotes: inline asides after their block on narrow screens. */
+.sidenote {
+  padding: var(--er-space-3) 14px;
+  border-left: 2px solid var(--er-accent);
+  background: var(--er-surface);
+  font: var(--er-type-ui-sm); color: var(--er-muted);
+}
+.prose > .has-note + .sidenote { margin-top: -10px; }
+.prose > .sidenote + .sidenote { margin-top: -14px; }
+.sidenote-num { margin-right: 0.3em; font-family: var(--er-font-mono); color: var(--er-accent); }
+
+@media (min-width: 1024px) {
+  .prose figure, .prose .embed-frame {
+    width: min(var(--er-figure), calc(100vw - 2 * var(--er-gutter)));
+    max-width: none;
+  }
+}
+
+/* ...and Tufte-style margin notes once the 260px margin column fits. */
+@media (min-width: 1200px) {
+  .prose > * { clear: left; }
+  .prose > figure, .prose > .embed-frame { clear: both; }
+  .prose > .has-note { float: left; width: 100%; }
+  .prose > .sidenote,
+  .prose > .has-note + .sidenote,
+  .prose > .sidenote + .sidenote {
+    float: right; clear: right;
+    width: 260px; margin: 6px -316px 18px 0; padding: 0;
+    border: 0; background: none;
+    font-size: 14px; line-height: 1.55;
+  }
+}
+
+@media (max-width: 720px) {
+  .wrap { padding-left: var(--er-gutter-phone); padding-right: var(--er-gutter-phone); }
+  .site-header .wrap { padding-right: var(--er-space-2); }
+  .site-header-inner { gap: var(--er-space-1); padding-top: 6px; padding-bottom: 6px; }
+  .site-brand { font-size: 12px; }
+  .site-nav { display: none; }
+  .site-menu { display: block; }
+  .theme-toggle { border-color: transparent; }
+  .landing { padding-top: var(--er-space-8); }
+  .hero { font-size: clamp(36px, 10vw, 44px); line-height: 1.08; }
+  .hero-sub { margin-top: var(--er-space-5); font-size: 19px; }
+  .site-intro { font-size: 17px; }
+  .landing-grid { margin-top: var(--er-space-9); }
+  .post-row-title { font-size: 21px; }
+  .how { margin-top: var(--er-space-11); }
+  .listing { padding-top: var(--er-space-8); }
+  .listing h1 { font: var(--er-type-display-md); }
+  .post-wrap { padding-top: var(--er-space-7); padding-bottom: var(--er-space-11); }
+  .post-tags { font-size: 11px; }
+  .post-head h1 { margin-top: var(--er-space-3); font: var(--er-type-display-md); }
+  .post-meta { margin-top: 14px; font-size: 11.5px; }
+  .prose { margin-top: var(--er-space-7); font-size: 18px; line-height: 1.62; }
+  .prose > * { margin-bottom: 18px; }
+  .prose > p:first-child { font-size: 19px; line-height: 1.62; }
+  .prose h2 { padding-top: 22px; font-size: 24px; }
+  .prose h3 { font-size: 20px; }
+  .math-display + .math-display { margin-top: -18px; }
+  .prose figure, .prose .embed-frame {
+    margin-left: calc(-1 * var(--er-gutter-phone));
+    margin-right: calc(-1 * var(--er-gutter-phone));
+    border-left: 0; border-right: 0;
+  }
+  .embed-bar { padding: 10px var(--er-gutter-phone); font-size: 10.5px; }
+  .er-fig-bar { padding: var(--er-space-1) var(--er-gutter-phone); font-size: 10.5px; }
+  .er-fig-plot { padding: var(--er-space-3) var(--er-gutter-phone); }
+  .prose figcaption { padding: var(--er-space-3) var(--er-gutter-phone) var(--er-space-4); font-size: 15px; line-height: 1.5; }
+  .prose figcaption::before, .prose figure:not(:has(figcaption))::after { font-size: 11px; }
+  .prose figure:not(:has(figcaption))::after { padding: 10px var(--er-gutter-phone); }
+  .sidenote { font-size: 14px; line-height: 1.5; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap site-header-inner">
+<a href="/" class="site-brand">Encode Reality</a>
+<nav class="site-nav" aria-label="Primary"><ul><li><a href="/" aria-current="page">Essays</a></li><li><a href="/lab/">Lab</a></li><li><a href="/tags/">Tags</a></li><li><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></li></ul></nav>
+<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to ink theme" hidden>◐</button>
+<script>(function(){var b=document.getElementById("theme-toggle");if(!b)return;var d=document.documentElement,q=window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)"):null;function cur(){var t=d.getAttribute("data-theme");return t==="paper"||t==="ink"?t:(q&&q.matches?"ink":"paper")}function label(){var o=cur()==="ink"?"paper":"ink";b.setAttribute("aria-label","Switch to "+o+" theme");b.title="Switch to "+o+" theme"}b.hidden=false;label();b.addEventListener("click",function(){var n=cur()==="ink"?"paper":"ink";d.setAttribute("data-theme",n);try{localStorage.setItem("er-theme",n)}catch(e){}label()});if(q&&q.addEventListener)q.addEventListener("change",label)})();</script>
+<details class="site-menu">
+<summary><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.6" fill="none"/></svg><span class="visually-hidden">Menu</span></summary>
+<nav aria-label="Menu"><ul><li><a href="/" aria-current="page">Essays</a></li><li><a href="/lab/">Lab</a></li><li><a href="/tags/">Tags</a></li><li><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></li></ul></nav>
+</details>
+</div>
+</header>
+<main id="main">
+<div class="wrap post-wrap"><article><header class="post-head"><p class="kicker post-tags"><a href="/tags/modeling/">modeling</a><span aria-hidden="true"> · </span><a href="/tags/agent-based-models/">agent-based-models</a><span aria-hidden="true"> · </span><a href="/tags/complex-systems/">complex-systems</a><span aria-hidden="true"> · </span><a href="/tags/computational-irreducibility/">computational-irreducibility</a><span aria-hidden="true"> · </span><a href="/tags/epidemiology/">epidemiology</a><span aria-hidden="true"> · </span><a href="/tags/philosophy-of-science/">philosophy-of-science</a></p><h1>The Models We Choose Define the Worlds We Can See</h1><p class="post-meta"><time datetime="2026-03-17">17 March 2026</time><span class="code-link"><a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/models_define_world" target="_blank" rel="noopener">Code: models_define_world ↗</a></span></p></header><div class="prose">
+<p>Modeling is commonly framed as approximation — the assumption that a system exists in full, and our models trace its contours with varying levels of fidelity.</p>
+<p>This framing is incomplete.</p>
+<p>Models do not merely approximate reality with varying precision. They constrain what dynamics can be represented in the first place. A model that represents populations as aggregate compartments cannot express phenomena that depend on individual interactions. A model that represents individuals on networks cannot yield closed-form predictions. These are not differences in accuracy — they are differences in what the model is capable of saying.</p>
+<blockquote>Models define the space of representable dynamics, and therefore constrain what can be observed, predicted, and decided.</blockquote>
+<p>This essay develops this claim through epidemic modeling. We begin with compartmental models (SIRS), introduce agent-based models as a different representational class, establish their formal relationship, and then show — through four computational experiments — that the choice of model determines not only what dynamics emerge, but which interventions can be evaluated.</p>
+<hr>
+<h2>From Curves to Computations</h2>
+<p class="has-note">Consider a familiar tool: compartmental epidemic models. The SIRS model divides a population into Susceptible, Infected, and Recovered groups, with transitions governed by differential equations <a href="#ref-1">[1]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">1</span> Kermack, W. O., &amp; McKendrick, A. G. (1927). &quot;A contribution to the mathematical theory of epidemics.&quot; <em>Proceedings of the Royal Society A</em>, 115(772), 700-721.</aside>
+<p>The SIRS model does not represent individuals, interactions, or behavior explicitly. Instead, it encodes:</p>
+<ul><li>Infection as a rate (<span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span></span></span></span></span>)</li><li>Recovery as a rate (<span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span></span></span></span></span>)</li><li>Loss of immunity as a rate (<span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span></span>)</li></ul>
+<p>The system is governed by:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mi>d</mi><mi>S</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mo>−</mo><mfrac><mrow><mi>β</mi><mi>S</mi><mi>I</mi></mrow><mi>N</mi></mfrac><mo>+</mo><mi>ω</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\frac{dS}{dt} = -\frac{\beta S I}{N} + \omega R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord">−</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span></span></div>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mi>d</mi><mi>I</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>β</mi><mi>S</mi><mi>I</mi></mrow><mi>N</mi></mfrac><mo>−</mo><mi>γ</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">\frac{dI}{dt} = \frac{\beta S I}{N} - \gamma I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span></span></div>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mi>d</mi><mi>R</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>γ</mi><mi>I</mi><mo>−</mo><mi>ω</mi><mi>R</mi></mrow><annotation encoding="application/x-tex">\frac{dR}{dt} = \gamma I - \omega R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span></span></div>
+<p>where <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mi>S</mi><mo>+</mo><mi>I</mi><mo>+</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">N = S + I + R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span></span> is conserved.</p>
+<p class="has-note">This reflects a <strong>mean-field assumption</strong>: individuals mix homogeneously, and interactions can be averaged into continuous flows <a href="#ref-2">[2]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">2</span> Anderson, R. M., &amp; May, R. M. (1992). <em>Infectious Diseases of Humans: Dynamics and Control</em>. Oxford University Press.</aside>
+<p>This imposes specific constraints on the model&#39;s behavior.</p>
+<p>Because the system evolves through ordinary differential equations in the variables <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">S(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span>, and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">R(t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span>, its trajectories are continuous functions of time. Infection is represented as a continuous flow between compartments rather than as discrete transmission events between individuals.</p>
+<p>The evolution of the system is fully determined by the current values of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>S</mi><mo separator="true">,</mo><mi>I</mi><mo separator="true">,</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(S, I, R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mclose">)</span></span></span></span></span> and the parameters <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo separator="true">,</mo><mi>γ</mi><mo separator="true">,</mo><mi>ω</mi></mrow><annotation encoding="application/x-tex">\beta, \gamma, \omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span></span>. Given these values, the model produces a single trajectory (up to numerical error), rather than a distribution of possible outcomes arising from different interaction histories.</p>
+<blockquote>The model assumes that aggregate rates are sufficient statistics of the underlying process <a href="#ref-2">[2]</a>.</blockquote>
+<hr>
+<h2>A Different Ontology</h2>
+<p>Now consider an alternative: an agent-based model (ABM).</p>
+<p>Instead of compartments, we simulate individuals:</p>
+<ul><li>Each agent has state (S, I, R)</li><li>Each agent has attributes (behavior, movement, occupation)</li><li>Each agent interacts locally with others</li></ul>
+<p>Instead of rates, we define <strong>rules</strong>.</p>
+<p>Instead of equations, we define <strong>mechanisms</strong>.</p>
+<pre><code># Pseudocode: Agent-Based Infection Step
+
+for agent in population:
+    if agent.state == INFECTED:
+        for neighbor in agent.get_contacts():
+            if neighbor.state == SUSCEPTIBLE:
+                if random() &lt; transmission_probability(agent, neighbor):
+                    neighbor.state = INFECTED
+
+    if agent.state == INFECTED:
+        if random() &lt; recovery_probability(agent):
+            agent.state = RECOVERED</code></pre>
+<p class="has-note">Agent-based models are widely used to study infectious disease dynamics precisely because they allow heterogeneous agents and structured interactions <a href="#ref-3">[3]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">3</span> Epstein, J. M. (2009). &quot;Modelling to contain pandemics.&quot; <em>Nature</em>, 460(7256), 687.</aside>
+<p>It is a different model class. The system is no longer defined by aggregate compartments, but by individual agents, their attributes, and the interaction rules that govern their behavior. The state of the system therefore includes not only how many individuals are infected, but also who is infected, how they are connected, and how they interact.</p>
+<hr>
+<h2>Agent-Based Models as Computational Systems</h2>
+<p>To understand why relaxing mean-field assumptions has such consequences, it is useful to situate agent-based models within a broader computational framework.</p>
+<p class="has-note">Cellular automata (CA) are among the simplest systems that exhibit this property. A cellular automaton consists of discrete cells arranged on a grid, each holding a finite state value. At each time step, every cell updates its state according to a fixed local rule that depends only on its current state and the states of its immediate neighbors <a href="#ref-8">[8]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">8</span> Wolfram, S. (1983). &quot;Statistical mechanics of cellular automata.&quot; <em>Reviews of Modern Physics</em>, 55(3), 601-644.</aside>
+<p class="has-note">Despite their simplicity, cellular automata produce global patterns that depend on the repeated application of local update rules. Wolfram&#39;s classification of elementary cellular automata demonstrated that even one-dimensional systems with binary states and nearest-neighbor rules can produce behavior ranging from fixed points to structures that are computationally irreducible — meaning the only way to determine the system&#39;s state at time <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></span> is to execute all <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></span> steps of the computation <a href="#ref-7">[7]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">7</span> Wolfram, S. (2002). <em>A New Kind of Science</em>. Wolfram Media.</aside>
+<p>Agent-based models generalize this framework in three directions:</p>
+<ul><li><strong>From regular grids to arbitrary graphs.</strong> Agents interact through network topologies — small-world, scale-free, multilayer — rather than fixed lattice neighborhoods.</li><li><strong>From uniform rules to heterogeneous agents.</strong> Each agent can carry distinct attributes (age, occupation, behavior) that modulate its update rule.</li><li><strong>From fixed rules to adaptive behavior.</strong> Agents can change their rules in response to local or global state — complying with interventions, altering contact patterns, or developing immunity.</li></ul>
+<p>These extensions preserve the core computational property: the system evolves through the iterated application of local rules, and global behavior emerges from the sequence of interactions rather than from a closed-form expression over aggregate variables <a href="#ref-3">[3]</a><a href="#ref-8">[8]</a>.</p>
+<p>This has a direct consequence for predictability. When the mean-field assumptions hold — homogeneous mixing, statistical independence, no persistent structure — the system&#39;s expected trajectory can be computed analytically. The aggregate ODE is a sufficient summary. But when these assumptions are relaxed, the system inherits the computational properties of its underlying interaction structure. Behavior becomes sequence-dependent: the order in which agents interact, the specific paths through which infection propagates, and the local clustering of states all influence the outcome in ways that cannot be shortcut.</p>
+<blockquote>Once a system is represented as local rules executed over time, its behavior depends on the sequence of state transitions those rules generate, rather than on a closed-form expression over aggregate variables.</blockquote>
+<p>The experiments that follow test this boundary systematically — first confirming that agent-based models recover ODE dynamics under restricted assumptions, then showing where and why the equivalence breaks down.</p>
+<hr>
+<h2>Recovering the Familiar</h2>
+<p>To make this concrete, we begin with an experiment.</p>
+<p>We construct an agent-based model that mirrors the assumptions of SIRS:</p>
+<ul><li>Homogeneous agents</li><li>Random mixing</li><li>Fixed transition probabilities</li></ul>
+<pre><code># Pseudocode: Homogeneous ABM approximating SIRS
+
+for timestep in simulation:
+    shuffle(population)
+
+    for agent in population:
+        contacts = random_sample(population, k=CONTACT_RATE)
+
+        for other in contacts:
+            attempt_infection(agent, other)
+
+        attempt_recovery(agent)
+        attempt_resusceptibility(agent)
+
+    record_global_counts(S, I, R)</code></pre>
+<p>When we aggregate the results, the system reproduces the characteristic dynamics of compartmental models.</p>
+<p>This aligns with established results:</p>
+<blockquote class="has-note">Under homogeneous mixing and large populations, agent-based simulations converge to mean-field models such as SIR/SIRS <a href="#ref-4">[4]</a>.</blockquote>
+<aside class="sidenote" role="note"><span class="sidenote-num">4</span> Keeling, M. J., &amp; Rohani, P. (2008). <em>Modeling Infectious Diseases in Humans and Animals</em>. Princeton University Press.</aside>
+<p>The following figure shows the result: an ensemble of 20 ABM runs (colored bands showing ±1 standard deviation) overlaid on the deterministic SIRS ODE solution (white dashed curves). The ABM mean closely traces the ODE prediction throughout the simulation, confirming that under homogeneous mixing, the agent-based model recovers compartmental dynamics. The peak infection reaches approximately 31% of the population around day 25.</p>
+<figure><img src="/blobs/6401acbd2434395d957721e0e583101636d1e261816caeb4826946fe6299b822" alt="SIRS Recovery: ABM vs ODE"></figure>
+<p>This is our first key result: <strong>compartmental models can be understood as coarse-grained limits of underlying individual-based processes.</strong></p>
+<hr>
+<h2>From Agent-Based Dynamics to Mean-Field Equations</h2>
+<p>The recovery experiment demonstrated empirically that an agent-based model reproduces SIRS dynamics under homogeneous mixing. We can make this relationship precise by deriving the SIRS equations as a limiting case of agent-level dynamics.</p>
+<p>Consider a population of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></span> agents, each in state <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></span>, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi></mrow><annotation encoding="application/x-tex">I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span></span>, or <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi></mrow><annotation encoding="application/x-tex">R</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span></span>. At each time step, every agent contacts <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> other agents drawn uniformly at random. For a susceptible agent making a single contact, the probability that the contact is infected is:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>contact is infected</mtext><mo stretchy="false">)</mo><mo>=</mo><mfrac><mi>I</mi><mi>N</mi></mfrac></mrow><annotation encoding="application/x-tex">P(\text{contact is infected}) = \frac{I}{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord text"><span class="mord">contact is infected</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div>
+<p>If each contact transmits infection independently with probability <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">\beta&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>, the probability that a susceptible agent with <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> contacts avoids infection entirely is:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>not infected</mtext><mo stretchy="false">)</mo><mo>=</mo><msup><mrow><mo fence="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mrow><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>I</mi></mrow><mi>N</mi></mfrac><mo fence="true">)</mo></mrow><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">P(\text{not infected}) = \left(1 - \frac{\beta&#x27; I}{N}\right)^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord text"><span class="mord">not infected</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.639em;vertical-align:-0.95em;"></span><span class="minner"><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4289em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.689em;"><span style="top:-3.9029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span></span></span></span></span></span></span></span></div>
+<p>For small <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>I</mi><mi mathvariant="normal">/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">\beta&#x27; I / N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.0019em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord">/</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></span>, this can be approximated:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>P</mi><mo stretchy="false">(</mo><mtext>infected</mtext><mo stretchy="false">)</mo><mo>≈</mo><mfrac><mrow><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>k</mi><mi>I</mi></mrow><mi>N</mi></mfrac></mrow><annotation encoding="application/x-tex">P(\text{infected}) \approx \frac{\beta&#x27; k I}{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord text"><span class="mord">infected</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.1149em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4289em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div>
+<p>The expected number of new infections per time step among all susceptible agents is therefore:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="double-struck">E</mi><mo stretchy="false">[</mo><mi mathvariant="normal">Δ</mi><msub><mi>I</mi><mtext>new</mtext></msub><mo stretchy="false">]</mo><mo>≈</mo><mfrac><mrow><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>k</mi><mo>⋅</mo><mi>S</mi><mo>⋅</mo><mi>I</mi></mrow><mi>N</mi></mfrac></mrow><annotation encoding="application/x-tex">\mathbb{E}[\Delta I_{\text{new}}] \approx \frac{\beta&#x27; k \cdot S \cdot I}{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathbb">E</span><span class="mopen">[</span><span class="mord">Δ</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">new</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.1149em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4289em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div>
+<p>Defining <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>k</mi></mrow><annotation encoding="application/x-tex">\beta = \beta&#x27; k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> and taking the continuous-time limit, we recover the SIRS infection term:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><mi>d</mi><mi>I</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><msub><mo fence="false" stretchy="true" minsize="2.4em" maxsize="2.4em">∣</mo><mtext>infection</mtext></msub><mo>=</mo><mfrac><mrow><mi>β</mi><mi>S</mi><mi>I</mi></mrow><mi>N</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{dI}{dt} \bigg|_{\text{infection}} = \frac{\beta S I}{N}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:2.4497em;vertical-align:-0.9997em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.45em;"><span class="pstrut" style="height:4.4em;"></span><span style="width:0.333em;height:2.4em;"><svg xmlns="http://www.w3.org/2000/svg" width="0.333em" height="2.4em" viewBox="0 0 333 2400"><path d="M145 15 v585 v1200 v585 c2.667,10,9.667,15,21,15
+c10,0,16.667,-5,20,-15 v-585 v-1200 v-585 c-2.667,-10,-9.667,-15,-21,-15
+c-10,0,-16.667,5,-20,15z M188 15 H145 v585 v1200 v585 h43z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:-0.5136em;"><span style="top:-1.7003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">infection</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></div>
+<p>The recovery and immunity loss terms follow analogously from individual transition probabilities <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span></span></span></span></span> and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span></span>.</p>
+<p>This derivation rests on four explicit assumptions:</p>
+<ol><li><strong>Homogeneous mixing.</strong> Every agent is equally likely to contact every other agent. There is no network structure, no spatial locality, and no persistent contact relationships.</li><li><strong>Statistical independence.</strong> Each contact event is independent. The probability of infection does not depend on the agent&#39;s contact history or the states of other contacts.</li><li><strong>No structural heterogeneity.</strong> All agents have the same contact rate <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span> and the same transmission probability <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">\beta&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.9463em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span>. There are no high-degree hubs, no behavioral variation, and no demographic stratification.</li><li><strong>Expectation replaces distribution.</strong> The derivation uses expected values rather than the full distribution of outcomes. Stochastic variation across runs — which depends on the specific sequence of interactions — is averaged away.</li></ol>
+<p>Under these assumptions, the SIRS equations are the expected-value projection of the agent-based dynamics. The ODE variables <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>S</mi><mo separator="true">,</mo><mi>I</mi><mo separator="true">,</mo><mi>R</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(S, I, R)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mclose">)</span></span></span></span></span> are sufficient statistics for the system state, and the aggregate trajectory is determined by the parameters <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>β</mi><mo separator="true">,</mo><mi>γ</mi><mo separator="true">,</mo><mi>ω</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \gamma, \omega)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mclose">)</span></span></span></span></span> alone.</p>
+<blockquote>SIRS is the expected-value projection of a restricted class of agent-based systems. Each assumption removed opens a degree of freedom that the ODE cannot represent.</blockquote>
+<p>The remaining sections test what happens when these assumptions are relaxed.</p>
+<hr>
+<h2>Where Do the Parameters Live?</h2>
+<p>The difference comes down to where parameters live in each model.</p>
+<p>In SIRS, parameters are global:</p>
+<ul><li><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span></span></span></span></span> summarizes infection dynamics</li><li><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi></mrow><annotation encoding="application/x-tex">\gamma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span></span></span></span></span> summarizes recovery</li><li><span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span></span></span></span></span> summarizes immunity loss</li></ul>
+<p>These are not mechanisms—they are <strong>effective parameters</strong>, aggregating many micro-level processes <a href="#ref-2">[2]</a>.</p>
+<p>In agent-based models, parameters are local:</p>
+<ul><li>Contact networks</li><li>Behavioral rules</li><li>Movement constraints</li><li>Context-dependent interactions</li></ul>
+<p>Here, parameters do not summarize computation.</p>
+<p>They <strong>define the computation itself</strong>.</p>
+<blockquote class="has-note">Macro-level parameters often emerge from micro-level rules rather than exist independently <a href="#ref-5">[5]</a>.</blockquote>
+<aside class="sidenote" role="note"><span class="sidenote-num">5</span> Wilensky, U., &amp; Rand, W. (2015). <em>An Introduction to Agent-Based Modeling</em>. MIT Press.</aside>
+<hr>
+<h2>Breaking the Equivalence</h2>
+<p>We relax the three assumptions from the derivation section and observe what changes.</p>
+<p>We introduce:</p>
+<ul><li>Network structure (e.g., small-world or scale-free graphs)</li><li>Behavioral heterogeneity</li><li>Occupation-dependent exposure</li></ul>
+<pre><code># Pseudocode: Structured Interaction
+
+for agent in population:
+    contacts = agent.network_neighbors()
+
+    for neighbor in contacts:
+        if interaction_occurs(agent, neighbor):
+            attempt_infection(agent, neighbor)</code></pre>
+<p>When we simulate this system, the model produces behaviors that cannot be represented by the original SIRS formulation:</p>
+<ul><li>Infections can remain confined within densely connected subgraphs rather than spreading uniformly</li><li>Transmission rates vary across individuals depending on their position in the network</li><li>Repeated simulations with identical aggregate initial conditions produce different trajectories due to stochastic interaction patterns</li></ul>
+<blockquote class="has-note">Network structure can fundamentally alter epidemic dynamics, producing outcomes not captured by homogeneous mixing models <a href="#ref-6">[6]</a>.</blockquote>
+<aside class="sidenote" role="note"><span class="sidenote-num">6</span> Pastor-Satorras, R., &amp; Vespignani, A. (2001). &quot;Epidemic spreading in scale-free networks.&quot; <em>Physical Review Letters</em>, 86(14), 3200-3203.</aside>
+<p>The left panel shows the recovery experiment for reference—agents mixing randomly produce dynamics that match the ODE. The right panel tells a different story: when agents are placed on a scale-free network with heterogeneous transmission rates, individual simulation trajectories (thin colored lines) spread widely around the ODE prediction (white dashed). Some runs produce large outbreaks, others fizzle early. The smooth ODE curve cannot capture this trajectory diversity.</p>
+<figure><img src="/blobs/4352e46c137419252e68fcc3c243db06a25f204f3d9fbb727ddaeb763dd346c8" alt="Network Divergence"></figure>
+<p>At this point, the SIRS framework cannot be &quot;retuned&quot; to match the behavior.</p>
+<p>The SIRS formulation lacks variables for network position or interaction history — retuning parameters cannot recover what the model doesn&#39;t encode.</p>
+<hr>
+<h2>Irreducibility and the Limits of Compression</h2>
+<p>A system is <strong>computationally reducible</strong> if there exists a shortcut — a closed-form expression that maps parameters and initial conditions to outputs without executing each step of the dynamics. The SIRS model is reducible in this sense. Given <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>β</mi><mo separator="true">,</mo><mi>γ</mi><mo separator="true">,</mo><mi>ω</mi><mo separator="true">,</mo><mi>N</mi><mo separator="true">,</mo><msub><mi>I</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \gamma, \omega, N, I_0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>, the full trajectory is determined by integrating three ODEs.</p>
+<blockquote>Certain systems cannot be predicted without simulating their step-by-step evolution <a href="#ref-7">[7]</a>.</blockquote>
+<p>The agent-based model under network structure is not reducible in this way. Non-compliance modulates per-contact transmission probability at the agent level. The infection cascade that follows depends on which specific agents interact in which order — which high-degree nodes are contacted early, which clusters saturate before the infection front arrives, which transmission paths activate before local immunity accumulates. No closed-form expression over <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>β</mi><mo separator="true">,</mo><mi>γ</mi><mo separator="true">,</mo><mi>ω</mi><mo separator="true">,</mo><mi>N</mi><mo separator="true">,</mo><mi>ρ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \gamma, \omega, N, \rho)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">ρ</span><span class="mclose">)</span></span></span></span></span> can recover it.</p>
+<p>We can probe this directly by sweeping non-compliance rate <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>∈</mo><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\rho \in [0, 1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7335em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ρ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span></span> and recording peak infection across 200 simulation runs per level:</p>
+<pre><code># Pseudocode: Sensitivity Experiment
+
+for non_compliance_rate in [0.2, 0.4, 0.6, 0.8]:
+    configure_population(non_compliance=non_compliance_rate)
+    run_simulation()
+    record_outcomes()</code></pre>
+<figure><img src="/blobs/71baf82aa845db60a42873fc22733a07c133be6f8942634d536eb4480da857dc" alt="Irreducibility Sweep"></figure>
+<p>The mean curve shows peak outbreak size growing nonlinearly with <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi></mrow><annotation encoding="application/x-tex">\rho</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ρ</span></span></span></span></span>. But the mean is not the primary signal — the band is.</p>
+<p>At each non-compliance level, 200 runs with identical aggregate parameters produce a distribution of outcomes. This variance is not numerical noise. It is information carried by the specific sequence of agent interactions in each run: which agents contacted which, in what order, through which network paths. The aggregate parameters <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>β</mi><mo separator="true">,</mo><mi>γ</mi><mo separator="true">,</mo><mi>ω</mi><mo separator="true">,</mo><mi>ρ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(\beta, \gamma, \omega, \rho)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">ρ</span><span class="mclose">)</span></span></span></span></span> do not determine it.</p>
+<p>A computationally reducible system has no such residual. Given the parameters, the output is fixed — as it is in SIRS. The band in the figure is a direct measurement of that residual: the portion of the outcome that lives in the interaction sequence and cannot be compressed into any aggregate summary.</p>
+<hr>
+<h2>When Structure Determines the Answer</h2>
+<p>The previous experiments follow a single thread: each step removes a representational degree of freedom.</p>
+<ol><li>An agent-based model reproduces SIRS dynamics under homogeneous mixing</li><li>Introducing interaction structure produces divergent trajectories</li><li>System behavior depends on the sequence of interactions, not just aggregate state</li></ol>
+<p>The remaining question is whether these losses affect decisions.</p>
+<p>This can be tested by comparing intervention strategies that depend on interaction structure.</p>
+<hr>
+<h3>Experimental setup</h3>
+<p>We consider two vaccination strategies:</p>
+<ul><li><strong>Random vaccination</strong>: immunize 20% of the population uniformly at random</li><li><strong>Targeted vaccination</strong>: immunize the 20% most-connected individuals (highest-degree nodes)</li></ul>
+<p>Both strategies are evaluated under:</p>
+<ul><li>identical disease parameters (<span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.3</mn><mo separator="true">,</mo><mi>γ</mi><mo>=</mo><mn>0.1</mn><mo separator="true">,</mo><mi>ω</mi><mo>=</mo><mn>0.01</mn></mrow><annotation encoding="application/x-tex">\beta = 0.3, \gamma = 0.1, \omega = 0.01</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">0.3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0556em;">γ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">0.1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">ω</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">0.01</span></span></span></span></span>)</li><li>identical population size (<span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>1000</mn></mrow><annotation encoding="application/x-tex">N = 1000</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1000</span></span></span></span></span>)</li><li>identical initial conditions</li></ul>
+<p>The only difference between models is how interactions are represented:</p>
+<ul><li><strong>Homogeneous model</strong>: agents mix uniformly; degree is not defined</li><li><strong>Structured model</strong>: agents interact through a layered contact network with heterogeneous degree distribution</li></ul>
+<hr>
+<h3>Representational constraint</h3>
+<p>In the homogeneous model, all agents have identical expected contact rates.</p>
+<p>Formally, for any two agents <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo separator="true">,</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">i, j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span></span>:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi mathvariant="double-struck">E</mi><mo stretchy="false">[</mo><msub><mtext>contacts</mtext><mi>i</mi></msub><mo stretchy="false">]</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo stretchy="false">[</mo><msub><mtext>contacts</mtext><mi>j</mi></msub><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">\mathbb{E}[\text{contacts}_i] = \mathbb{E}[\text{contacts}_j]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathbb">E</span><span class="mopen">[</span><span class="mord"><span class="mord text"><span class="mord">contacts</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord mathbb">E</span><span class="mopen">[</span><span class="mord"><span class="mord text"><span class="mord">contacts</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose">]</span></span></span></span></span></div>
+<p>There is no variable in the model that distinguishes highly connected individuals from others.</p>
+<p>As a result:</p>
+<ul><li>&quot;highest-degree node&quot; is undefined</li><li>targeted vaccination reduces to random vaccination</li></ul>
+<p>The two interventions are therefore identical within the model.</p>
+<hr>
+<h3>Structured model behavior</h3>
+<p>In the structured model, each agent has a defined contact set:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub><mo>=</mo><mi mathvariant="normal">∣</mi><mtext>neighbors</mtext><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">k_i = |\text{neighbors}(i)|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord text"><span class="mord">neighbors</span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mord">∣</span></span></span></span></span></div>
+<p>The distribution of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">k_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span> is heterogeneous.</p>
+<p>This introduces:</p>
+<ul><li>high-degree nodes (hubs)</li><li>clustered subgraphs (households, workplaces)</li><li>repeated interactions within local neighborhoods</li></ul>
+<p>Targeted vaccination removes nodes with large <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">k_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0315em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span>, reducing the number of potential transmission paths more than random removal.</p>
+<hr>
+<h3>Results</h3>
+<figure><img src="/blobs/42a4d1d660d8cf94fb086a359e3d026390dd7ab2824d80508daa45d1a75b9330" alt="Structured Comparison"></figure>
+<p>The trajectory comparison shows that introducing contact structure alone — without changing disease parameters — alters:</p>
+<ul><li>peak timing</li><li>peak magnitude</li><li>equilibrium behavior</li></ul>
+<p>The structured model produces a lower and broader infection curve. This follows from local saturation effects: infections propagate within clusters before reaching the broader network.</p>
+<hr>
+<figure><img src="/blobs/71ef690db616f76ec36840d0650dd4e69557b23ba67a6c5ca36abf5a9dbfc69f" alt="Intervention Ranking"></figure>
+<p>The intervention comparison shows a qualitative difference:</p>
+<ul><li><strong>Homogeneous model</strong>:</li><li><strong>Structured model</strong>:</li></ul>
+<p>The difference arises from network structure, not from changes in disease parameters.</p>
+<hr>
+<h3>Interpretation</h3>
+<p>The homogeneous model produces a correct result within its assumptions: all agents are statistically identical, so intervention strategies that depend on heterogeneity collapse to the same outcome.</p>
+<p>The structured model represents variables that the homogeneous model removes:</p>
+<ul><li>degree distribution</li><li>network topology</li><li>local clustering</li></ul>
+<p>Because these variables exist in the model, interventions that act on them can be evaluated.</p>
+<hr>
+<h3>Consequence</h3>
+<ul><li>The homogeneous model cannot represent targeted intervention</li><li>The structured model can</li></ul>
+<p>This leads to different policy conclusions from the same underlying disease assumptions.</p>
+<p>The model determines which interventions exist within the decision space.</p>
+<hr>
+<h3>Final statement</h3>
+<p>A model that does not include interaction structure cannot evaluate interventions that depend on interaction structure.</p>
+<p>The model lacks the variables required to define the intervention.</p>
+<hr>
+<h2>The Tradeoff We Cannot Escape</h2>
+<p>This increased expressivity comes with tradeoffs.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>SIRS (ODE)</th>
+<th>Agent-Based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interpretability</td>
+<td>High</td>
+<td>Lower</td>
+</tr>
+<tr>
+<td>Expressivity</td>
+<td>Limited</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Computational Cost</td>
+<td>Low</td>
+<td>High</td>
+</tr>
+</tbody>
+</table></div>
+<p>Compartmental models offer:</p>
+<ul><li>Analytical tractability</li><li>Parameter interpretability</li><li>Fast evaluation</li></ul>
+<p>Agent-based models offer:</p>
+<ul><li>Mechanistic fidelity</li><li>Structural realism</li><li>Rich emergent dynamics</li></ul>
+<p>This tradeoff is fundamental in modeling complex systems <a href="#ref-5">[5]</a>.</p>
+<hr>
+<h2>The Deeper Implication</h2>
+<p>We often think of models as tools for discovering truth.</p>
+<p>But a more precise statement is:</p>
+<blockquote>A model defines which variables exist, how they interact, and what dependencies can be represented. These choices determine which hypotheses can be formulated and evaluated within the model.</blockquote>
+<p>A model with homogeneous mixing cannot represent network-driven phenomena. A model with discrete agents cannot easily yield closed-form solutions.</p>
+<p>Each model class defines what can be represented — and therefore what can be predicted and evaluated.</p>
+<p>Because decisions are made based on model outputs, limits on what the model can represent translate directly into limits on the interventions that can be evaluated.</p>
+<hr>
+<h2>The Decision Space</h2>
+<p>The experiments carry a direct consequence for how decisions are made.</p>
+<p>Consider what happened in the divergence experiment. The ODE and the ABM used <strong>identical epidemiological parameters</strong> — the same infection rate, the same recovery rate, the same immunity loss rate, the same population size. The only difference was structural: the ABM placed agents on a network and allowed individual variation in transmission. The result was not a minor quantitative correction. The ODE predicted a peak infection of 31%. The network ABM produced peaks around 11% — with individual runs ranging widely depending on which nodes happened to seed the outbreak.</p>
+<p>If a policymaker relied on the ODE, they would allocate hospital capacity for a 31% surge. If they relied on the ABM, they might instead invest in identifying and protecting network hubs. <strong>The models were calibrated to match under homogeneous assumptions, but diverge once structure is introduced. The resulting predictions lead to different policy decisions.</strong></p>
+<p>Both models are consistent with their assumptions. The divergence follows from what each model represents. Model selection is not a technical detail to be delegated — it is a decision with material consequences.</p>
+<h3>The obligation of model selection</h3>
+<p>We do not get to choose models based on convenience alone. A model that is easier to interpret, faster to compute, or more familiar to the field is not automatically the right model for the decision at hand. The relevant question is:</p>
+<blockquote><strong>Does this model capture the degrees of freedom available to us — and the constraints that are non-negotiable?</strong></blockquote>
+<p>If you can control network structure — through quarantine policy, contact tracing, or targeted vaccination — then you need a model that <em>represents</em> network structure. An ODE cannot tell you which nodes to vaccinate, because it does not know that nodes exist.</p>
+<p>If you can control individual compliance — through mandates, incentives, or communication campaigns — then you need a model where compliance is a parameter attached to agents, not averaged into a global rate. The irreducibility sweep showed that identical aggregate parameters produce a distribution of outcomes — the variance is carried by the interaction sequence, not by any aggregate summary. A smooth ODE has no such residual.</p>
+<p>Conversely, if you cannot control network structure — if you are modeling a well-mixed system like airborne transmission in a crowded stadium — then the additional complexity of an ABM may not be justified. The tradeoff table is real. But it must be evaluated against what you are trying to <em>decide</em>, not what you find easier to <em>analyze</em>.</p>
+<h3>Agency determines the model</h3>
+<p>This leads to a principle:</p>
+<blockquote><strong>The model must match the resolution of our agency.</strong></blockquote>
+<p>If we can act at the level of individuals — targeting superspreaders, tailoring interventions by occupation, adapting policy in real time — then we need models that represent individuals. If we can only act at the level of populations — setting national policy, adjusting aggregate parameters — then compartmental models may suffice.</p>
+<p>But we must be honest about this assessment. Too often, models are chosen because they are tractable, and then the policies derived from them are limited to what the model can express. The model&#39;s constraints quietly become the policy&#39;s constraints. We optimize within a space that was never the right space to begin with.</p>
+<p>The cost of this mismatch is not abstract. It is measured in misallocated resources, missed intervention points, and thresholds that were invisible until they were crossed.</p>
+<hr>
+<h2>Closing</h2>
+<p>We began with a practical question: how should we model a pandemic?</p>
+<p>The implication is direct:</p>
+<blockquote>The models we choose must be commensurate with the decisions we intend to make.</blockquote>
+<p>Compartmental models are appropriate when the system is well-mixed and interventions act at the population level. When the system contains structure that matters and interventions target that structure, a model that cannot represent it cannot evaluate it.</p>
+<p>The SIRS equations see smooth flows. The agent-based model sees individual interactions. Neither is wrong. But each constrains what truths can be expressed — and what policies can be imagined.</p>
+<p>The models we choose determine which system behaviors can be represented, which outcomes can be predicted, and which interventions can be evaluated.</p>
+<hr>
+<h2>Experiments</h2>
+<p>The computational experiments supporting this essay are available in the project repository:</p>
+<ul><li><strong>Experiment 1 -- Recovery</strong>: <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/models_define_world" target="_blank" rel="noopener">SIRS ABM vs ODE</a> -- Agent-based model with homogeneous mixing reproduces SIRS ODE dynamics.</li><li><strong>Experiment 2 -- Divergence</strong>: <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/models_define_world" target="_blank" rel="noopener">Network Structure</a> -- Adding network topology and heterogeneity breaks the ODE equivalence.</li><li><strong>Experiment 3 -- Irreducibility</strong>: <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/models_define_world" target="_blank" rel="noopener">Parameter Sweep</a> -- Compliance rate sweep reveals threshold effects and computational irreducibility.</li><li><strong>Experiment 4 -- Structured Networks</strong>: <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/models_define_world" target="_blank" rel="noopener">Layered Networks &amp; Interventions</a> -- Layered contact networks (household/workplace/community) show that intervention rankings are model-dependent.</li></ul>
+<details><summary>Full source code</summary><p>The complete implementation -- including the SIRS ODE solver, agent-based model, network generation, and all plotting -- is available in the <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/models_define_world" target="_blank" rel="noopener"><code>experiments/models_define_world/</code></a> directory. Run it with:</p><pre><code class="language-bash">python run_experiment.py --seed 42 --n-ensemble 20</code></pre></details>
+<hr>
+<h2 class="references-heading">References</h2>
+<ol class="references"><li><a id="ref-1"></a>Kermack, W. O., &amp; McKendrick, A. G. (1927). &quot;A contribution to the mathematical theory of epidemics.&quot; <em>Proceedings of the Royal Society A</em>, 115(772), 700-721.</li><li><a id="ref-2"></a>Anderson, R. M., &amp; May, R. M. (1992). <em>Infectious Diseases of Humans: Dynamics and Control</em>. Oxford University Press.</li><li><a id="ref-3"></a>Epstein, J. M. (2009). &quot;Modelling to contain pandemics.&quot; <em>Nature</em>, 460(7256), 687.</li><li><a id="ref-4"></a>Keeling, M. J., &amp; Rohani, P. (2008). <em>Modeling Infectious Diseases in Humans and Animals</em>. Princeton University Press.</li><li><a id="ref-5"></a>Wilensky, U., &amp; Rand, W. (2015). <em>An Introduction to Agent-Based Modeling</em>. MIT Press.</li><li><a id="ref-6"></a>Pastor-Satorras, R., &amp; Vespignani, A. (2001). &quot;Epidemic spreading in scale-free networks.&quot; <em>Physical Review Letters</em>, 86(14), 3200-3203.</li><li><a id="ref-7"></a>Wolfram, S. (2002). <em>A New Kind of Science</em>. Wolfram Media.</li><li><a id="ref-8"></a>Wolfram, S. (1983). &quot;Statistical mechanics of cellular automata.&quot; <em>Reviews of Modern Physics</em>, 55(3), 601-644.</li></ol>
+<hr>
+<p><em>This essay is part of the <a href="https://github.com/thememesofproduction/encode-reality" target="_blank" rel="noopener">Encode Reality</a> research project.</em></p></div></article></div>
+</main>
+<footer class="site-footer">
+<div class="wrap site-footer-inner">
+<span>Encode Reality research project</span>
+<span class="site-footer-links"><a href="/feed.xml">Feed</a><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></span>
+</div>
+</footer>
+<script>
+(function () {
+  function shrink(box, inner, leftAlign) {
+    inner.style.transform = "";
+    inner.style.transformOrigin = "";
+    if (leftAlign) inner.style.textAlign = "";
+    box.style.height = "";
+    var contentW = inner.scrollWidth;
+    var boxW = box.clientWidth;
+    if (contentW <= boxW + 1) return;
+    var scale = Math.max(0.5, boxW / contentW);
+    if (leftAlign) inner.style.textAlign = "left";
+    inner.style.transformOrigin = "left top";
+    inner.style.transform = "scale(" + scale + ")";
+    box.style.height = inner.getBoundingClientRect().height + "px";
+  }
+  function fit() {
+    var m = document.querySelectorAll(".math-display");
+    for (var i = 0; i < m.length; i++) {
+      var k = m[i].querySelector(".katex-display");
+      if (k) shrink(m[i], k, true);
+    }
+    var t = document.querySelectorAll(".table-scroll");
+    for (var j = 0; j < t.length; j++) {
+      var tb = t[j].querySelector("table");
+      if (tb) shrink(t[j], tb, false);
+    }
+  }
+  var timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(fit, 150); }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fit);
+  } else {
+    fit();
+  }
+  window.addEventListener("load", fit);
+  window.addEventListener("resize", schedule);
+  window.addEventListener("orientationchange", schedule);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+})();
+</script>
+</body>
+</html>

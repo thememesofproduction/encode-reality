@@ -1,0 +1,743 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Beyond What Works: Ideas, Intelligence, and the Courage to Be Creative</title>
+<meta name="description" content="A structural hierarchy of ideas, intelligence, and creativity — where creativity is not novelty but a mechanism for modifying the space of possibility itself.">
+<script>(function(){try{var t=localStorage.getItem("er-theme");if(t==="paper"||t==="ink")document.documentElement.setAttribute("data-theme",t)}catch(e){}})();</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" href="/feed.xml" title="RSS Feed">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/er/fonts.css">
+<link rel="stylesheet" href="/assets/er/tokens.css">
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  background: var(--er-bg);
+  color: var(--er-ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  display: flex; flex-direction: column; min-height: 100vh;
+  margin: 0;
+  background: var(--er-bg);
+  color: var(--er-ink);
+  font: var(--er-type-body);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--er-accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--er-accent); outline-offset: 2px; }
+::selection { background: var(--er-selected); color: var(--er-strong); }
+main { flex: 1 0 auto; }
+img, svg { max-width: 100%; }
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--er-space-4); top: -200px; z-index: 20;
+  padding: var(--er-space-3) var(--er-space-4);
+  background: var(--er-strong); color: var(--er-bg);
+  font: var(--er-type-ui); text-decoration: none;
+}
+.skip-link:focus { top: var(--er-space-2); }
+.wrap {
+  max-width: var(--er-page);
+  margin: 0 auto;
+  padding-left: var(--er-gutter);
+  padding-right: var(--er-gutter);
+}
+.kicker, .eyebrow {
+  margin: 0;
+  font: var(--er-type-eyebrow);
+  letter-spacing: var(--er-type-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--er-muted);
+}
+.kicker a, .eyebrow a { color: inherit; text-decoration: none; }
+.kicker a:hover, .eyebrow a:hover { text-decoration: underline; }
+
+/* Header: wordmark, nav, the theme toggle; a <details> menu at phone width. */
+.site-header { position: relative; border-bottom: var(--er-hairline) solid var(--er-rule); }
+.site-header-inner {
+  display: flex; align-items: center; gap: var(--er-space-6);
+  padding-top: 18px; padding-bottom: 18px;
+}
+.site-brand {
+  margin-right: auto;
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  font: var(--er-type-brand);
+  letter-spacing: var(--er-type-brand-tracking);
+  text-transform: uppercase;
+  color: var(--er-strong);
+  text-decoration: none;
+}
+.site-nav ul {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 28px;
+  margin: 0; padding: 0; list-style: none;
+  font: var(--er-type-ui);
+}
+.site-nav a, .site-menu a { color: var(--er-ink); text-decoration: none; }
+.site-nav a { display: inline-flex; align-items: center; min-height: var(--er-touch); }
+.site-nav a:hover, .site-menu a:hover { color: var(--er-strong); text-decoration: underline; }
+.site-nav a[aria-current="page"], .site-menu a[aria-current="page"] {
+  color: var(--er-strong);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px;
+}
+.theme-toggle {
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--er-touch); height: var(--er-touch); padding: 0;
+  border: var(--er-hairline) solid var(--er-rule); border-radius: var(--er-radius-pill);
+  background: transparent; color: var(--er-ink);
+  font: 400 18px/1 var(--er-font-sans);
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--er-muted); color: var(--er-strong); }
+.theme-toggle[hidden] { display: none; }
+.site-menu { display: none; }
+.site-menu > summary {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--er-touch); height: var(--er-touch);
+  list-style: none; cursor: pointer; color: var(--er-ink);
+}
+.site-menu > summary::-webkit-details-marker { display: none; }
+.site-menu[open] > summary { color: var(--er-strong); }
+.site-menu nav {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 10;
+  padding: var(--er-space-2) 0;
+  background: var(--er-surface);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+}
+.site-menu ul { margin: 0; padding: 0; list-style: none; font: var(--er-type-ui); }
+.site-menu a { display: flex; align-items: center; min-height: var(--er-touch); padding: 0 var(--er-gutter-phone); }
+
+/* Footer: attribution, the feed, the code. */
+.site-footer { margin-top: var(--er-space-11); border-top: var(--er-hairline) solid var(--er-rule); }
+.site-footer-inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-2) var(--er-space-4);
+  padding-top: var(--er-space-5); padding-bottom: var(--er-space-9);
+  font: var(--er-type-mono); color: var(--er-muted);
+}
+.site-footer-links { display: flex; flex-wrap: wrap; gap: var(--er-space-6); }
+.site-footer a {
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  color: var(--er-muted); text-decoration: none;
+}
+.site-footer a:hover { color: var(--er-strong); text-decoration: underline; }
+
+/* Landing */
+.landing { padding-top: var(--er-space-12); padding-bottom: var(--er-space-8); }
+.hero {
+  margin: 18px 0 0; max-width: 15ch;
+  font: var(--er-type-display-xl);
+  letter-spacing: var(--er-type-display-xl-tracking);
+  color: var(--er-strong);
+}
+.hero-sub { margin: 26px 0 0; max-width: 38rem; font-size: 22px; line-height: 1.5; color: var(--er-ink); }
+.site-intro { margin-top: var(--er-space-7); max-width: 38rem; font-size: 18px; line-height: 1.6; color: var(--er-ink); }
+.site-intro p { margin: 0 0 var(--er-space-4); }
+.site-intro ul { margin: 0 0 var(--er-space-4); padding-left: 1.25em; }
+.site-intro li { margin: 0 0 var(--er-space-2); }
+.site-intro li::marker { color: var(--er-muted); }
+.site-intro strong { font-weight: 600; color: var(--er-strong); }
+.landing-grid {
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--er-space-10);
+  margin-top: var(--er-space-12);
+}
+.recent { flex: 999 1 520px; min-width: 0; }
+.recent:only-child { max-width: 880px; }
+.recent > .eyebrow { margin-bottom: var(--er-space-2); font-weight: 500; }
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-row {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-2) var(--er-space-6);
+  padding: 22px 0;
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.post-row > time { flex: 0 0 17ch; font: 400 13px/2 var(--er-font-mono); color: var(--er-muted); }
+.post-row-main { flex: 1 1 320px; min-width: 0; }
+.post-row-title {
+  font: 600 23px/1.3 var(--er-font-serif);
+  color: var(--er-strong); text-decoration: none;
+}
+.post-row-title:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.post-row-tags {
+  margin: var(--er-space-2) 0 0;
+  font: var(--er-type-eyebrow); letter-spacing: 0.04em;
+  color: var(--er-accent);
+}
+.post-row-tags a { color: inherit; text-decoration: none; }
+.post-row-tags a:hover { text-decoration: underline; }
+.empty { color: var(--er-muted); font-style: italic; }
+.lab-card {
+  flex: 1 1 400px; min-width: 0;
+  border: var(--er-hairline) solid var(--er-rule);
+  background: var(--er-surface);
+}
+.instrument-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-2) var(--er-space-3);
+  padding: var(--er-space-3) var(--er-space-4);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.instrument-status { color: var(--er-live); }
+.lab-card-body { padding: var(--er-space-5) var(--er-space-4) var(--er-space-2); }
+.lab-card h2 { margin: 0; font: 600 26px/1.25 var(--er-font-serif); color: var(--er-strong); }
+.lab-card p { margin: 10px 0 0; font-size: 16.5px; line-height: 1.55; color: var(--er-muted); }
+.lab-card-actions {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-3);
+  margin-top: var(--er-space-3); padding: var(--er-space-4);
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.btn {
+  display: inline-flex; align-items: center; min-height: var(--er-touch); padding: 0 18px;
+  font: 500 15px/1.2 var(--er-font-sans); text-decoration: none;
+}
+.btn-primary { background: var(--er-strong); color: var(--er-bg); }
+.btn-primary:hover { text-decoration: underline; }
+.how {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--er-space-8);
+  margin-top: 88px; padding-top: var(--er-space-8);
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.how h3 { font-weight: 400; }
+.how p { margin: 10px 0 0; font-size: 18px; line-height: 1.55; }
+
+/* Listing pages: tags, a tag, the archive, errors */
+.listing { padding-top: var(--er-space-11); padding-bottom: var(--er-space-8); }
+.listing h1 {
+  margin: var(--er-space-4) 0 var(--er-space-8); max-width: 20ch;
+  font: var(--er-type-display-lg); letter-spacing: var(--er-type-display-lg-tracking);
+  color: var(--er-strong);
+  overflow-wrap: anywhere;
+}
+.listing > p { max-width: var(--er-measure); }
+.tag-list { display: flex; flex-wrap: wrap; gap: var(--er-space-3); margin: 0; padding: 0; list-style: none; }
+.tag-list a {
+  display: inline-flex; align-items: center; gap: var(--er-space-2);
+  min-height: var(--er-touch); padding: 0 var(--er-space-4);
+  border: var(--er-hairline) solid var(--er-rule); background: var(--er-surface);
+  font: var(--er-type-mono); color: var(--er-accent); text-decoration: none;
+}
+.tag-list a:hover { border-color: var(--er-accent); }
+.tag-list .count { color: var(--er-muted); }
+
+/* Post */
+.post-wrap { padding-top: var(--er-space-11); padding-bottom: var(--er-space-13); }
+.post-head { max-width: var(--er-measure); }
+.post-tags { color: var(--er-accent); letter-spacing: 0.14em; }
+.post-head h1 {
+  margin: var(--er-space-4) 0 0;
+  font: var(--er-type-display-lg); letter-spacing: var(--er-type-display-lg-tracking);
+  color: var(--er-strong);
+}
+.post-meta {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-2) 22px;
+  margin: var(--er-space-5) 0 0;
+  font: var(--er-type-mono); text-transform: uppercase; color: var(--er-muted);
+}
+.post-meta a { color: var(--er-accent); text-decoration: none; }
+.post-meta a:hover { text-decoration: underline; }
+
+/* Prose: the post body, a 680px measure. */
+.prose { display: flow-root; max-width: var(--er-measure); margin-top: var(--er-space-9); counter-reset: figure; }
+.prose > * { margin-top: 0; margin-bottom: 22px; }
+.prose > p:first-child { font: var(--er-type-lede); }
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { color: var(--er-strong); }
+.prose h1 { margin-bottom: var(--er-space-4); padding-top: 26px; font: var(--er-type-display-md); }
+.prose h2 { margin-bottom: var(--er-space-4); padding-top: 26px; font: var(--er-type-display-sm); }
+.prose h3 { margin-bottom: var(--er-space-3); padding-top: 14px; font: 600 22px/1.3 var(--er-font-serif); }
+.prose h4, .prose h5, .prose h6 { margin-bottom: var(--er-space-2); padding-top: var(--er-space-2); font: 600 19px/1.4 var(--er-font-serif); }
+.prose strong { font-weight: 600; color: var(--er-strong); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin-bottom: 6px; }
+.prose li > ul, .prose li > ol { margin-top: 6px; margin-bottom: 0; }
+.prose li::marker { color: var(--er-muted); }
+.prose hr {
+  height: 0; margin: 0 0 var(--er-space-8); padding-top: 26px;
+  border: 0; border-bottom: var(--er-hairline) solid var(--er-rule);
+}
+.prose hr + h1, .prose hr + h2, .prose hr + h3 { padding-top: 0; }
+.prose a[href^="#ref-"] {
+  font: 500 0.7em/1 var(--er-font-mono);
+  vertical-align: 0.4em;
+  text-decoration: none; white-space: nowrap;
+}
+.prose a[href^="#ref-"]:hover { text-decoration: underline; }
+.prose code {
+  padding: 0.1em 0.35em;
+  background: var(--er-surface); border: var(--er-hairline) solid var(--er-rule);
+  font-family: var(--er-font-mono); font-size: 0.84em;
+}
+.prose pre {
+  overflow-x: auto; padding: var(--er-space-4) 18px;
+  background: var(--er-surface); border: var(--er-hairline) solid var(--er-rule);
+  font: 400 14px/1.6 var(--er-font-mono); color: var(--er-ink);
+}
+.prose pre code { padding: 0; border: 0; background: none; font-size: inherit; }
+.prose blockquote {
+  margin-left: 0; margin-right: 0; padding: 2px 0 2px var(--er-space-5);
+  border-left: 2px solid var(--er-accent);
+  font-style: italic; color: var(--er-ink);
+}
+.prose details { padding: var(--er-space-3) var(--er-space-4); border: var(--er-hairline) solid var(--er-rule); background: var(--er-surface); }
+.prose summary { cursor: pointer; font-weight: 600; color: var(--er-strong); }
+.prose .task-list-item { list-style: none; }
+.prose input[type="checkbox"] { accent-color: var(--er-accent); }
+
+/* Tables: wide ones scroll (no-JS fallback); the fit script scales them on a narrow screen. */
+.table-scroll { overflow-x: auto; max-width: 100%; }
+.prose table { border-collapse: collapse; font: 400 15px/1.5 var(--er-font-sans); font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--er-space-2) var(--er-space-3); border: var(--er-hairline) solid var(--er-rule); text-align: left; vertical-align: top; }
+.prose thead th { background: var(--er-surface); color: var(--er-strong); font-weight: 600; }
+
+/* Display math scrolls rather than overflowing (katex sets nowrap); KaTeX inherits the ink. */
+.math-display {
+  box-sizing: content-box;
+  overflow-x: auto; overflow-y: hidden; max-width: 100%;
+  padding: var(--er-space-4) 0;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  color: var(--er-strong);
+}
+.math-display + .math-display { margin-top: -22px; border-top: 0; }
+.math-display .katex-display { margin: 0; }
+.katex { font-size: 1.05em; }
+
+/* Figures and embeds are numbered by one counter: "FIGURE N." on a caption, "FIG N" on an embed's bar. */
+.prose figure, .prose .embed-frame {
+  counter-increment: figure;
+  margin: var(--er-space-8) 0 var(--er-space-9);
+  border: var(--er-hairline) solid var(--er-rule);
+  background: var(--er-surface);
+}
+.prose figure > img, .prose figure > svg { display: block; height: auto; margin: 0 auto; padding: var(--er-space-4); }
+.prose figcaption {
+  padding: 14px 18px 18px;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-prose-sm); color: var(--er-ink); text-align: left;
+}
+.prose figcaption::before, .prose figure:not(:has(figcaption))::after {
+  content: "Figure " counter(figure) ".";
+  font: 500 12px/1.55 var(--er-font-mono);
+  letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-strong);
+}
+.prose figcaption::before { margin-right: 0.6em; }
+.prose figure:not(:has(figcaption))::after {
+  display: block; padding: 10px 18px;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  text-align: left;
+}
+.embed-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--er-space-1) var(--er-space-4);
+  padding: var(--er-space-3) 18px;
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.embed-bar::before { content: "Fig " counter(figure); font-weight: 500; color: var(--er-strong); }
+.embed { margin: 0; }
+.embed iframe { display: block; width: 100%; max-width: 100%; border: 0; background: var(--er-surface); }
+.embed--responsive { position: relative; height: 0; padding-bottom: 56.25%; overflow: hidden; }
+.embed--responsive iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.embed-play-button {
+  all: unset;
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--er-selected); color: var(--er-strong);
+  cursor: pointer;
+}
+.embed-play-button:hover { color: var(--er-accent); }
+.embed-play-button:focus-visible { outline: 2px solid var(--er-accent); outline-offset: -4px; }
+.embed-play-button svg { pointer-events: none; }
+
+/* Lab figures (CO-162): the instrument bar (what was computed, Run live, Open in Lab), the
+   baked SVG inline -- its colours are these same tokens -- then the caption. */
+.er-fig-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-1) var(--er-space-4);
+  margin: 0; padding: var(--er-space-2) 18px;
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.er-fig-bar-label { min-width: 0; overflow-wrap: anywhere; }
+.er-fig-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--er-space-1) var(--er-space-4); margin-left: auto; }
+.er-fig-run, .er-fig-open {
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  font: 500 12px/1.2 var(--er-font-mono); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.er-fig-run {
+  padding: 0 var(--er-space-3);
+  border: var(--er-hairline) solid var(--er-rule); border-radius: var(--er-radius-pill);
+  background: transparent; color: var(--er-strong); cursor: pointer;
+}
+.er-fig-run:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.er-fig-run[hidden] { display: none; }
+.er-fig-open { color: var(--er-accent); }
+.er-fig-open:hover { text-decoration: underline; }
+.er-fig-plot { padding: var(--er-space-4); }
+.er-fig-plot svg { display: block; width: 100%; max-width: 100%; height: auto; margin: 0 auto; }
+.er-fig-live iframe { display: block; width: 100%; height: 560px; max-height: 85vh; border: 0; background: var(--er-surface); }
+.er-fig-missing { padding: var(--er-space-7) var(--er-space-4); font: var(--er-type-mono); color: var(--er-muted); text-align: center; }
+.er-fig-problem { display: block; margin-top: var(--er-space-2); }
+
+/* References: the list keeps every entry; DOI links are pills. */
+.prose .references-heading {
+  font: var(--er-type-eyebrow); font-weight: 500;
+  letter-spacing: var(--er-type-eyebrow-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.prose .references { padding-left: 22px; font: var(--er-type-prose-sm); }
+.prose .references li { margin-bottom: 10px; }
+.prose .references li::marker { font-family: var(--er-font-mono); font-size: 12px; }
+.prose .references li:has(> a[id]:target) { background: var(--er-selected); }
+.prose a[href*="doi.org/"], .sidenote a[href*="doi.org/"] {
+  display: inline-block; padding: 2px 7px;
+  border: var(--er-hairline) solid var(--er-rule);
+  font: 400 11.5px/1.4 var(--er-font-mono);
+  color: var(--er-accent); text-decoration: none; white-space: nowrap;
+}
+
+/* Sidenotes: inline asides after their block on narrow screens. */
+.sidenote {
+  padding: var(--er-space-3) 14px;
+  border-left: 2px solid var(--er-accent);
+  background: var(--er-surface);
+  font: var(--er-type-ui-sm); color: var(--er-muted);
+}
+.prose > .has-note + .sidenote { margin-top: -10px; }
+.prose > .sidenote + .sidenote { margin-top: -14px; }
+.sidenote-num { margin-right: 0.3em; font-family: var(--er-font-mono); color: var(--er-accent); }
+
+@media (min-width: 1024px) {
+  .prose figure, .prose .embed-frame {
+    width: min(var(--er-figure), calc(100vw - 2 * var(--er-gutter)));
+    max-width: none;
+  }
+}
+
+/* ...and Tufte-style margin notes once the 260px margin column fits. */
+@media (min-width: 1200px) {
+  .prose > * { clear: left; }
+  .prose > figure, .prose > .embed-frame { clear: both; }
+  .prose > .has-note { float: left; width: 100%; }
+  .prose > .sidenote,
+  .prose > .has-note + .sidenote,
+  .prose > .sidenote + .sidenote {
+    float: right; clear: right;
+    width: 260px; margin: 6px -316px 18px 0; padding: 0;
+    border: 0; background: none;
+    font-size: 14px; line-height: 1.55;
+  }
+}
+
+@media (max-width: 720px) {
+  .wrap { padding-left: var(--er-gutter-phone); padding-right: var(--er-gutter-phone); }
+  .site-header .wrap { padding-right: var(--er-space-2); }
+  .site-header-inner { gap: var(--er-space-1); padding-top: 6px; padding-bottom: 6px; }
+  .site-brand { font-size: 12px; }
+  .site-nav { display: none; }
+  .site-menu { display: block; }
+  .theme-toggle { border-color: transparent; }
+  .landing { padding-top: var(--er-space-8); }
+  .hero { font-size: clamp(36px, 10vw, 44px); line-height: 1.08; }
+  .hero-sub { margin-top: var(--er-space-5); font-size: 19px; }
+  .site-intro { font-size: 17px; }
+  .landing-grid { margin-top: var(--er-space-9); }
+  .post-row-title { font-size: 21px; }
+  .how { margin-top: var(--er-space-11); }
+  .listing { padding-top: var(--er-space-8); }
+  .listing h1 { font: var(--er-type-display-md); }
+  .post-wrap { padding-top: var(--er-space-7); padding-bottom: var(--er-space-11); }
+  .post-tags { font-size: 11px; }
+  .post-head h1 { margin-top: var(--er-space-3); font: var(--er-type-display-md); }
+  .post-meta { margin-top: 14px; font-size: 11.5px; }
+  .prose { margin-top: var(--er-space-7); font-size: 18px; line-height: 1.62; }
+  .prose > * { margin-bottom: 18px; }
+  .prose > p:first-child { font-size: 19px; line-height: 1.62; }
+  .prose h2 { padding-top: 22px; font-size: 24px; }
+  .prose h3 { font-size: 20px; }
+  .math-display + .math-display { margin-top: -18px; }
+  .prose figure, .prose .embed-frame {
+    margin-left: calc(-1 * var(--er-gutter-phone));
+    margin-right: calc(-1 * var(--er-gutter-phone));
+    border-left: 0; border-right: 0;
+  }
+  .embed-bar { padding: 10px var(--er-gutter-phone); font-size: 10.5px; }
+  .er-fig-bar { padding: var(--er-space-1) var(--er-gutter-phone); font-size: 10.5px; }
+  .er-fig-plot { padding: var(--er-space-3) var(--er-gutter-phone); }
+  .prose figcaption { padding: var(--er-space-3) var(--er-gutter-phone) var(--er-space-4); font-size: 15px; line-height: 1.5; }
+  .prose figcaption::before, .prose figure:not(:has(figcaption))::after { font-size: 11px; }
+  .prose figure:not(:has(figcaption))::after { padding: 10px var(--er-gutter-phone); }
+  .sidenote { font-size: 14px; line-height: 1.5; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap site-header-inner">
+<a href="/" class="site-brand">Encode Reality</a>
+<nav class="site-nav" aria-label="Primary"><ul><li><a href="/" aria-current="page">Essays</a></li><li><a href="/lab/">Lab</a></li><li><a href="/tags/">Tags</a></li><li><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></li></ul></nav>
+<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to ink theme" hidden>◐</button>
+<script>(function(){var b=document.getElementById("theme-toggle");if(!b)return;var d=document.documentElement,q=window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)"):null;function cur(){var t=d.getAttribute("data-theme");return t==="paper"||t==="ink"?t:(q&&q.matches?"ink":"paper")}function label(){var o=cur()==="ink"?"paper":"ink";b.setAttribute("aria-label","Switch to "+o+" theme");b.title="Switch to "+o+" theme"}b.hidden=false;label();b.addEventListener("click",function(){var n=cur()==="ink"?"paper":"ink";d.setAttribute("data-theme",n);try{localStorage.setItem("er-theme",n)}catch(e){}label()});if(q&&q.addEventListener)q.addEventListener("change",label)})();</script>
+<details class="site-menu">
+<summary><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.6" fill="none"/></svg><span class="visually-hidden">Menu</span></summary>
+<nav aria-label="Menu"><ul><li><a href="/" aria-current="page">Essays</a></li><li><a href="/lab/">Lab</a></li><li><a href="/tags/">Tags</a></li><li><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></li></ul></nav>
+</details>
+</div>
+</header>
+<main id="main">
+<div class="wrap post-wrap"><article><header class="post-head"><p class="kicker post-tags"><a href="/tags/creativity/">creativity</a><span aria-hidden="true"> · </span><a href="/tags/intelligence/">intelligence</a><span aria-hidden="true"> · </span><a href="/tags/epistemology/">epistemology</a><span aria-hidden="true"> · </span><a href="/tags/complex-systems/">complex-systems</a><span aria-hidden="true"> · </span><a href="/tags/AI/">AI</a><span aria-hidden="true"> · </span><a href="/tags/philosophy-of-science/">philosophy-of-science</a></p><h1>Beyond What Works: Ideas, Intelligence, and the Courage to Be Creative</h1><p class="post-meta"><time datetime="2026-03-17">17 March 2026</time><span class="code-link"><a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener">Code: ideas_intelligence_creativity ↗</a></span></p></header><div class="prose">
+<p>When we talk about intelligence, we often treat it as the ability to solve problems.</p>
+<p>A problem appears. A system searches. A solution is found.</p>
+<p>But this picture hides something deeper.</p>
+<p>Not all solutions are of the same kind, because not all acts of intelligence operate at the same level. Some systems generate solutions within an established space. Others generate the spaces themselves.</p>
+<p>To understand this distinction, we need to be precise about our terms.</p>
+<p>An <strong>idea</strong> is a solution within a space. <strong>Intelligence</strong> is the ability to generate ideas within a given space. <strong>Creativity</strong>, in a functional sense, is the ability to generate new spaces by operating over generators themselves.</p>
+<p>This is not a poetic distinction. It is a structural one.</p>
+<hr>
+<h2>Ideas are generated, not primitive</h2>
+<p>An idea is not a fundamental unit.</p>
+<p>A proof, a hypothesis, a design—these are all outputs of a system operating under constraints. They emerge from representations, transformation rules, and evaluation processes.</p>
+<p>Every idea presupposes:</p>
+<ul><li>a way of representing the problem</li><li>a way of generating candidates</li><li>a way of evaluating outcomes</li></ul>
+<p>So rather than treating ideas as primitive, we treat them as <strong>outputs of a generator operating in a constrained space</strong>.</p>
+<hr>
+<h2>Evolution does not search every form</h2>
+<p>Biology provides a clear example.</p>
+<p class="has-note">Evolution is often described as a search over all possible organisms, guided by natural selection. But this is incomplete. Organisms do not vary arbitrarily; they vary according to the structure of the developmental systems that produce them <a href="#ref-1">[1]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">1</span> Müller, G. B. (2007). &quot;Evo–devo: extending the evolutionary synthesis.&quot; <em>Nature Reviews Genetics</em>, 8(12), 943–949.</aside>
+<p class="has-note">The extinct <strong>Tasmanian wolf (thylacine)</strong> and modern wolves diverged over 100 million years ago, yet evolved strikingly similar forms. This is not just because the environment favored those forms. It is because both lineages inherited similar generative resources—developmental systems that bias what can be produced <a href="#ref-2">[2]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">2</span> Feigin, C. Y., et al. (2018). &quot;Genome of the Tasmanian tiger...&quot; <em>Nature Ecology &amp; Evolution</em>.</aside>
+<p>Selection chooses among possibilities.</p>
+<p>But the generator defines the possibilities.</p>
+<p>And crucially, those generators are themselves products of prior evolution.</p>
+<hr>
+<h2>Science operates within generators</h2>
+<p>Scientific reasoning follows the same structure.</p>
+<p>Scientists do not explore all possible explanations. They operate within frameworks—mathematical, conceptual, and representational—that determine what kinds of explanations can exist.</p>
+<p class="has-note">Kuhn called these <strong>paradigms</strong> <a href="#ref-4">[4]</a>. Within a paradigm, intelligence produces solutions. But when the paradigm itself changes, the space of possible solutions changes with it.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">4</span> Kuhn, T. S. (1962). <em>The Structure of Scientific Revolutions.</em></aside>
+<p class="has-note">For centuries, geometry meant Euclidean geometry. The introduction of non-Euclidean geometry redefined what “space” could be, enabling entirely new lines of reasoning and ultimately new physical theories <a href="#ref-5">[5]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">5</span> Riemann, B. (1868). Foundations of geometry.</aside>
+<p class="has-note">In quantum mechanics, the shift from probabilities as primitives to amplitudes as primitives fundamentally altered the structure of reasoning about uncertainty and interaction <a href="#ref-6">[6]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">6</span> Dirac, P. A. M. (1930). <em>The Principles of Quantum Mechanics.</em></aside>
+<p>These were not just better answers.</p>
+<p>They were new generators.</p>
+<hr>
+<h2>A functional hierarchy</h2>
+<p>We can now define a clean hierarchy:</p>
+<h3>Level 0 — Ideas</h3>
+<p>Solutions generated within a space.</p>
+<h3>Level 1 — Intelligence</h3>
+<p>A generator that produces ideas within a fixed space.</p>
+<h3>Level 2 — Creativity</h3>
+<p>A generator that operates over generators, producing new spaces of ideas.</p>
+<p>Creativity, in this sense, is not about novelty or artistic expression. It is a <strong>mechanism for modifying the structure of possibility itself</strong>.</p>
+<p>It is a generator of generators.</p>
+<h3>Formal notation</h3>
+<p>More precisely:</p>
+<ul><li><strong>Level 0</strong>: An idea is an element <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>∈</mo><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">x \in \mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span>, where <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span> is the solution space defined by a generator.</li><li><strong>Level 1</strong>: Intelligence is a function <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>:</mo><mi mathvariant="script">P</mi><mo>→</mo><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">G: \mathcal{P} \to \mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0822em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span> — a generator that maps problems to solutions within a fixed space.</li><li><strong>Level 2</strong>: Creativity is a meta-function <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi><mo>:</mo><mi mathvariant="script">G</mi><mo>→</mo><msup><mi mathvariant="script">G</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">\mathcal{M}: \mathcal{G} \to \mathcal{G}&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7805em;vertical-align:-0.0972em;"></span><span class="mord mathcal" style="margin-right:0.0593em;">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8491em;vertical-align:-0.0972em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0593em;">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span> — a transformation that takes generators and produces new generators, thereby redefining the space of reachable solutions.</li></ul>
+<p>These levels are not merely conceptual. In the <a href="#the-observable-difference">supporting experiments</a>, we construct systems at each level and observe their qualitatively different behaviors.</p>
+<hr>
+<h2>Creativity as a system</h2>
+<p>This definition aligns with—but sharpens—existing work.</p>
+<p class="has-note">Margaret Boden distinguishes between exploratory, combinational, and transformational creativity <a href="#ref-7">[7]</a>. What we are calling creativity corresponds specifically to her <strong>transformational</strong> category: changing the space itself.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">7</span> Boden, M. A. (2004). <em>The Creative Mind: Myths and Mechanisms.</em> 2nd ed. Routledge. See Ch. 3 for the distinction between exploratory, combinational, and transformational creativity.</aside>
+<p>But here we go further.</p>
+<p>We treat creativity not as a descriptive label, but as a <strong>functional system</strong>:</p>
+<pre><code>Creativity(G₁) → produces G₂
+G₂ → produces ideas</code></pre>
+<p>Creativity is not just producing unusual outputs. It is modifying the underlying generator.</p>
+<hr>
+<h2>Pseudo-code: intelligence vs creativity</h2>
+<h3>Intelligence (fixed generator)</h3>
+<pre><code>function solve(problem, generator):
+    ideas = generator.generate(problem)
+    return select_best(ideas)</code></pre>
+<p>This is standard intelligence: search within a fixed space.</p>
+<hr>
+<h3>Creativity (generator over generators)</h3>
+<pre><code>function create_new_generator(problem, generators, meta_generator):
+    candidate_generators = meta_generator.generate(generators)
+
+    evaluated = []
+    for g in candidate_generators:
+        ideas = g.generate(problem)
+        score = evaluate(ideas)
+        evaluated.append((g, score))
+
+    return select_best(evaluated)</code></pre>
+<p>Creativity operates at a different level. It does not generate solutions directly. It generates <strong>new ways of generating solutions</strong>.</p>
+<hr>
+<h2>The observable difference</h2>
+<p>The distinction between intelligence and creativity is not just theoretical — it produces measurably different dynamics. To demonstrate this, we simulate two systems searching a rugged fitness landscape with many local optima:</p>
+<ol><li><strong>Intelligence</strong> (fixed strategy): A hill-climbing optimizer with a fixed Gaussian step size. It can only find solutions reachable by small perturbations of its current position.</li><li><strong>Creativity</strong> (meta-strategy): The same base mechanism, but a meta-system periodically evaluates and mutates the search strategy itself — changing step sizes, switching between exploration methods, and generating entirely new strategies.</li></ol>
+<p>The result is striking:</p>
+<figure><img src="/blobs/dd3214da255e23b723004d430244d482a52f670175b843c7e5cb7c595f8eb9d2" alt="Intelligence vs. Creativity: Fitness Over Time"></figure>
+<p>The intelligence system (blue) converges rapidly to a local optimum and plateaus. The creativity system (red) shows the same initial convergence, but then makes a <strong>discontinuous jump</strong> — escaping the local basin when a strategy mutation opens access to a previously unreachable region of the landscape.</p>
+<figure><img src="/blobs/2311e6d9f7556ebcc01bbcdaee71d25439bc85ccb608d1b9b6c46927114a7e2f" alt="Optimizer Trajectories"></figure>
+<p>On the fitness landscape itself, the intelligence trajectory stays trapped in one basin. The creativity trajectory leaps across the landscape to find the global optimum (gold X) — a peak that no amount of refinement within the original strategy could reach.</p>
+<p>This is exactly the pattern we should expect: <strong>the fixed system plateaus; the creative system exhibits discontinuous jumps</strong>. The jumps do not come from better execution within the existing strategy. They come from changing the strategy itself.</p>
+<details><summary>Full source code</summary><p>The complete implementation — including the fitness landscape, search strategies, strategy mutation, and all plotting — is available in the <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener"><code>experiments/ideas_intelligence_creativity/</code></a> directory. Run it with:</p><pre><code class="language-bash">python run_experiment_1.py --n-steps 1000 --n-peaks 20</code></pre></details>
+<hr>
+<h2>Generators have histories</h2>
+<p>Generators do not appear out of nowhere.</p>
+<p>Developmental systems evolve. Mathematical frameworks are constructed over time. Scientific paradigms emerge through accumulated constraints and successes.</p>
+<p>Most of us only ever see the solutions. We see relativity, but not how Einstein arrived at it. There is a sociological and historical explanation — the mathematical machinery he drew on, the work of Hilbert, the structure of Minkowski spacetime — and these are well documented <a href="#ref-5">[5]</a>. But what Einstein went through internally to string those elements together, to embody a new concept deeply enough to expose it to the world — that generative process is far harder to record or audit. And it is the most important part of the story. The output was a theory. The creative act was the construction of a new generator: a way of seeing space, time, and gravitation that did not exist within any prior framework.</p>
+<p>This is the pattern. We inherit the ideas but rarely the generators that produced them, and almost never the creative acts that built those generators in the first place.</p>
+<p class="has-note">Ioan P. Culianu described intellectual systems as <strong>ideal objects</strong> whose internal possibilities unfold historically <a href="#ref-9">[9]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">9</span> Culianu, I. P. (1992). <em>The Tree of Gnosis.</em></aside>
+<p>This leads to a recursive structure:</p>
+<ul><li>ideas are generated by intelligence</li><li>intelligence operates through generators</li><li>creativity modifies those generators</li></ul>
+<p>So the full system is:</p>
+<pre><code>Creativity → Intelligence → Ideas</code></pre>
+<p>Or more abstractly:</p>
+<pre><code>G₂ → G₁ → outputs</code></pre>
+<hr>
+<h2>Why creativity looks like error</h2>
+<p>When a new generator appears, it often looks wrong.</p>
+<p>Not because it fails within the current system—but because it does not belong to it.</p>
+<p>Complex numbers were rejected. Non-Euclidean geometry was dismissed. Abstract mathematical systems seemed disconnected from reality.</p>
+<p>But once the generator stabilizes, it becomes the new baseline.</p>
+<p>What was once unintelligible becomes obvious.</p>
+<hr>
+<h2>AI and the boundary</h2>
+<p>Modern AI systems are extremely strong at intelligence in this framework.</p>
+<p>They can:</p>
+<ul><li>generate large numbers of ideas</li><li>explore combinatorial spaces</li><li>optimize within fixed representations</li></ul>
+<p>Consider AlphaFold: it is a remarkably powerful generator within a fixed representational space — amino acid sequences mapped to three-dimensional structures. It produces solutions that human scientists could not, but it does not invent new representations of protein structure. It operates entirely within a generator defined by decades of structural biology.</p>
+<p>Large language models demonstrate a similar pattern. They excel at what Boden would call <strong>combinational creativity</strong> — recombining learned representations in novel ways, synthesizing across domains, generating fluent text in styles they have absorbed <a href="#ref-7">[7]</a>. But they rarely perform <strong>transformational creativity</strong>: inventing a new representational space that makes previously inexpressible ideas expressible.</p>
+<p>This distinction maps precisely onto the hierarchy. LLMs are sophisticated Level 1 systems — powerful generators within the representational space defined by their training. They do not typically modify the generator itself.</p>
+<p class="has-note">Gian-Carlo Rota described a &quot;barrier of meaning&quot; in mathematics — the moment when a structure is seen <em>as</em> something new, not merely rearranged within its existing interpretation <a href="#ref-10">[10]</a>. Seeing something <em>as</em> something else is a generator-level operation, not an output-level one. It requires redefining the representational primitives, not just recombining them.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">10</span> Rota, G.-C. (1997). <em>Indiscrete Thoughts.</em> Birkhauser. See the discussion of the &quot;barrier of meaning&quot; in mathematical understanding.</aside>
+<p>This is the boundary.</p>
+<p>The difference between generating better answers and generating better ways of answering.</p>
+<hr>
+<h2>What this means for us</h2>
+<p>This boundary is not unique to machines.</p>
+<p>It is easy to become comfortable in what has already worked.</p>
+<p>And we should be proud of that. Every system we inherit—scientific, mathematical, cultural—represents real progress. These generators encode generations of effort.</p>
+<p>But they are not final.</p>
+<p>The mistake is to confuse stability with completeness.</p>
+<p>The world will always pull us toward established structures. It rewards what fits. What is legible. What has precedent.</p>
+<p>But the universe does not operate within our generators.</p>
+<p>It continues to present forms that exceed them.</p>
+<p>A functioning society needs intelligence—people who can operate effectively within existing systems.</p>
+<p>But it also needs creativity—systems and individuals capable of generating new ones.</p>
+<p>These are often harder to understand. They do not align with current expectations. They may appear incoherent.</p>
+<p>But that incoherence may not be failure.</p>
+<p>It may be a signal that the current generator is insufficient.</p>
+<p>So the next time you feel the impulse to reject something because it does not make sense, pause.</p>
+<p>Ask whether the failure is in the idea—or in the generator you are using to interpret it.</p>
+<p>The same applies beyond ideas.</p>
+<p>Even the smallest forms of life—things we dismiss as insignificant—are products of entirely different generative trajectories. They embody structures we did not produce, solutions we did not discover, generators we cannot yet replicate.</p>
+<p>That is why we have each other.</p>
+<p>Not because we think the same way—but because we don’t.</p>
+<p>Society is not pure order. It is a system that must maintain <strong>structured variation</strong>. The more variation it can sustain without collapse, the more capable it is of adapting to an unpredictable universe.</p>
+<p>Because the universe is not fixed.</p>
+<p>It is open.</p>
+<p>And if we can learn to embrace what is different—not just tolerate it, but engage with it—we transform uncertainty into curiosity, and the unknown into something we can approach.</p>
+<p>Something we can play with.</p>
+<p>...and maybe even shape.</p>
+<hr>
+<h2>Inspiration</h2>
+<p>This essay owes a deep debt to <strong>Jacob Foster&#39;s</strong> talk <em>&quot;Ideal Objects&quot;</em>, delivered as part of a symposium on the platonic space. Foster — a professor of cognitive science and informatics at Indiana University Bloomington and an external professor at the Santa Fe Institute — articulates with remarkable clarity the distinction between exploratory, combinatorial, and transformational creativity, drawing on Boden&#39;s framework and extending it into a theory of how intellectual systems unfold as <em>ideal objects</em> whose internal possibilities are explored historically.</p>
+<p>His discussion of how AI excels at tinkering and combinatorial search but struggles with transformational creativity — and his framing of what it means to see a structure <em>as</em> something new rather than merely rearrange it — directly shaped the hierarchy presented here. The idea that generators have histories, that creativity operates over the structure of possibility rather than within it, and that the most important innovations look like errors from within the current paradigm: these insights crystallized while engaging with this talk.</p>
+<p>I am grateful to Professor Foster for making these ideas publicly available, and I encourage anyone interested in the deeper structure of creativity, intelligence, and scientific discovery to watch the full lecture:</p>
+<div class="embed-frame"><div class="embed-bar"><span class="embed-bar-label">Video · YouTube, loads on click</span></div>
+<div class="embed embed--responsive">
+  <button type="button" class="embed-play-button" data-video-id="9cps3Wdv_hE" aria-label="Play video (loads from youtube-nocookie.com)">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
+      <circle cx="32" cy="32" r="31" fill="none" stroke="currentColor" stroke-width="2"/>
+      <polygon points="28,20 48,32 28,44" fill="currentColor"/>
+    </svg>
+  </button>
+  <iframe style="display: none;" title="Video" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<script>
+(function() {
+  const btn = document.currentScript.previousElementSibling.querySelector('button');
+  btn?.addEventListener('click', function() {
+    const videoId = this.dataset.videoId;
+    const iframe = this.parentElement.querySelector('iframe');
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1';
+    iframe.style.display = '';
+    this.style.display = 'none';
+  });
+})();
+</script>
+</div>
+<hr>
+<h2>Experiments</h2>
+<p>The computational experiments supporting this essay are available in the project repository:</p>
+<ul><li><strong>Experiment 1</strong> — <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener">Fitness Landscape Optimization</a>: Intelligence (fixed strategy) vs. Creativity (meta-strategy) on a rugged landscape.</li><li><strong>Experiment 2</strong> — <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener">The Generator Hierarchy</a>: Agent-based demonstration of three levels — fixed behavior, weight evolution, and architecture evolution in a grid world.</li></ul>
+<hr>
+<h2 class="references-heading">References</h2>
+<ol class="references"><li><a id="ref-1"></a>Müller, G. B. (2007). &quot;Evo–devo: extending the evolutionary synthesis.&quot; <em>Nature Reviews Genetics</em>, 8(12), 943–949.</li><li><a id="ref-2"></a>Feigin, C. Y., et al. (2018). &quot;Genome of the Tasmanian tiger...&quot; <em>Nature Ecology &amp; Evolution</em>.</li><li><a id="ref-3"></a>Thompson, D. W. (1917). <em>On Growth and Form.</em></li><li><a id="ref-4"></a>Kuhn, T. S. (1962). <em>The Structure of Scientific Revolutions.</em></li><li><a id="ref-5"></a>Riemann, B. (1868). Foundations of geometry.</li><li><a id="ref-6"></a>Dirac, P. A. M. (1930). <em>The Principles of Quantum Mechanics.</em></li><li><a id="ref-7"></a>Boden, M. A. (2004). <em>The Creative Mind: Myths and Mechanisms.</em> 2nd ed. Routledge. See Ch. 3 for the distinction between exploratory, combinational, and transformational creativity.</li><li><a id="ref-8"></a>Turing, A. M. (1936). Computable numbers.</li><li><a id="ref-9"></a>Culianu, I. P. (1992). <em>The Tree of Gnosis.</em></li><li><a id="ref-10"></a>Rota, G.-C. (1997). <em>Indiscrete Thoughts.</em> Birkhauser. See the discussion of the &quot;barrier of meaning&quot; in mathematical understanding.</li><li><a id="ref-11"></a>Hofstadter, D. (1979). <em>Godel, Escher, Bach: An Eternal Golden Braid.</em> On strange loops and tangled hierarchies as self-referential generators.</li><li><a id="ref-12"></a>Holland, J. H. (1992). <em>Adaptation in Natural and Artificial Systems.</em> On the formal structure of evolutionary search operators.</li></ol>
+<hr>
+<p><em>This essay is part of the <a href="https://github.com/thememesofproduction/encode-reality" target="_blank" rel="noopener">Encode Reality</a> research project.</em></p></div></article></div>
+</main>
+<footer class="site-footer">
+<div class="wrap site-footer-inner">
+<span>Encode Reality research project</span>
+<span class="site-footer-links"><a href="/feed.xml">Feed</a><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></span>
+</div>
+</footer>
+<script>
+(function () {
+  function shrink(box, inner, leftAlign) {
+    inner.style.transform = "";
+    inner.style.transformOrigin = "";
+    if (leftAlign) inner.style.textAlign = "";
+    box.style.height = "";
+    var contentW = inner.scrollWidth;
+    var boxW = box.clientWidth;
+    if (contentW <= boxW + 1) return;
+    var scale = Math.max(0.5, boxW / contentW);
+    if (leftAlign) inner.style.textAlign = "left";
+    inner.style.transformOrigin = "left top";
+    inner.style.transform = "scale(" + scale + ")";
+    box.style.height = inner.getBoundingClientRect().height + "px";
+  }
+  function fit() {
+    var m = document.querySelectorAll(".math-display");
+    for (var i = 0; i < m.length; i++) {
+      var k = m[i].querySelector(".katex-display");
+      if (k) shrink(m[i], k, true);
+    }
+    var t = document.querySelectorAll(".table-scroll");
+    for (var j = 0; j < t.length; j++) {
+      var tb = t[j].querySelector("table");
+      if (tb) shrink(t[j], tb, false);
+    }
+  }
+  var timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(fit, 150); }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fit);
+  } else {
+    fit();
+  }
+  window.addEventListener("load", fit);
+  window.addEventListener("resize", schedule);
+  window.addEventListener("orientationchange", schedule);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+})();
+</script>
+</body>
+</html>

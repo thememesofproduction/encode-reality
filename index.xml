@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>Encode Reality</title>
+<link>https://encodereality.com/</link>
+<description>Posts from Encode Reality</description>
+<lastBuildDate>Tue, 24 Mar 2026 00:00:00 GMT</lastBuildDate>
+<item>
+<title>Bell&#39;s Theorem and the Limits of Classical Probability</title>
+<link>https://encodereality.com/posts/bells_inequality/</link>
+<guid isPermaLink="true">https://encodereality.com/posts/bells_inequality/</guid>
+<pubDate>Tue, 24 Mar 2026 00:00:00 GMT</pubDate>
+<description>Bell&#39;s inequality constrains any model built from local hidden variables. The constraint follows from structure alone. Quantum mechanics violates it because probabilities are not primitive.</description>
+</item>
+<item>
+<title>The Models We Choose Define the Worlds We Can See</title>
+<link>https://encodereality.com/posts/models_define_world/</link>
+<guid isPermaLink="true">https://encodereality.com/posts/models_define_world/</guid>
+<pubDate>Tue, 17 Mar 2026 00:00:00 GMT</pubDate>
+<description>How modeling choices constrain what dynamics we can express — demonstrated through epidemic modeling, agent-based simulation, and computational irreducibility.</description>
+</item>
+<item>
+<title>Beyond What Works: Ideas, Intelligence, and the Courage to Be Creative</title>
+<link>https://encodereality.com/posts/ideas_intelligence_creativity/</link>
+<guid isPermaLink="true">https://encodereality.com/posts/ideas_intelligence_creativity/</guid>
+<pubDate>Tue, 17 Mar 2026 00:00:00 GMT</pubDate>
+<description>A structural hierarchy of ideas, intelligence, and creativity — where creativity is not novelty but a mechanism for modifying the space of possibility itself.</description>
+</item>
+<item>
+<title>The Paradox of Individualism: How the Myth of Total Agency Makes Us Easier to Control</title>
+<link>https://encodereality.com/posts/paradox_of_individualism/</link>
+<guid isPermaLink="true">https://encodereality.com/posts/paradox_of_individualism/</guid>
+<pubDate>Wed, 11 Mar 2026 00:00:00 GMT</pubDate>
+<description>How the myth of total individual agency obscures the systems that shape human behavior, and why radical individualism may function as a mechanism of control.</description>
+</item>
+<item>
+<title>Toward a Science of Politics: Dynamic Stability, Agency, and Dissipation in Open Social Systems</title>
+<link>https://encodereality.com/posts/societies-as-complex-systems/</link>
+<guid isPermaLink="true">https://encodereality.com/posts/societies-as-complex-systems/</guid>
+<pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+<description>A systems-theoretic framework grounding political organization in non-equilibrium thermodynamics, cybernetics, and complex systems theory.</description>
+</item>
+</channel>
+</rss>
