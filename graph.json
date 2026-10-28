@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "posts": [
+    {
+      "slug": "bells_inequality",
+      "title": "Bell's Theorem and the Limits of Classical Probability",
+      "date": "2026-03-24",
+      "tags": [
+        "quantum-mechanics",
+        "bell-theorem",
+        "type-theory",
+        "free-theorems",
+        "CHSH",
+        "computational-physics"
+      ],
+      "description": "Bell's inequality constrains any model built from local hidden variables. The constraint follows from structure alone. Quantum mechanics violates it because probabilities are not primitive."
+    },
+    {
+      "slug": "ideas_intelligence_creativity",
+      "title": "Beyond What Works: Ideas, Intelligence, and the Courage to Be Creative",
+      "date": "2026-03-17",
+      "tags": [
+        "creativity",
+        "intelligence",
+        "epistemology",
+        "complex-systems",
+        "AI",
+        "philosophy-of-science"
+      ],
+      "description": "A structural hierarchy of ideas, intelligence, and creativity — where creativity is not novelty but a mechanism for modifying the space of possibility itself."
+    },
+    {
+      "slug": "models_define_world",
+      "title": "The Models We Choose Define the Worlds We Can See",
+      "date": "2026-03-17",
+      "tags": [
+        "modeling",
+        "agent-based-models",
+        "complex-systems",
+        "computational-irreducibility",
+        "epidemiology",
+        "philosophy-of-science"
+      ],
+      "description": "How modeling choices constrain what dynamics we can express — demonstrated through epidemic modeling, agent-based simulation, and computational irreducibility."
+    },
+    {
+      "slug": "paradox_of_individualism",
+      "title": "The Paradox of Individualism: How the Myth of Total Agency Makes Us Easier to Control",
+      "date": "2026-03-11",
+      "tags": [
+        "individualism",
+        "behavioral-psychology",
+        "neuroscience",
+        "choice-architecture",
+        "agency",
+        "complex-systems"
+      ],
+      "description": "How the myth of total individual agency obscures the systems that shape human behavior, and why radical individualism may function as a mechanism of control."
+    },
+    {
+      "slug": "societies-as-complex-systems",
+      "title": "Toward a Science of Politics: Dynamic Stability, Agency, and Dissipation in Open Social Systems",
+      "date": "2026-03-01",
+      "tags": [
+        "complex-systems",
+        "political-science",
+        "thermodynamics",
+        "systems-theory",
+        "dissipative-systems"
+      ],
+      "description": "A systems-theoretic framework grounding political organization in non-equilibrium thermodynamics, cybernetics, and complex systems theory."
+    }
+  ]
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive CHSH Angle Sweep</title>
+<script src="/assets/plotly/plotly.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow: hidden; }
+  body {
+    background: #1e1e1e; color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 20px; max-width: 900px; margin: 0 auto;
+  }
+  h2 { margin-bottom: 10px; font-size: 1.3em; }
+  .controls {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 12px 24px; margin-bottom: 20px; padding: 16px;
+    background: #2a2a2a; border-radius: 8px;
+  }
+  .control-group { display: flex; flex-direction: column; }
+  .control-group label { font-size: 0.9em; margin-bottom: 4px; color: #aaa; }
+  .control-group .value { font-weight: bold; color: #e0e0e0; font-size: 1.05em; }
+  input[type=range] {
+    width: 100%; accent-color: #CC6666; cursor: pointer;
+  }
+  .readout {
+    display: flex; justify-content: space-around; margin-bottom: 16px;
+    padding: 12px; background: #2a2a2a; border-radius: 8px;
+    font-size: 1.1em;
+  }
+  .readout .label { color: #aaa; }
+  .readout .val { font-weight: bold; font-size: 1.3em; margin-top: 4px; }
+  .quantum { color: #CC6666; }
+  .classical { color: #6699CC; }
+  .tsirelson { color: #66CC99; }
+  #plot { width: 100%; height: 420px; }
+</style>
+</head>
+<body>
+
+<h2>CHSH Angle Sweep: Quantum vs Classical</h2>
+
+<div class="readout">
+  <div style="text-align:center">
+    <div class="label">Quantum |S|</div>
+    <div class="val quantum" id="s-quantum">2.828</div>
+  </div>
+  <div style="text-align:center">
+    <div class="label">Classical Bound</div>
+    <div class="val classical">2.000</div>
+  </div>
+  <div style="text-align:center">
+    <div class="label">Tsirelson Bound</div>
+    <div class="val tsirelson">2.828</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="control-group">
+    <label>Alice a&#8321;: <span class="value" id="v-a1">0</span>&deg;</label>
+    <input type="range" id="a1" min="0" max="360" value="0" step="1">
+  </div>
+  <div class="control-group">
+    <label>Alice a&#8322;: <span class="value" id="v-a2">90</span>&deg;</label>
+    <input type="range" id="a2" min="0" max="360" value="90" step="1">
+  </div>
+  <div class="control-group">
+    <label>Bob b&#8321;: <span class="value" id="v-b1">45</span>&deg;</label>
+    <input type="range" id="b1" min="0" max="360" value="45" step="1">
+  </div>
+  <div class="control-group">
+    <label>Bob b&#8322;: <span class="value" id="v-b2">135</span>&deg;</label>
+    <input type="range" id="b2" min="0" max="360" value="135" step="1">
+  </div>
+</div>
+
+<div id="plot"></div>
+
+<script>
+const DEG = Math.PI / 180;
+
+function E_quantum(a, b) { return -Math.cos(a - b); }
+
+function chsh(a1, a2, b1, b2) {
+  return E_quantum(a1, b1) - E_quantum(a1, b2) + E_quantum(a2, b1) + E_quantum(a2, b2);
+}
+
+// Sweep b1 from 0 to 360 while keeping other angles fixed
+function computeSweep(a1, a2, b2) {
+  const theta = [], qS = [];
+  for (let d = 0; d <= 360; d += 1) {
+    const b1 = d * DEG;
+    theta.push(d);
+    qS.push(Math.abs(chsh(a1, a2, b1, b2)));
+  }
+  return { theta, qS };
+}
+
+const layout = {
+  paper_bgcolor: '#1e1e1e', plot_bgcolor: '#2a2a2a',
+  font: { color: '#e0e0e0' },
+  xaxis: { title: 'Bob b\u2081 angle (\u00B0)', gridcolor: '#3a3a3a',
+           range: [0, 360] },
+  yaxis: { title: '|S|', gridcolor: '#3a3a3a', range: [0, 3.2] },
+  margin: { t: 30, b: 50, l: 60, r: 30 },
+  showlegend: true,
+  legend: { x: 0.02, y: 0.98, bgcolor: 'rgba(42,42,42,0.8)' },
+};
+
+function getAngles() {
+  return {
+    a1: +document.getElementById('a1').value * DEG,
+    a2: +document.getElementById('a2').value * DEG,
+    b1: +document.getElementById('b1').value * DEG,
+    b2: +document.getElementById('b2').value * DEG,
+  };
+}
+
+function update() {
+  const a = getAngles();
+  const a1d = +document.getElementById('a1').value;
+  const a2d = +document.getElementById('a2').value;
+  const b1d = +document.getElementById('b1').value;
+  const b2d = +document.getElementById('b2').value;
+
+  document.getElementById('v-a1').textContent = a1d;
+  document.getElementById('v-a2').textContent = a2d;
+  document.getElementById('v-b1').textContent = b1d;
+  document.getElementById('v-b2').textContent = b2d;
+
+  const S = Math.abs(chsh(a.a1, a.a2, a.b1, a.b2));
+  const el = document.getElementById('s-quantum');
+  el.textContent = S.toFixed(3);
+  el.style.color = S > 2.0 ? '#CC6666' : '#6699CC';
+
+  const sweep = computeSweep(a.a1, a.a2, a.b2);
+
+  const traces = [
+    // Quantum sweep curve
+    { x: sweep.theta, y: sweep.qS, mode: 'lines',
+      line: { color: '#CC6666', width: 2.5 },
+      name: 'Quantum |S| (sweep b\u2081)' },
+    // Classical bound
+    { x: [0, 360], y: [2, 2], mode: 'lines',
+      line: { color: '#FFFFFF', width: 2, dash: 'dash' },
+      name: 'Classical bound (|S| = 2)' },
+    // Tsirelson bound
+    { x: [0, 360], y: [2.828, 2.828], mode: 'lines',
+      line: { color: '#66CC99', width: 2, dash: 'dot' },
+      name: 'Tsirelson bound (2\u221A2)' },
+    // Current position marker
+    { x: [b1d], y: [S], mode: 'markers',
+      marker: { color: '#CC6666', size: 12, symbol: 'diamond',
+                line: { color: '#fff', width: 2 } },
+      name: 'Current setting', showlegend: false },
+  ];
+
+  Plotly.react('plot', traces, layout, { responsive: true });
+}
+
+['a1', 'a2', 'b1', 'b2'].forEach(id => {
+  document.getElementById(id).addEventListener('input', update);
+});
+update();
+</script>
+</body>
+</html>

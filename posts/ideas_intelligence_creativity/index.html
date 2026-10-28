@@ -1,0 +1,1319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Beyond What Works: Ideas, Intelligence, and the Courage to Be Creative</title>
+<meta name="description" content="A structural hierarchy of ideas, intelligence, and creativity — where creativity is not novelty but a mechanism for modifying the space of possibility itself.">
+<script>(function(){try{var t=localStorage.getItem("er-theme");if(t==="paper"||t==="ink")document.documentElement.setAttribute("data-theme",t)}catch(e){}})();</script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" href="/feed.xml" title="RSS Feed">
+<link rel="preload" href="/assets/fonts/source-serif-4-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/er/fonts.css">
+<link rel="stylesheet" href="/assets/er/tokens.css">
+<link rel="stylesheet" href="/assets/katex/katex.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html {
+  background: var(--er-bg);
+  color: var(--er-ink);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+body {
+  display: flex; flex-direction: column; min-height: 100vh;
+  margin: 0;
+  background: var(--er-bg);
+  color: var(--er-ink);
+  font: var(--er-type-body);
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--er-accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--er-accent); outline-offset: 2px; }
+::selection { background: var(--er-selected); color: var(--er-strong); }
+main { flex: 1 0 auto; }
+img, svg { max-width: 100%; }
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--er-space-4); top: -200px; z-index: 20;
+  padding: var(--er-space-3) var(--er-space-4);
+  background: var(--er-strong); color: var(--er-bg);
+  font: var(--er-type-ui); text-decoration: none;
+}
+.skip-link:focus { top: var(--er-space-2); }
+.wrap {
+  max-width: var(--er-page);
+  margin: 0 auto;
+  padding-left: var(--er-gutter);
+  padding-right: var(--er-gutter);
+}
+.kicker, .eyebrow {
+  margin: 0;
+  font: var(--er-type-eyebrow);
+  letter-spacing: var(--er-type-eyebrow-tracking);
+  text-transform: uppercase;
+  color: var(--er-muted);
+}
+.kicker a, .eyebrow a { color: inherit; text-decoration: none; }
+.kicker a:hover, .eyebrow a:hover { text-decoration: underline; }
+
+/* Header: wordmark, nav, the theme toggle; a <details> menu at phone width. */
+.site-header { position: relative; border-bottom: var(--er-hairline) solid var(--er-rule); }
+.site-header-inner {
+  display: flex; align-items: center; gap: var(--er-space-6);
+  padding-top: 18px; padding-bottom: 18px;
+}
+.site-brand {
+  margin-right: auto;
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  font: var(--er-type-brand);
+  letter-spacing: var(--er-type-brand-tracking);
+  text-transform: uppercase;
+  color: var(--er-strong);
+  text-decoration: none;
+}
+.site-nav ul {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 28px;
+  margin: 0; padding: 0; list-style: none;
+  font: var(--er-type-ui);
+}
+.site-nav a, .site-menu a { color: var(--er-ink); text-decoration: none; }
+.site-nav a { display: inline-flex; align-items: center; min-height: var(--er-touch); }
+.site-nav a:hover, .site-menu a:hover { color: var(--er-strong); text-decoration: underline; }
+.site-nav a[aria-current="page"], .site-menu a[aria-current="page"] {
+  color: var(--er-strong);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px;
+}
+.theme-toggle {
+  flex: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--er-touch); height: var(--er-touch); padding: 0;
+  border: var(--er-hairline) solid var(--er-rule); border-radius: var(--er-radius-pill);
+  background: transparent; color: var(--er-ink);
+  font: 400 18px/1 var(--er-font-sans);
+  cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--er-muted); color: var(--er-strong); }
+.theme-toggle[hidden] { display: none; }
+.site-menu { display: none; }
+.site-menu > summary {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--er-touch); height: var(--er-touch);
+  list-style: none; cursor: pointer; color: var(--er-ink);
+}
+.site-menu > summary::-webkit-details-marker { display: none; }
+.site-menu[open] > summary { color: var(--er-strong); }
+.site-menu nav {
+  position: absolute; top: 100%; left: 0; right: 0; z-index: 10;
+  padding: var(--er-space-2) 0;
+  background: var(--er-surface);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+}
+.site-menu ul { margin: 0; padding: 0; list-style: none; font: var(--er-type-ui); }
+.site-menu a { display: flex; align-items: center; min-height: var(--er-touch); padding: 0 var(--er-gutter-phone); }
+
+/* Footer: attribution, the feed, the code. */
+.site-footer { margin-top: var(--er-space-11); border-top: var(--er-hairline) solid var(--er-rule); }
+.site-footer-inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-2) var(--er-space-4);
+  padding-top: var(--er-space-5); padding-bottom: var(--er-space-9);
+  font: var(--er-type-mono); color: var(--er-muted);
+}
+.site-footer-links { display: flex; flex-wrap: wrap; gap: var(--er-space-6); }
+.site-footer a {
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  color: var(--er-muted); text-decoration: none;
+}
+.site-footer a:hover { color: var(--er-strong); text-decoration: underline; }
+
+/* Landing */
+.landing { padding-top: var(--er-space-12); padding-bottom: var(--er-space-8); }
+.hero {
+  margin: 18px 0 0; max-width: 15ch;
+  font: var(--er-type-display-xl);
+  letter-spacing: var(--er-type-display-xl-tracking);
+  color: var(--er-strong);
+}
+.hero-sub { margin: 26px 0 0; max-width: 38rem; font-size: 22px; line-height: 1.5; color: var(--er-ink); }
+.site-intro { margin-top: var(--er-space-7); max-width: 38rem; font-size: 18px; line-height: 1.6; color: var(--er-ink); }
+.site-intro p { margin: 0 0 var(--er-space-4); }
+.site-intro ul { margin: 0 0 var(--er-space-4); padding-left: 1.25em; }
+.site-intro li { margin: 0 0 var(--er-space-2); }
+.site-intro li::marker { color: var(--er-muted); }
+.site-intro strong { font-weight: 600; color: var(--er-strong); }
+.landing-grid {
+  display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--er-space-10);
+  margin-top: var(--er-space-12);
+}
+.recent { flex: 999 1 520px; min-width: 0; }
+.recent:only-child { max-width: 880px; }
+.recent > .eyebrow { margin-bottom: var(--er-space-2); font-weight: 500; }
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-row {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-2) var(--er-space-6);
+  padding: 22px 0;
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.post-row > time { flex: 0 0 17ch; font: 400 13px/2 var(--er-font-mono); color: var(--er-muted); }
+.post-row-main { flex: 1 1 320px; min-width: 0; }
+.post-row-title {
+  font: 600 23px/1.3 var(--er-font-serif);
+  color: var(--er-strong); text-decoration: none;
+}
+.post-row-title:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.post-row-tags {
+  margin: var(--er-space-2) 0 0;
+  font: var(--er-type-eyebrow); letter-spacing: 0.04em;
+  color: var(--er-accent);
+}
+.post-row-tags a { color: inherit; text-decoration: none; }
+.post-row-tags a:hover { text-decoration: underline; }
+.empty { color: var(--er-muted); font-style: italic; }
+.lab-card {
+  flex: 1 1 400px; min-width: 0;
+  border: var(--er-hairline) solid var(--er-rule);
+  background: var(--er-surface);
+}
+.instrument-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-2) var(--er-space-3);
+  padding: var(--er-space-3) var(--er-space-4);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.instrument-status { color: var(--er-live); }
+.lab-card-body { padding: var(--er-space-5) var(--er-space-4) var(--er-space-2); }
+.lab-card h2 { margin: 0; font: 600 26px/1.25 var(--er-font-serif); color: var(--er-strong); }
+.lab-card p { margin: 10px 0 0; font-size: 16.5px; line-height: 1.55; color: var(--er-muted); }
+.lab-card-actions {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-3);
+  margin-top: var(--er-space-3); padding: var(--er-space-4);
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.btn {
+  display: inline-flex; align-items: center; min-height: var(--er-touch); padding: 0 18px;
+  font: 500 15px/1.2 var(--er-font-sans); text-decoration: none;
+}
+.btn-primary { background: var(--er-strong); color: var(--er-bg); }
+.btn-primary:hover { text-decoration: underline; }
+.how {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--er-space-8);
+  margin-top: 88px; padding-top: var(--er-space-8);
+  border-top: var(--er-hairline) solid var(--er-rule);
+}
+.how h3 { font-weight: 400; }
+.how p { margin: 10px 0 0; font-size: 18px; line-height: 1.55; }
+
+/* Listing pages: tags, a tag, the archive, errors */
+.listing { padding-top: var(--er-space-11); padding-bottom: var(--er-space-8); }
+.listing h1 {
+  margin: var(--er-space-4) 0 var(--er-space-8); max-width: 20ch;
+  font: var(--er-type-display-lg); letter-spacing: var(--er-type-display-lg-tracking);
+  color: var(--er-strong);
+  overflow-wrap: anywhere;
+}
+.listing > p { max-width: var(--er-measure); }
+.tag-list { display: flex; flex-wrap: wrap; gap: var(--er-space-3); margin: 0; padding: 0; list-style: none; }
+.tag-list a {
+  display: inline-flex; align-items: center; gap: var(--er-space-2);
+  min-height: var(--er-touch); padding: 0 var(--er-space-4);
+  border: var(--er-hairline) solid var(--er-rule); background: var(--er-surface);
+  font: var(--er-type-mono); color: var(--er-accent); text-decoration: none;
+}
+.tag-list a:hover { border-color: var(--er-accent); }
+.tag-list .count { color: var(--er-muted); }
+
+/* Post */
+.post-wrap { padding-top: var(--er-space-11); padding-bottom: var(--er-space-13); }
+.post-head { max-width: var(--er-measure); }
+.post-tags { color: var(--er-accent); letter-spacing: 0.14em; }
+.post-head h1 {
+  margin: var(--er-space-4) 0 0;
+  font: var(--er-type-display-lg); letter-spacing: var(--er-type-display-lg-tracking);
+  color: var(--er-strong);
+}
+.post-meta {
+  display: flex; flex-wrap: wrap; gap: var(--er-space-2) 22px;
+  margin: var(--er-space-5) 0 0;
+  font: var(--er-type-mono); text-transform: uppercase; color: var(--er-muted);
+}
+.post-meta a { color: var(--er-accent); text-decoration: none; }
+.post-meta a:hover { text-decoration: underline; }
+
+/* Prose: the post body, a 680px measure. */
+.prose { display: flow-root; max-width: var(--er-measure); margin-top: var(--er-space-9); counter-reset: figure; }
+.prose > * { margin-top: 0; margin-bottom: 22px; }
+.prose > p:first-child { font: var(--er-type-lede); }
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 { color: var(--er-strong); }
+.prose h1 { margin-bottom: var(--er-space-4); padding-top: 26px; font: var(--er-type-display-md); }
+.prose h2 { margin-bottom: var(--er-space-4); padding-top: 26px; font: var(--er-type-display-sm); }
+.prose h3 { margin-bottom: var(--er-space-3); padding-top: 14px; font: 600 22px/1.3 var(--er-font-serif); }
+.prose h4, .prose h5, .prose h6 { margin-bottom: var(--er-space-2); padding-top: var(--er-space-2); font: 600 19px/1.4 var(--er-font-serif); }
+.prose strong { font-weight: 600; color: var(--er-strong); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin-bottom: 6px; }
+.prose li > ul, .prose li > ol { margin-top: 6px; margin-bottom: 0; }
+.prose li::marker { color: var(--er-muted); }
+.prose hr {
+  height: 0; margin: 0 0 var(--er-space-8); padding-top: 26px;
+  border: 0; border-bottom: var(--er-hairline) solid var(--er-rule);
+}
+.prose hr + h1, .prose hr + h2, .prose hr + h3 { padding-top: 0; }
+.prose a[href^="#ref-"] {
+  font: 500 0.7em/1 var(--er-font-mono);
+  vertical-align: 0.4em;
+  text-decoration: none; white-space: nowrap;
+}
+.prose a[href^="#ref-"]:hover { text-decoration: underline; }
+.prose code {
+  padding: 0.1em 0.35em;
+  background: var(--er-surface); border: var(--er-hairline) solid var(--er-rule);
+  font-family: var(--er-font-mono); font-size: 0.84em;
+}
+.prose pre {
+  overflow-x: auto; padding: var(--er-space-4) 18px;
+  background: var(--er-surface); border: var(--er-hairline) solid var(--er-rule);
+  font: 400 14px/1.6 var(--er-font-mono); color: var(--er-ink);
+}
+.prose pre code { padding: 0; border: 0; background: none; font-size: inherit; }
+.prose blockquote {
+  margin-left: 0; margin-right: 0; padding: 2px 0 2px var(--er-space-5);
+  border-left: 2px solid var(--er-accent);
+  font-style: italic; color: var(--er-ink);
+}
+.prose details { padding: var(--er-space-3) var(--er-space-4); border: var(--er-hairline) solid var(--er-rule); background: var(--er-surface); }
+.prose summary { cursor: pointer; font-weight: 600; color: var(--er-strong); }
+.prose .task-list-item { list-style: none; }
+.prose input[type="checkbox"] { accent-color: var(--er-accent); }
+
+/* Tables: wide ones scroll (no-JS fallback); the fit script scales them on a narrow screen. */
+.table-scroll { overflow-x: auto; max-width: 100%; }
+.prose table { border-collapse: collapse; font: 400 15px/1.5 var(--er-font-sans); font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--er-space-2) var(--er-space-3); border: var(--er-hairline) solid var(--er-rule); text-align: left; vertical-align: top; }
+.prose thead th { background: var(--er-surface); color: var(--er-strong); font-weight: 600; }
+
+/* Display math scrolls rather than overflowing (katex sets nowrap); KaTeX inherits the ink. */
+.math-display {
+  box-sizing: content-box;
+  overflow-x: auto; overflow-y: hidden; max-width: 100%;
+  padding: var(--er-space-4) 0;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  color: var(--er-strong);
+}
+.math-display + .math-display { margin-top: -22px; border-top: 0; }
+.math-display .katex-display { margin: 0; }
+.katex { font-size: 1.05em; }
+
+/* Figures and embeds are numbered by one counter: "FIGURE N." on a caption, "FIG N" on an embed's bar. */
+.prose figure, .prose .embed-frame {
+  counter-increment: figure;
+  margin: var(--er-space-8) 0 var(--er-space-9);
+  border: var(--er-hairline) solid var(--er-rule);
+  background: var(--er-surface);
+}
+.prose figure > img, .prose figure > svg { display: block; height: auto; margin: 0 auto; padding: var(--er-space-4); }
+/* A diagram stays inside its own figure (CO-217). Its root <svg> is markup any client of the
+   sync wrote, and the page's own CSS reaches it too: the sanitizer keeps the root's class, so a
+   page rule written for something else (an absolutely placed button, a fixed skip link) can place
+   it. The figure is the drawing's whole box, whatever places it: contain: layout makes the figure
+   the containing block of everything inside it, fixed and absolute included, and a stacking
+   context, and overflow: clip cuts whatever is drawn past its edge (a transform, a negative
+   margin, an oversized box, a shadow). position: relative is the absolute half for a browser
+   without containment. Not contain: paint: paint containment snaps the figure to whole pixels and
+   moved its caption's rule by one. hidden is for browsers without clip; flow-root keeps a negative
+   margin on the root from collapsing through the figure. Layout containment leaves counters alone,
+   so the figure numbering is unchanged. */
+.prose figure.diagram { position: relative; display: flow-root; overflow: hidden; overflow: clip; contain: layout; }
+.prose figcaption {
+  padding: 14px 18px 18px;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-prose-sm); color: var(--er-ink); text-align: left;
+}
+.prose figcaption::before, .prose figure:not(:has(figcaption))::after {
+  content: "Figure " counter(figure) ".";
+  font: 500 12px/1.55 var(--er-font-mono);
+  letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-strong);
+}
+.prose figcaption::before { margin-right: 0.6em; }
+.prose figure:not(:has(figcaption))::after {
+  display: block; padding: 10px 18px;
+  border-top: var(--er-hairline) solid var(--er-rule);
+  text-align: left;
+}
+.embed-bar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--er-space-1) var(--er-space-4);
+  padding: var(--er-space-3) 18px;
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.embed-bar::before { content: "Fig " counter(figure); font-weight: 500; color: var(--er-strong); }
+.embed { margin: 0; }
+.embed iframe { display: block; width: 100%; max-width: 100%; border: 0; background: var(--er-surface); }
+.embed--responsive { position: relative; height: 0; padding-bottom: 56.25%; overflow: hidden; }
+.embed--responsive iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+.embed-play-button {
+  all: unset;
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--er-selected); color: var(--er-strong);
+  cursor: pointer;
+}
+.embed-play-button:hover { color: var(--er-accent); }
+.embed-play-button:focus-visible { outline: 2px solid var(--er-accent); outline-offset: -4px; }
+.embed-play-button svg { pointer-events: none; }
+
+/* Lab figures (CO-162): the instrument bar (what was computed, Run live, Open in Lab), the
+   baked SVG inline -- its colours are these same tokens -- then the caption. */
+.er-fig-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--er-space-1) var(--er-space-4);
+  margin: 0; padding: var(--er-space-2) 18px;
+  border-bottom: var(--er-hairline) solid var(--er-rule);
+  font: var(--er-type-label); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.er-fig-bar-label { min-width: 0; overflow-wrap: anywhere; }
+.er-fig-actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--er-space-1) var(--er-space-4); margin-left: auto; }
+.er-fig-run, .er-fig-open {
+  display: inline-flex; align-items: center; min-height: var(--er-touch);
+  font: 500 12px/1.2 var(--er-font-mono); letter-spacing: var(--er-type-label-tracking);
+  text-transform: uppercase; text-decoration: none; white-space: nowrap;
+}
+.er-fig-run {
+  padding: 0 var(--er-space-3);
+  border: var(--er-hairline) solid var(--er-rule); border-radius: var(--er-radius-pill);
+  background: transparent; color: var(--er-strong); cursor: pointer;
+}
+.er-fig-run:hover { border-color: var(--er-accent); color: var(--er-accent); }
+.er-fig-run[hidden] { display: none; }
+.er-fig-open { color: var(--er-accent); }
+.er-fig-open:hover { text-decoration: underline; }
+.er-fig-plot { padding: var(--er-space-4); }
+.er-fig-plot svg { display: block; width: 100%; max-width: 100%; height: auto; margin: 0 auto; }
+.er-fig-live iframe { display: block; width: 100%; height: 560px; max-height: 85vh; border: 0; background: var(--er-surface); }
+.er-fig-missing { padding: var(--er-space-7) var(--er-space-4); font: var(--er-type-mono); color: var(--er-muted); text-align: center; }
+.er-fig-problem { display: block; margin-top: var(--er-space-2); }
+
+/* References: the list keeps every entry; DOI links are pills. */
+.prose .references-heading {
+  font: var(--er-type-eyebrow); font-weight: 500;
+  letter-spacing: var(--er-type-eyebrow-tracking);
+  text-transform: uppercase; color: var(--er-muted);
+}
+.prose .references { padding-left: 22px; font: var(--er-type-prose-sm); }
+.prose .references li { margin-bottom: 10px; }
+.prose .references li::marker { font-family: var(--er-font-mono); font-size: 12px; }
+.prose .references li:has(> a[id]:target) { background: var(--er-selected); }
+.prose a[href*="doi.org/"], .sidenote a[href*="doi.org/"] {
+  display: inline-block; padding: 2px 7px;
+  border: var(--er-hairline) solid var(--er-rule);
+  font: 400 11.5px/1.4 var(--er-font-mono);
+  color: var(--er-accent); text-decoration: none; white-space: nowrap;
+}
+
+/* Sidenotes: inline asides after their block on narrow screens. */
+.sidenote {
+  padding: var(--er-space-3) 14px;
+  border-left: 2px solid var(--er-accent);
+  background: var(--er-surface);
+  font: var(--er-type-ui-sm); color: var(--er-muted);
+}
+.prose > .has-note + .sidenote { margin-top: -10px; }
+.prose > .sidenote + .sidenote { margin-top: -14px; }
+.sidenote-num { margin-right: 0.3em; font-family: var(--er-font-mono); color: var(--er-accent); }
+
+@media (min-width: 1024px) {
+  .prose figure, .prose .embed-frame {
+    width: min(var(--er-figure), calc(100vw - 2 * var(--er-gutter)));
+    max-width: none;
+  }
+}
+
+/* ...and Tufte-style margin notes once the 260px margin column fits. */
+@media (min-width: 1200px) {
+  .prose > * { clear: left; }
+  .prose > figure, .prose > .embed-frame { clear: both; }
+  .prose > .has-note { float: left; width: 100%; }
+  .prose > .sidenote,
+  .prose > .has-note + .sidenote,
+  .prose > .sidenote + .sidenote {
+    float: right; clear: right;
+    width: 260px; margin: 6px -316px 18px 0; padding: 0;
+    border: 0; background: none;
+    font-size: 14px; line-height: 1.55;
+  }
+}
+
+@media (max-width: 720px) {
+  .wrap { padding-left: var(--er-gutter-phone); padding-right: var(--er-gutter-phone); }
+  .site-header .wrap { padding-right: var(--er-space-2); }
+  .site-header-inner { gap: var(--er-space-1); padding-top: 6px; padding-bottom: 6px; }
+  .site-brand { font-size: 12px; }
+  .site-nav { display: none; }
+  .site-menu { display: block; }
+  .theme-toggle { border-color: transparent; }
+  .landing { padding-top: var(--er-space-8); }
+  .hero { font-size: clamp(36px, 10vw, 44px); line-height: 1.08; }
+  .hero-sub { margin-top: var(--er-space-5); font-size: 19px; }
+  .site-intro { font-size: 17px; }
+  .landing-grid { margin-top: var(--er-space-9); }
+  .post-row-title { font-size: 21px; }
+  .how { margin-top: var(--er-space-11); }
+  .listing { padding-top: var(--er-space-8); }
+  .listing h1 { font: var(--er-type-display-md); }
+  .post-wrap { padding-top: var(--er-space-7); padding-bottom: var(--er-space-11); }
+  .post-tags { font-size: 11px; }
+  .post-head h1 { margin-top: var(--er-space-3); font: var(--er-type-display-md); }
+  .post-meta { margin-top: 14px; font-size: 11.5px; }
+  .prose { margin-top: var(--er-space-7); font-size: 18px; line-height: 1.62; }
+  .prose > * { margin-bottom: 18px; }
+  .prose > p:first-child { font-size: 19px; line-height: 1.62; }
+  .prose h2 { padding-top: 22px; font-size: 24px; }
+  .prose h3 { font-size: 20px; }
+  .math-display + .math-display { margin-top: -18px; }
+  .prose figure, .prose .embed-frame {
+    margin-left: calc(-1 * var(--er-gutter-phone));
+    margin-right: calc(-1 * var(--er-gutter-phone));
+    border-left: 0; border-right: 0;
+  }
+  .embed-bar { padding: 10px var(--er-gutter-phone); font-size: 10.5px; }
+  .er-fig-bar { padding: var(--er-space-1) var(--er-gutter-phone); font-size: 10.5px; }
+  .er-fig-plot { padding: var(--er-space-3) var(--er-gutter-phone); }
+  .prose figcaption { padding: var(--er-space-3) var(--er-gutter-phone) var(--er-space-4); font-size: 15px; line-height: 1.5; }
+  .prose figcaption::before, .prose figure:not(:has(figcaption))::after { font-size: 11px; }
+  .prose figure:not(:has(figcaption))::after { padding: 10px var(--er-gutter-phone); }
+  .sidenote { font-size: 14px; line-height: 1.5; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap site-header-inner">
+<a href="/" class="site-brand">Encode Reality</a>
+<nav class="site-nav" aria-label="Primary"><ul><li><a href="/" aria-current="page">Essays</a></li><li><a href="/lab/">Lab</a></li><li><a href="/tags/">Tags</a></li><li><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></li></ul></nav>
+<button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to ink theme" hidden>◐</button>
+<script>(function(){var b=document.getElementById("theme-toggle");if(!b)return;var d=document.documentElement,q=window.matchMedia?window.matchMedia("(prefers-color-scheme: dark)"):null;function cur(){var t=d.getAttribute("data-theme");return t==="paper"||t==="ink"?t:(q&&q.matches?"ink":"paper")}function label(){var o=cur()==="ink"?"paper":"ink";b.setAttribute("aria-label","Switch to "+o+" theme");b.title="Switch to "+o+" theme"}b.hidden=false;label();b.addEventListener("click",function(){var n=cur()==="ink"?"paper":"ink";d.setAttribute("data-theme",n);try{localStorage.setItem("er-theme",n)}catch(e){}label()});if(q&&q.addEventListener)q.addEventListener("change",label)})();</script>
+<details class="site-menu">
+<summary><svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true" focusable="false"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.6" fill="none"/></svg><span class="visually-hidden">Menu</span></summary>
+<nav aria-label="Menu"><ul><li><a href="/" aria-current="page">Essays</a></li><li><a href="/lab/">Lab</a></li><li><a href="/tags/">Tags</a></li><li><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></li></ul></nav>
+</details>
+</div>
+</header>
+<main id="main">
+<div class="wrap post-wrap"><article><header class="post-head"><p class="kicker post-tags"><a href="/tags/creativity/">creativity</a><span aria-hidden="true"> · </span><a href="/tags/intelligence/">intelligence</a><span aria-hidden="true"> · </span><a href="/tags/epistemology/">epistemology</a><span aria-hidden="true"> · </span><a href="/tags/complex-systems/">complex-systems</a><span aria-hidden="true"> · </span><a href="/tags/AI/">AI</a><span aria-hidden="true"> · </span><a href="/tags/philosophy-of-science/">philosophy-of-science</a></p><h1>Beyond What Works: Ideas, Intelligence, and the Courage to Be Creative</h1><p class="post-meta"><time datetime="2026-03-17">17 March 2026</time><span class="code-link"><a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener">Code: ideas_intelligence_creativity ↗</a></span></p></header><div class="prose">
+<p>When we talk about intelligence, we often treat it as the ability to solve problems.</p>
+<p>A problem appears. A system searches. A solution is found.</p>
+<p>But this picture hides something deeper.</p>
+<p>Not all solutions are of the same kind, because not all acts of intelligence operate at the same level. Some systems generate solutions within an established space. Others generate the spaces themselves.</p>
+<p>To understand this distinction, we need to be precise about our terms.</p>
+<p>An <strong>idea</strong> is a solution within a space. <strong>Intelligence</strong> is the ability to generate ideas within a given space. <strong>Creativity</strong>, in a functional sense, is the ability to generate new spaces by operating over generators themselves.</p>
+<p>This is not a poetic distinction. It is a structural one.</p>
+<hr>
+<h2>Ideas are generated, not primitive</h2>
+<p>An idea is not a fundamental unit.</p>
+<p>A proof, a hypothesis, a design—these are all outputs of a system operating under constraints. They emerge from representations, transformation rules, and evaluation processes.</p>
+<p>Every idea presupposes:</p>
+<ul><li>a way of representing the problem</li><li>a way of generating candidates</li><li>a way of evaluating outcomes</li></ul>
+<p>So rather than treating ideas as primitive, we treat them as <strong>outputs of a generator operating in a constrained space</strong>.</p>
+<hr>
+<h2>Evolution does not search every form</h2>
+<p>Biology provides a clear example.</p>
+<p class="has-note">Evolution is often described as a search over all possible organisms, guided by natural selection. But this is incomplete. Organisms do not vary arbitrarily; they vary according to the structure of the developmental systems that produce them <a href="#ref-1">[1]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">1</span> Müller, G. B. (2007). &quot;Evo–devo: extending the evolutionary synthesis.&quot; <em>Nature Reviews Genetics</em>, 8(12), 943–949.</aside>
+<p class="has-note">The extinct <strong>Tasmanian wolf (thylacine)</strong> and modern wolves diverged over 100 million years ago, yet evolved strikingly similar forms. This is not just because the environment favored those forms. It is because both lineages inherited similar generative resources—developmental systems that bias what can be produced <a href="#ref-2">[2]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">2</span> Feigin, C. Y., et al. (2018). &quot;Genome of the Tasmanian tiger...&quot; <em>Nature Ecology &amp; Evolution</em>.</aside>
+<p>Selection chooses among possibilities.</p>
+<p>But the generator defines the possibilities.</p>
+<p>And crucially, those generators are themselves products of prior evolution.</p>
+<hr>
+<h2>Science operates within generators</h2>
+<p>Scientific reasoning follows the same structure.</p>
+<p>Scientists do not explore all possible explanations. They operate within frameworks—mathematical, conceptual, and representational—that determine what kinds of explanations can exist.</p>
+<p class="has-note">Kuhn called these <strong>paradigms</strong> <a href="#ref-4">[4]</a>. Within a paradigm, intelligence produces solutions. But when the paradigm itself changes, the space of possible solutions changes with it.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">4</span> Kuhn, T. S. (1962). <em>The Structure of Scientific Revolutions.</em></aside>
+<p class="has-note">For centuries, geometry meant Euclidean geometry. The introduction of non-Euclidean geometry redefined what “space” could be, enabling entirely new lines of reasoning and ultimately new physical theories <a href="#ref-5">[5]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">5</span> Riemann, B. (1868). Foundations of geometry.</aside>
+<p class="has-note">In quantum mechanics, the shift from probabilities as primitives to amplitudes as primitives fundamentally altered the structure of reasoning about uncertainty and interaction <a href="#ref-6">[6]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">6</span> Dirac, P. A. M. (1930). <em>The Principles of Quantum Mechanics.</em></aside>
+<p>These were not just better answers.</p>
+<p>They were new generators.</p>
+<hr>
+<h2>A functional hierarchy</h2>
+<p>We can now define a clean hierarchy:</p>
+<h3>Level 0 — Ideas</h3>
+<p>Solutions generated within a space.</p>
+<h3>Level 1 — Intelligence</h3>
+<p>A generator that produces ideas within a fixed space.</p>
+<h3>Level 2 — Creativity</h3>
+<p>A generator that operates over generators, producing new spaces of ideas, and with them solutions the old space did not contain.</p>
+<p>Creativity, in this sense, is not about novelty or artistic expression. It is a <strong>mechanism for modifying the structure of possibility itself</strong>.</p>
+<p>It is a generator of generators.</p>
+<h3>Formal notation</h3>
+<p>More precisely:</p>
+<ul><li><strong>Level 0</strong>: An idea is an element <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>∈</mo><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">x \in \mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span>, where <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span> is the solution space defined by a generator.</li><li><strong>Level 1</strong>: Intelligence is a function <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>:</mo><mi mathvariant="script">P</mi><mo>→</mo><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">G: \mathcal{P} \to \mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.0822em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span> — a generator that maps problems to solutions within a fixed space.</li><li><strong>Level 2</strong>: Creativity is a meta-function <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi><mo>:</mo><mi mathvariant="script">G</mi><mo>→</mo><msup><mi mathvariant="script">G</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">\mathcal{M}: \mathcal{G} \to \mathcal{G}&#x27;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7805em;vertical-align:-0.0972em;"></span><span class="mord mathcal" style="margin-right:0.0593em;">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8491em;vertical-align:-0.0972em;"></span><span class="mord"><span class="mord mathcal" style="margin-right:0.0593em;">G</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span></span></span></span></span> — a transformation that takes generators and produces new generators, thereby redefining the space of reachable solutions.</li></ul>
+<p>Two things about this ladder matter later on.</p>
+<ul><li><strong>Acting on generators is necessary, not sufficient.</strong> An operator that takes generators as input is <em>second-order</em>. It is creative, Level 2 in this essay&#39;s sense, <em>with respect to</em> a space <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span> only when the generators it produces reach solutions outside <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">S</mi></mrow><annotation encoding="application/x-tex">\mathcal{S}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6833em;"></span><span class="mord mathcal" style="margin-right:0.075em;">S</span></span></span></span></span>. An operator that chooses among search strategies that all search the same space is second-order but not creative relative to that space.</li><li><strong>A level is set by what an operator acts on and where its output can go, not by whether it loops back on itself.</strong> Level 1 acts on candidates and Level 2 acts on generators. An operator that is among its own inputs, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">M</mi><mo>∈</mo><mi mathvariant="normal">dom</mi><mo>⁡</mo><mi mathvariant="script">M</mi></mrow><annotation encoding="application/x-tex">\mathcal{M} \in \operatorname{dom} \mathcal{M}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathcal">M</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mop"><span class="mord mathrm">dom</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathcal">M</span></span></span></span></span>, is <em>recursive</em>. As <a href="#ai-and-the-boundary">AI and the boundary</a> argues, recursion lets one system keep climbing without anyone adding the next rung, but it is not what puts a system on the second rung.</li></ul>
+<p>These levels are not merely conceptual. In the <a href="#the-observable-difference">supporting experiments</a>, we construct systems at each level and observe their qualitatively different behaviors.</p>
+<hr>
+<h2>Creativity as a system</h2>
+<p>This definition aligns with—but sharpens—existing work.</p>
+<p class="has-note">Margaret Boden distinguishes between exploratory, combinational, and transformational creativity <a href="#ref-7">[7]</a>. What we are calling creativity corresponds specifically to her <strong>transformational</strong> category: changing the space itself.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">7</span> Boden, M. A. (2004). <em>The Creative Mind: Myths and Mechanisms.</em> 2nd ed. Routledge. See Ch. 3 for the distinction between exploratory, combinational, and transformational creativity.</aside>
+<p>But here we go further.</p>
+<p>We treat creativity not as a descriptive label, but as a <strong>functional system</strong>:</p>
+<pre><code>Creativity(G₁) → produces G₂
+G₂ → produces ideas</code></pre>
+<p>Creativity is not just producing unusual outputs. It is modifying the underlying generator.</p>
+<hr>
+<h2>Pseudo-code: intelligence vs creativity</h2>
+<h3>Intelligence (fixed generator)</h3>
+<pre><code>function solve(problem, generator):
+    ideas = generator.generate(problem)
+    return select_best(ideas)</code></pre>
+<p>This is standard intelligence: search within a fixed space.</p>
+<hr>
+<h3>Creativity (generator over generators)</h3>
+<pre><code>function create_new_generator(problem, generators, meta_generator):
+    candidate_generators = meta_generator.generate(generators)
+
+    evaluated = []
+    for g in candidate_generators:
+        ideas = g.generate(problem)
+        score = evaluate(ideas)
+        evaluated.append((g, score))
+
+    return select_best(evaluated)</code></pre>
+<p>Creativity operates at a different level. It does not generate solutions directly. It generates <strong>new ways of generating solutions</strong>.</p>
+<hr>
+<h2>The observable difference</h2>
+<p>The distinction between intelligence and creativity is not only a matter of words. It shows up as two different kinds of failure, and both can be built and measured.</p>
+<h3>When the answer is not in the space</h3>
+<p>Take a simple problem: find a number <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span> where</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>4</mn><msup><mi>x</mi><mn>4</mn></msup><mo>−</mo><mn>8</mn><msup><mi>x</mi><mn>3</mn></msup><mo>−</mo><mn>7</mn><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>20</mn><mi>x</mi><mo>+</mo><mn>25</mn><mo>=</mo><mn>0.</mn></mrow><annotation encoding="application/x-tex">p(x) = 4x^4 - 8x^3 - 7x^2 + 20x + 25 = 0.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.9474em;vertical-align:-0.0833em;"></span><span class="mord">4</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.9474em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.9474em;vertical-align:-0.0833em;"></span><span class="mord">7</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">20</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">25</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">0.</span></span></span></span></span></div>
+<p>Write <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">|p(x)|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord">∣</span></span></span></span></span> for how far <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span> is from zero. Zero means solved, and smaller means closer.</p>
+<p>Among the real numbers, there is no such <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span>. The closest any real number gets is <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi><mo>≈</mo><mn>9.77</mn></mrow><annotation encoding="application/x-tex">|p(x)| \approx 9.77</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">9.77</span></span></span></span></span>, at <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>≈</mo><mo>−</mo><mn>0.92</mn></mrow><annotation encoding="application/x-tex">x \approx -0.92</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4831em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">0.92</span></span></span></span></span>. That number is not a plateau that a search happened to reach. It is a property of the space, and it is computed directly, from where the slope of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></span> is zero, rather than found by search. Call it the floor.</p>
+<p>The real numbers lie along a line, and that line is everything a Level-1 search here can move along. The complex numbers add a second direction at right angles to it. A complex number <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">a + bi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">bi</span></span></span></span></span> has an ordinary part <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi></mrow><annotation encoding="application/x-tex">a</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span></span> and a part <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi></mrow><annotation encoding="application/x-tex">b</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></span> along the new direction, where <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi></mrow><annotation encoding="application/x-tex">i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></span> is a number whose square is <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>.</p>
+<p><strong>How to read the next figure.</strong> The dark panel is a map of numbers. The horizontal line through it is the real line, and every point above or below it is a complex number. The shading shows how far <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></span> is from zero at each point: the brighter, the closer. The dots are searchers. Each one tries a nearby number and moves there only if it is closer to solved. The orange rings mark the four solutions, and you can drag the white ring to read off how far from zero any point is. Start with the searchers confined to the line, then let them use the second direction.</p>
+<div class="embed-frame"><div class="embed-bar"><span class="embed-bar-label">Interactive plot · instrument line</span></div><div class="embed"><iframe src="/plots/ideas_intelligence_creativity/instrument_line.html" title="Interactive plot · instrument line" width="100%" height="560" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation" allowfullscreen></iframe></div></div>
+<p>On the line, the searchers stop at 9.77 and stay there however long they run. Many get stuck in a second, shallower dip, at 32.5. Off the line, they close in on zero, as near as their small steps allow. The equation does have solutions (mathematicians call them roots), four of them, but they were never on the line. They lie beside it, in a direction the real numbers do not have.</p>
+<p>So we give the problem to intelligence. We ran four search strategies confined to the real line:</p>
+<ul><li>a simple hill-climber, which tries a small random step and keeps it only if it is closer to solved;</li><li>the same, restarting from a fresh random point when it gets stuck;</li><li>an &quot;evolution strategy&quot;, which also adjusts its step size as it goes;</li><li>a portfolio that learns which of several strategies to use.</li></ul>
+<p>Each was allowed a million guesses, where a guess is one number tried and checked, and each was run thirty times over. None of them gets below the floor. Three of the four reach it in every run. The simplest hill-climber reaches it in 20 runs of 30 and is stuck in the second dip in the rest. Giving the search two real numbers to work with instead of one does not help either: it hits the same floor. Two real numbers side by side are not a complex number. What matters is how they multiply. A pair of real numbers multiplies part by part, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>a</mi><mo separator="true">,</mo><mi>b</mi><mo stretchy="false">)</mo><mo>×</mo><mo stretchy="false">(</mo><mi>c</mi><mo separator="true">,</mo><mi>d</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mi>a</mi><mi>c</mi><mo separator="true">,</mo><mi>b</mi><mi>d</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(a, b) \times (c, d) = (ac, bd)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">d</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">b</span><span class="mord mathnormal">d</span><span class="mclose">)</span></span></span></span></span>, so squaring a pair gives <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msup><mi>a</mi><mn>2</mn></msup><mo separator="true">,</mo><msup><mi>b</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(a^2, b^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span>, which can never be <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo separator="true">,</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(-1, -1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">−</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></span>. The complex numbers are built so that <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>×</mo><mi>i</mi><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i \times i = -1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7429em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>.</p>
+<p>Now let a second system search over <em>number systems</em> instead. It considers the two-dimensional systems in which a new number <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> obeys <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>2</mn></msup><mo>=</mo><mi>α</mi><mo>+</mo><mi>β</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">e^2 = \alpha + \beta e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mord mathnormal">e</span></span></span></span></span>, for <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span> between <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span> and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn></mrow><annotation encoding="application/x-tex">5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span></span> and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span></span></span></span></span> between <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">-4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">4</span></span></span></span></span> and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn></mrow><annotation encoding="application/x-tex">4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>. It judges each one by running one of the Level-1 searches, the evolution strategy, inside it. Closeness to solved is measured the same way in every system: by how strongly multiplying by <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">p(z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mclose">)</span></span></span></span></span>, again and again, grows or shrinks the numbers of that system. Renaming the system&#39;s parts cannot change it, and on the real line it is just <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">|p(x)|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord">∣</span></span></span></span></span>. For most choices of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span> and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span></span></span></span></span>, these systems are two real numbers in disguise, and they inherit the same floor. But in a small region, 5.6% of the space it was allowed to search, you can build from <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span></span></span></span></span> a number whose square is <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>. For instance, if <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>2</mn></msup><mo>=</mo><mo>−</mo><mn>2</mn><mo>+</mo><mn>2</mn><mi>e</mi></mrow><annotation encoding="application/x-tex">e^2 = -2 + 2e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mord mathnormal">e</span></span></span></span></span>, then <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>e</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mn>2</mn></msup><mo>=</mo><msup><mi>e</mi><mn>2</mn></msup><mo>−</mo><mn>2</mn><mi>e</mi><mo>+</mo><mn>1</mn><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">(e - 1)^2 = e^2 - 2e + 1 = -1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>. Those systems contain a square root of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>. They are copies of the complex numbers, and in them the equation has solutions.</p>
+<p><strong>How to read the next figure.</strong> Left to right is the number of guesses, on a log scale: equal steps along the axis multiply the count by the same amount, so the marked points go 1, 100, 10,000 and a million. Height is how close the best guess so far is to solved, as a fraction of the floor, and it is on a log scale too: each marked step down is a thousand times closer. At 1 a search is at the floor, the best the real line allows, and lower is better. A computer never lands on exactly zero, so a run counts as having found a solution once it is within a millionth of the floor (the dotted line). Each line is the median of thirty runs: at every point, half the runs are above it and half below. The band around the orange line holds the middle half of the runs. Step through it with the buttons. <strong>1</strong> shows only the searches on the line. <strong>2</strong> adds the system that changes the space. <strong>3</strong> adds comparison runs:</p>
+<ul><li>the complex numbers handed to a search directly;</li><li>two real numbers side by side;</li><li>one search over the number system and the answer together;</li><li>three variants of Level 2:</li></ul>
+<div class="embed-frame"><div class="embed-bar"><span class="embed-bar-label">Interactive plot · residual vs evaluations</span></div><div class="embed"><iframe src="/plots/ideas_intelligence_creativity/residual_vs_evaluations.html" title="Interactive plot · residual vs evaluations" width="100%" height="600" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation" allowfullscreen></iframe></div></div>
+<p>The blue lines flatten at 1 and never go below it. In all thirty runs, the Level-2 system adopted a number system containing a square root of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>, after a median of about twelve thousand guesses, and then found a root. More search in the old space never got below the floor. A new space went straight through it.</p>
+<p><strong>How to read the next figure.</strong> Each point in this panel is a different number system, the rule <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>2</mn></msup><mo>=</mo><mi>α</mi><mo>+</mo><mi>β</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">e^2 = \alpha + \beta e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span><span class="mord mathnormal">e</span></span></span></span></span>, with <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">\beta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0528em;">β</span></span></span></span></span> along the bottom and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span> up the side. Drag the white marker to choose one. It starts above the dashed curve. Drag it under the curve, into the orange region. The readout names what you picked, and a small search runs inside it. Above the dashed curve, every system is two real numbers in disguise, and the search stops at the floor. On the curve sit the <em>dual numbers</em>, a borderline case, which stop there too. Below it, every system contains a square root of <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>. Those are the complex numbers in disguise, and there the search goes straight through. The small ring marks <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>2</mn></msup><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">e^2 = -1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span>, the usual way of writing the complex numbers. <strong>Replay a real run</strong> plays back one recorded Level-2 run: each dot is a number system it tried, and the line joins the ones it kept.</p>
+<div class="embed-frame"><div class="embed-bar"><span class="embed-bar-label">Interactive plot · instrument algebras</span></div><div class="embed"><iframe src="/plots/ideas_intelligence_creativity/instrument_algebras.html" title="Interactive plot · instrument algebras" width="100%" height="600" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation" allowfullscreen></iframe></div></div>
+<p>Outside the region under the curve, no system is closer to the answer than any other. There is no slope to follow toward it, which is why the second caveat below matters.</p>
+<p>Three caveats, because they matter:</p>
+<ul><li><strong>The menu was mine.</strong> The family of number systems that Level 2 searched was chosen by me. Level 2 is a search in a fixed space too, one level up. &quot;Level&quot; is relative: a system is creative <em>with respect to a space</em> when it produces generators that reach outside that space. Nothing escapes every space, and this is the essay&#39;s own point that generators have histories.</li><li><strong>There was nothing to climb.</strong> Outside the complex region, the best any number system can do is exactly the floor. No system is closer to the complex numbers than any other, so nothing points toward the answer. A version of Level 2 that could only make small changes to its current system succeeded in about half the runs. The versions that proposed distant systems, and recognised success when it came, succeeded every time.</li><li><strong>Layers are not the point.</strong> A single flat search that was allowed to vary the number system and the answer together also succeeded. What breaks the floor is not that the code has two levels. It is that the space itself is allowed to change.</li></ul>
+<h3>When the answer is in the space, but hard to find</h3>
+<p>An earlier version of this essay showed a different experiment: a hill-climber on a rugged landscape against a &quot;meta-strategy&quot; that switched search strategies and jumped to a higher peak. On inspection, it did not show what I claimed. The jump came from a randomly generated strategy that sampled the whole landscape, in effect a random restart. The comparison was a single run with unequal compute. So I rebuilt it with three kinds of landscape: random peaks; random peaks plus one tall peak; and random peaks plus one peak hidden in a corner, as in the original. There were 600 runs in all, 200 on each kind, with the same number of guesses for every strategy, the true highest point of each landscape computed, and fair baselines.</p>
+<p><strong>How to read the next figure.</strong> Here the answer <em>is</em> in the space. The landscape is a range of hills, and the task is to find the highest point. That point is worked out separately, by a far more expensive search than any strategy was allowed, so we know where the top is. Left to right is guesses again, on a log scale. Height is the share of runs that have come within 1% of the highest point&#39;s height by then. The menu switches between the three kinds of landscape.</p>
+<div class="embed-frame"><div class="embed-bar"><span class="embed-bar-label">Interactive plot · landscape success</span></div><div class="embed"><iframe src="/plots/ideas_intelligence_creativity/landscape_success.html" title="Interactive plot · landscape success" width="100%" height="560" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation" allowfullscreen></iframe></div></div>
+<p>Changing <em>how</em> you search helps enormously. A fixed small-step climber finds the highest point in 4–15% of runs, and strategies that explore find it in roughly 90–100%. But the most reliable searcher was the simplest one, a fixed strategy with random restarts (99–100%). Learning which strategy to use was not measurably better than switching at random (92% against 88% on random peaks, a gap that could easily be chance with this many runs). And no strategy ever exceeds the highest point. They differ in whether, and how fast, they reach it, never in where it is. The highest point here plays the part the floor played on the real line: a limit set by the space. The difference is that this one can be reached.</p>
+<p>That is the difference. On the landscape, the failure is in the search, and more exploration fixes it. On the real line, the failure is in the space, and no amount of exploration fixes it. Only a change of space does.</p>
+<details><summary>Full source code and how to reproduce</summary><p>The complete implementation is available in the <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener"><code>experiments/ideas_intelligence_creativity/</code></a> directory. It includes the number systems, the search strategies, the repaired landscape experiment, the figures, the specification and its tests. Every figure is rebuilt from the saved results, and a run is deterministic:</p><pre><code class="language-bash">python run_experiment_3.py --profile full --workers 16   # number systems, ~2.5 min
+python run_experiment_1.py --profile full --workers 8    # landscapes, ~1 min</code></pre></details>
+<hr>
+<h2>Generators have histories</h2>
+<p>Generators do not appear out of nowhere.</p>
+<p>Developmental systems evolve. Mathematical frameworks are constructed over time. Scientific paradigms emerge through accumulated constraints and successes.</p>
+<p>Most of us only ever see the solutions. We see relativity, but not how Einstein arrived at it. There is a sociological and historical explanation — the mathematical machinery he drew on, the work of Hilbert, the structure of Minkowski spacetime — and these are well documented <a href="#ref-5">[5]</a>. But what Einstein went through internally to string those elements together, to embody a new concept deeply enough to expose it to the world — that generative process is far harder to record or audit. And it is the most important part of the story. The output was a theory. The creative act was the construction of a new generator: a way of seeing space, time, and gravitation that did not exist within any prior framework.</p>
+<p>This is the pattern. We inherit the ideas but rarely the generators that produced them, and almost never the creative acts that built those generators in the first place.</p>
+<p class="has-note">Ioan P. Culianu described intellectual systems as <strong>ideal objects</strong> whose internal possibilities unfold historically <a href="#ref-9">[9]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">9</span> Culianu, I. P. (1992). <em>The Tree of Gnosis.</em></aside>
+<p>This leads to a layered structure:</p>
+<ul><li>ideas are generated by intelligence</li><li>intelligence operates through generators</li><li>creativity modifies those generators</li></ul>
+<p>So the full system is:</p>
+<pre><code>Creativity → Intelligence → Ideas</code></pre>
+<p>Or more abstractly:</p>
+<pre><code>G₂ → G₁ → outputs</code></pre>
+<hr>
+<h2>Why creativity looks like error</h2>
+<p>When a new generator appears, it often looks wrong.</p>
+<p>Not because it fails within the current system—but because it does not belong to it.</p>
+<p>Complex numbers were rejected. Non-Euclidean geometry was dismissed. Abstract mathematical systems seemed disconnected from reality.</p>
+<p>The complex numbers show how this happens. In 1572, Rafael Bombelli worked on the cubic <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mn>3</mn></msup><mo>=</mo><mn>15</mn><mi>x</mi><mo>+</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">x^3 = 15x + 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">15</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>. Its answer is an ordinary real number, <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">x = 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4</span></span></span></span></span>. But Cardano&#39;s formula reaches it only by passing through <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><mo>−</mo><mn>121</mn></mrow></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{-121}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.04em;vertical-align:-0.1744em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8656em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">−</span><span class="mord">121</span></span></span><span style="top:-2.8256em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1744em;"><span></span></span></span></span></span></span></span></span></span>, a quantity that did not exist:</p>
+<div class="math math-display"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>x</mi><mo>=</mo><mroot><mrow><mn>2</mn><mo>+</mo><msqrt><mrow><mo>−</mo><mn>121</mn></mrow></msqrt></mrow><mn>3</mn></mroot><mo>+</mo><mroot><mrow><mn>2</mn><mo>−</mo><msqrt><mrow><mo>−</mo><mn>121</mn></mrow></msqrt></mrow><mn>3</mn></mroot><mo>=</mo><mo stretchy="false">(</mo><mn>2</mn><mo>+</mo><mi>i</mi><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mn>2</mn><mo>−</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mn>4.</mn></mrow><annotation encoding="application/x-tex">x = \sqrt[3]{2 + \sqrt{-121}} + \sqrt[3]{2 - \sqrt{-121}} = (2 + i) + (2 - i) = 4.</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.84em;vertical-align:-0.4117em;"></span><span class="mord sqrt"><span class="katex-root"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-3.11em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size6 size1 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4283em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9144em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">−</span><span class="mord">121</span></span></span><span style="top:-2.8744em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1256em;"><span></span></span></span></span></span></span></span><span style="top:-3.3883em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.88em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.88em" viewBox="0 0 400000 1944" preserveAspectRatio="xMinYMin slice"><path d="M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4117em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.84em;vertical-align:-0.4117em;"></span><span class="mord sqrt"><span class="katex-root"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9322em;"><span style="top:-3.11em;"><span class="pstrut" style="height:2.5em;"></span><span class="katex-sizing reset-size6 size1 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4283em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9144em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">−</span><span class="mord">121</span></span></span><span style="top:-2.8744em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1256em;"><span></span></span></span></span></span></span></span><span style="top:-3.3883em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.88em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.88em" viewBox="0 0 400000 1944" preserveAspectRatio="xMinYMin slice"><path d="M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4117em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">i</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6444em;"></span><span class="mord">4.</span></span></span></span></span></div>
+<p>The step works because <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>2</mn><mo>+</mo><mi>i</mi><msup><mo stretchy="false">)</mo><mn>3</mn></msup><mo>=</mo><mn>2</mn><mo>+</mo><mn>11</mn><mi>i</mi></mrow><annotation encoding="application/x-tex">(2 + i)^3 = 2 + 11i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord mathnormal">i</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.6595em;"></span><span class="mord">11</span><span class="mord mathnormal">i</span></span></span></span></span>, and <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>11</mn><mi>i</mi></mrow><annotation encoding="application/x-tex">11i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.6595em;"></span><span class="mord">11</span><span class="mord mathnormal">i</span></span></span></span></span> is <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><mo>−</mo><mn>121</mn></mrow></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{-121}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:1.04em;vertical-align:-0.1744em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8656em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord">−</span><span class="mord">121</span></span></span><span style="top:-2.8256em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg xmlns="http://www.w3.org/2000/svg" width="400em" height="1.08em" viewBox="0 0 400000 1080" preserveAspectRatio="xMinYMin slice"><path d="M95,702
+c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,-10,-9.5,-14
+c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54
+c44.2,-33.3,65.8,-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10
+s173,378,173,378c0.7,0,35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429
+c69,-144,104.5,-217.7,106.5,-221
+l0 -0
+c5.3,-9.3,12,-14,20,-14
+H400000v40H845.2724
+s-225.272,467,-225.272,467s-235,486,-235,486c-2.7,4.7,-9,7,-19,7
+c-6,0,-10,-1,-12,-3s-194,-422,-194,-422s-65,47,-65,47z
+M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.1744em;"><span></span></span></span></span></span></span></span></span></span>. Within the real numbers, the middle of that calculation is nonsense. Bombelli computed with it anyway, and the nonsense cancelled into the right answer. The error was in the generator, not in the idea.</p>
+<p>But once the generator stabilizes, it becomes the new baseline.</p>
+<p>What was once unintelligible becomes obvious.</p>
+<hr>
+<h2>AI and the boundary</h2>
+<p>Modern AI systems are extremely strong at intelligence in this framework.</p>
+<p>They can:</p>
+<ul><li>generate large numbers of ideas</li><li>explore combinatorial spaces</li><li>optimize within fixed representations</li></ul>
+<p>Consider AlphaFold: it is a remarkably powerful generator within a fixed representational space — amino acid sequences mapped to three-dimensional structures. It produces solutions that human scientists could not, but it does not invent new representations of protein structure. It operates entirely within a generator defined by decades of structural biology.</p>
+<p>Large language models demonstrate a similar pattern. They excel at what Boden would call <strong>combinational creativity</strong> — recombining learned representations in novel ways, synthesizing across domains, generating fluent text in styles they have absorbed <a href="#ref-7">[7]</a>. But they rarely perform <strong>transformational creativity</strong>: inventing a new representational space that makes previously inexpressible ideas expressible.</p>
+<p>An earlier version of this essay ended the comparison there: language models are sophisticated Level 1 systems, powerful generators within the space their training defined. That was too quick, for two reasons.</p>
+<h3>The unit is the system, not the model</h3>
+<p class="has-note">A generator, in this essay&#39;s sense, is a way of representing a problem, a way of proposing candidates and a way of judging them. A language model whose learned parameters are fixed is still not one generator. What it is given (the prompt, the examples, the conversation so far) selects which generator it runs. The networks behind these models can even carry out simple learning procedures on the examples in front of them, without changing their parameters <a href="#ref-13">[13]</a> <a href="#ref-14">[14]</a>. Ask one about the polynomial above and it may reply &quot;work over the complex numbers&quot;. Relative to the problem as posed, that is the kind of move the Level-2 system made, though nothing in this essay tests a language model making it.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">13</span> Garg, S., Tsipras, D., Liang, P., &amp; Valiant, G. (2022). &quot;What Can Transformers Learn In-Context? A Case Study of Simple Function Classes.&quot; <em>NeurIPS 2022</em>. arXiv:2208.01066.</aside>
+<aside class="sidenote" role="note"><span class="sidenote-num">14</span> von Oswald, J., et al. (2023). &quot;Transformers Learn In-Context by Gradient Descent.&quot; <em>ICML 2023</em>. arXiv:2212.07677.</aside>
+<p>The systems now being built around these models go further. They rewrite their own prompts, tools, code and, in some cases, weights:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>System</th>
+<th>What it rewrites</th>
+<th>What stays fixed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Promptbreeder (2023) <a href="#ref-15">[15]</a></td>
+<td>its task prompts, and the prompts it uses to change them</td>
+<td>the model&#39;s weights; the tasks that score it</td>
+</tr>
+<tr>
+<td>Darwin Gödel Machine (2025) <a href="#ref-16">[16]</a></td>
+<td>its own agent code, including the code that makes the next edit</td>
+<td>the underlying language models; the benchmarks; how parents are picked from its archive</td>
+</tr>
+<tr>
+<td>AlphaEvolve (2025) <a href="#ref-17">[17]</a></td>
+<td>programs, including low-level code that cut about 1% from the training time of Gemini, the model family it runs on</td>
+<td>the evaluation functions, supplied by people</td>
+</tr>
+<tr>
+<td>SEAL (2025) <a href="#ref-18">[18]</a></td>
+<td>its own weights, by writing its own training data</td>
+<td>the reward that judges each edit: did the adapted model get the answer right</td>
+</tr>
+</tbody>
+</table></div>
+<p>By this essay&#39;s own definitions, a system that rewrites how it represents, proposes or judges is operating on generators. It is Level 2 relative to the space it started in. The useful question is not whether language models are creative. It is what a given system is allowed to change.</p>
+<p>One refinement. A language model gives some probability to every string, so nothing is strictly outside its space. &quot;Outside&quot; has to mean out of reach within any realistic budget. The real line in the number-systems experiment is an exact exclusion: no amount of search finds a root there. A language model&#39;s exclusions are almost always of the budget kind. For a language model, the question is rarely whether an idea is in its space at all. It is whether the idea is within reach. That makes its situation closer to the landscape than to the real line, with one difference: what matters is not how hard it searches, but what is cheap for it to reach. Changing that is the creative move.</p>
+<h3>Is recursion the line?</h3>
+<p>It is tempting to say that what separates Level 2 from Level 1 is recursion. The word covers two different things, and neither draws the line.</p>
+<ul><li><strong>Feeding outputs back in.</strong> Every search in this essay does this: a hill-climber builds its next guess from its last one. A language model feeds every word it writes back in as input. This is how Level 1 works, not what lifts a system above it.</li><li><strong>Acting on itself.</strong> This is an operator that takes itself as input.</li></ul>
+<p>What separates the levels is what an operator acts on: candidates, or the generators that produce them. It also matters whether the generators it produces reach outside the space. Acting on generators is not enough by itself. The portfolio in the number-systems experiment chooses among search strategies as it goes, so it is second-order. But it still stops at the floor with the rest, because every strategy it can choose searches the same line. Relative to the line, it is not Level 2. The landscape experiment&#39;s meta-strategy, which learns which strategy to use, is not measurably better than switching at random. What an operator acts on matters, and so does where the new generators can go. Whether the operator loops back is a separate question.</p>
+<h3>What recursion buys</h3>
+<p class="has-note">A fixed Level 2 has a ceiling of its own. The menu of number systems in the experiment was mine, and a system can only search the menu it is given. History has a clean example. William Rowan Hamilton had long wished for a theory of <em>triplets</em>: a way to multiply triples of numbers, a three-dimensional successor to the complex numbers. By his own account the problem had haunted him &quot;for at least fifteen years&quot; before he solved it. At breakfast his sons would ask, &quot;Well, Papa, can you multiply triplets?&quot;, and he had to say no <a href="#ref-19">[19]</a>. That was a search over number systems, a Level-2 search. It failed for a reason proved only later: no three-dimensional number system in which you can always divide exists <a href="#ref-20">[20]</a> <a href="#ref-23">[23]</a>. The answer came on 16 October 1843, when he gave up two assumptions at once. He admitted &quot;in some sense, a fourth dimension&quot;, and he let the order of multiplication matter, so that <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mi>i</mi><mo>=</mo><mo>−</mo><mi>i</mi><mi>j</mi></mrow><annotation encoding="application/x-tex">ji = -ij</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.0572em;">ij</span></span></span></span></span>. As he walked past Brougham Bridge in Dublin, he cut <span class="math math-inline"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>i</mi><mn>2</mn></msup><mo>=</mo><msup><mi>j</mi><mn>2</mn></msup><mo>=</mo><msup><mi>k</mi><mn>2</mn></msup><mo>=</mo><mi>i</mi><mi>j</mi><mi>k</mi><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">i^2 = j^2 = k^2 = ijk = -1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">i</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:1.0085em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="katex-sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">ij</span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="katex-base"><span class="katex-strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span> into one of its stones. The breakthrough was not a better search through the menu. It was a change to the menu, one level above the search Hamilton had been running, and he built that rung himself.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">19</span> Hamilton, W. R. Letters on the discovery of quaternions: to John T. Graves, 17 October 1843; to P. G. Tait, 15 October 1858; and to his son Archibald, 5 August 1865.</aside>
+<aside class="sidenote" role="note"><span class="sidenote-num">20</span> Frobenius, F. G. (1878). &quot;Über lineare Substitutionen und bilineare Formen.&quot; <em>Journal für die reine und angewandte Mathematik</em>, 84, 1–63. The only finite-dimensional associative division algebras over the real numbers are the reals, the complex numbers and the quaternions.</aside>
+<aside class="sidenote" role="note"><span class="sidenote-num">23</span> Brešar, M. (2024). &quot;Frobenius&#39; Theorem on Division Algebras.&quot; arXiv:2405.01876. Includes the elementary argument that a real division algebra of odd dimension greater than one cannot exist, whether or not its multiplication is associative.</aside>
+<p>Without recursion, each new rung needs someone to build it. A system whose modifier is among the things it can modify can in principle keep climbing on its own. In the Darwin Gödel Machine, for example, an agent edits the very code that makes the next edit. So recursion does not separate Level 1 from Level 2. It separates a ladder with a fixed top from one that can keep extending.</p>
+<h3>The part that is never rewritten</h3>
+<p class="has-note">Every recursive system keeps something it does not rewrite. In almost all of the systems above, the base model stays fixed, and so does the judge: the benchmark, the evaluator, the reward. Few systems let the evaluator change at all, and there is a reason. A system that can rewrite its own judge can declare success, unless the judge is tied to something the system cannot rewrite. The one recent system that lets its evaluators evolve ties them to grades given by people <a href="#ref-21">[21]</a>. So recursion moves the fixed space outward, to the machinery and the judge; it does not abolish it. Seen from outside, a self-modifying system is still a search over a fixed space: everything its machinery can express. That is what the flat search in the number-systems experiment showed one level down.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">21</span> Iacob, A., Jovanović, A., Shen, W. F., et al. (2026). &quot;The Red Queen Gödel Machine: Co-Evolving Agents and Their Evaluators.&quot; arXiv:2606.26294. Preprint.</aside>
+<p class="has-note">Recursion helped, but it was not the larger part. The Darwin Gödel Machine keeps an archive of every working agent it has made, including those that score worse, as stepping stones. Its authors tried removing each part, scoring it on a benchmark of real software bugs to fix (SWE-bench) <a href="#ref-16">[16]</a>:</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">16</span> Zhang, J., Hu, S., Lu, C., Lange, R., &amp; Clune, J. (2025). &quot;Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents.&quot; arXiv:2505.22954. The ablation is Table 1, Appendix A.3.</aside>
+<ul><li>the full system scored 50%;</li><li>without self-modification, with the part that makes edits held fixed, it scored 39%;</li><li>without the archive, keeping only its latest version, it scored 23%.</li></ul>
+<p>Losing the loop cost 11 points. Losing what it kept cost 27.</p>
+<p class="has-note">The number-systems experiment has no self-modifying arm, so it says nothing about recursion. It does show the same thing about breadth. A Level 2 restricted to small changes from its current best succeeded in about half the runs; one that kept proposing distant systems succeeded every time. Lehman and Stanley made the general case: an objective can deceive, and &quot;may actually prevent the objective from being reached&quot; <a href="#ref-22">[22]</a>.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">22</span> Lehman, J., &amp; Stanley, K. O. (2011). &quot;Abandoning Objectives: Evolution Through the Search for Novelty Alone.&quot; <em>Evolutionary Computation</em>, 19(2), 189–223.</aside>
+<p class="has-note">Gian-Carlo Rota described a &quot;barrier of meaning&quot; in mathematics — the moment when a structure is seen <em>as</em> something new, not merely rearranged within its existing interpretation <a href="#ref-10">[10]</a>. Seeing something <em>as</em> something else is a generator-level operation, not an output-level one. It requires redefining the representational primitives, not just recombining them.</p>
+<aside class="sidenote" role="note"><span class="sidenote-num">10</span> Rota, G.-C. (1997). <em>Indiscrete Thoughts.</em> Birkhauser. See the discussion of the &quot;barrier of meaning&quot; in mathematical understanding.</aside>
+<p>This is the boundary.</p>
+<p>The difference between generating better answers and generating better ways of answering.</p>
+<p>Level 1 searches a space. Level 2 changes it. Recursion lets one system keep changing it without anyone adding the next rung. But every recursive system keeps a part it does not rewrite, its judge. And how far it gets depends at least as much on what it keeps as on the loop: whether it can hold on to what does not work yet.</p>
+<hr>
+<h2>What this means for us</h2>
+<p>This boundary is not unique to machines.</p>
+<p>It is easy to become comfortable in what has already worked.</p>
+<p>And we should be proud of that. Every system we inherit—scientific, mathematical, cultural—represents real progress. These generators encode generations of effort.</p>
+<p>But they are not final.</p>
+<p>The mistake is to confuse stability with completeness.</p>
+<p>The world will always pull us toward established structures. It rewards what fits. What is legible. What has precedent.</p>
+<p>But the universe does not operate within our generators.</p>
+<p>It continues to present forms that exceed them.</p>
+<p>A functioning society needs intelligence—people who can operate effectively within existing systems.</p>
+<p>But it also needs creativity—systems and individuals capable of generating new ones.</p>
+<p>These are often harder to understand. They do not align with current expectations. They may appear incoherent.</p>
+<p>But that incoherence may not be failure.</p>
+<p>It may be a signal that the current generator is insufficient.</p>
+<p>So the next time you feel the impulse to reject something because it does not make sense, pause.</p>
+<p>Ask whether the failure is in the idea—or in the generator you are using to interpret it.</p>
+<p>The same applies beyond ideas.</p>
+<p>Even the smallest forms of life—things we dismiss as insignificant—are products of entirely different generative trajectories. They embody structures we did not produce, solutions we did not discover, generators we cannot yet replicate.</p>
+<p>That is why we have each other.</p>
+<p>Not because we think the same way—but because we don’t.</p>
+<p>Society is not pure order. It is a system that must maintain <strong>structured variation</strong>. The more variation it can sustain without collapse, the more capable it is of adapting to an unpredictable universe.</p>
+<p>Because the universe is not fixed.</p>
+<p>It is open.</p>
+<p>And if we can learn to embrace what is different—not just tolerate it, but engage with it—we transform uncertainty into curiosity, and the unknown into something we can approach.</p>
+<p>Something we can play with.</p>
+<p>...and maybe even shape.</p>
+<hr>
+<h2>Inspiration</h2>
+<p>This essay owes a deep debt to <strong>Jacob Foster&#39;s</strong> talk <em>&quot;Ideal Objects&quot;</em>, delivered as part of a symposium on the platonic space. Foster — a professor of cognitive science and informatics at Indiana University Bloomington and an external professor at the Santa Fe Institute — articulates with remarkable clarity the distinction between exploratory, combinatorial, and transformational creativity, drawing on Boden&#39;s framework and extending it into a theory of how intellectual systems unfold as <em>ideal objects</em> whose internal possibilities are explored historically.</p>
+<p>His discussion of how AI excels at tinkering and combinatorial search but struggles with transformational creativity — and his framing of what it means to see a structure <em>as</em> something new rather than merely rearrange it — directly shaped the hierarchy presented here. The idea that generators have histories, that creativity operates over the structure of possibility rather than within it, and that the most important innovations look like errors from within the current paradigm: these insights crystallized while engaging with this talk.</p>
+<p>I am grateful to Professor Foster for making these ideas publicly available, and I encourage anyone interested in the deeper structure of creativity, intelligence, and scientific discovery to watch the full lecture:</p>
+<div class="embed-frame"><div class="embed-bar"><span class="embed-bar-label">Video · YouTube, loads on click</span></div>
+<div class="embed embed--responsive">
+  <button type="button" class="embed-play-button" data-video-id="9cps3Wdv_hE" aria-label="Play video (loads from youtube-nocookie.com)">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true" focusable="false">
+      <circle cx="32" cy="32" r="31" fill="none" stroke="currentColor" stroke-width="2"/>
+      <polygon points="28,20 48,32 28,44" fill="currentColor"/>
+    </svg>
+  </button>
+  <iframe style="display: none;" title="Video" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</div>
+<script>
+(function() {
+  const btn = document.currentScript.previousElementSibling.querySelector('button');
+  btn?.addEventListener('click', function() {
+    const videoId = this.dataset.videoId;
+    const iframe = this.parentElement.querySelector('iframe');
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1';
+    iframe.style.display = '';
+    this.style.display = 'none';
+  });
+})();
+</script>
+</div>
+<hr>
+<h2>Experiments</h2>
+<p>The computational experiments supporting this essay are available in the project repository:</p>
+<ul><li><strong>Number systems</strong> — <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener">the main experiment</a>: searches confined to the real numbers stop at an exact floor; a search over number systems goes through it. Thirty paired runs, with controls.</li><li><strong>A rugged landscape (rebuilt)</strong> — <a href="https://github.com/thememesofproduction/encode-reality/tree/main/experiments/ideas_intelligence_creativity" target="_blank" rel="noopener">the contrast</a>: changing the search strategy changes whether and how fast the highest point is found, never where it is. 600 paired runs on three kinds of landscape.</li></ul>
+<p>An earlier agent-based &quot;generator hierarchy&quot; in a grid world has been withdrawn: on inspection it did not support the claim it was written for. The experiment README explains why.</p>
+<hr>
+<h2 class="references-heading">References</h2>
+<ol class="references"><li><a id="ref-1"></a>Müller, G. B. (2007). &quot;Evo–devo: extending the evolutionary synthesis.&quot; <em>Nature Reviews Genetics</em>, 8(12), 943–949.</li><li><a id="ref-2"></a>Feigin, C. Y., et al. (2018). &quot;Genome of the Tasmanian tiger...&quot; <em>Nature Ecology &amp; Evolution</em>.</li><li><a id="ref-3"></a>Thompson, D. W. (1917). <em>On Growth and Form.</em></li><li><a id="ref-4"></a>Kuhn, T. S. (1962). <em>The Structure of Scientific Revolutions.</em></li><li><a id="ref-5"></a>Riemann, B. (1868). Foundations of geometry.</li><li><a id="ref-6"></a>Dirac, P. A. M. (1930). <em>The Principles of Quantum Mechanics.</em></li><li><a id="ref-7"></a>Boden, M. A. (2004). <em>The Creative Mind: Myths and Mechanisms.</em> 2nd ed. Routledge. See Ch. 3 for the distinction between exploratory, combinational, and transformational creativity.</li><li><a id="ref-8"></a>Turing, A. M. (1936). Computable numbers.</li><li><a id="ref-9"></a>Culianu, I. P. (1992). <em>The Tree of Gnosis.</em></li><li><a id="ref-10"></a>Rota, G.-C. (1997). <em>Indiscrete Thoughts.</em> Birkhauser. See the discussion of the &quot;barrier of meaning&quot; in mathematical understanding.</li><li><a id="ref-11"></a>Hofstadter, D. (1979). <em>Godel, Escher, Bach: An Eternal Golden Braid.</em> On strange loops and tangled hierarchies as self-referential generators.</li><li><a id="ref-12"></a>Holland, J. H. (1992). <em>Adaptation in Natural and Artificial Systems.</em> On the formal structure of evolutionary search operators.</li><li><a id="ref-13"></a>Garg, S., Tsipras, D., Liang, P., &amp; Valiant, G. (2022). &quot;What Can Transformers Learn In-Context? A Case Study of Simple Function Classes.&quot; <em>NeurIPS 2022</em>. arXiv:2208.01066.</li><li><a id="ref-14"></a>von Oswald, J., et al. (2023). &quot;Transformers Learn In-Context by Gradient Descent.&quot; <em>ICML 2023</em>. arXiv:2212.07677.</li><li><a id="ref-15"></a>Fernando, C., et al. (2023). &quot;Promptbreeder: Self-Referential Self-Improvement Via Prompt Evolution.&quot; arXiv:2309.16797.</li><li><a id="ref-16"></a>Zhang, J., Hu, S., Lu, C., Lange, R., &amp; Clune, J. (2025). &quot;Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents.&quot; arXiv:2505.22954. The ablation is Table 1, Appendix A.3.</li><li><a id="ref-17"></a>Novikov, A., et al. (2025). &quot;AlphaEvolve: A coding agent for scientific and algorithmic discovery.&quot; Google DeepMind. arXiv:2506.13131.</li><li><a id="ref-18"></a>Zweiger, A., et al. (2025). &quot;Self-Adapting Language Models.&quot; arXiv:2506.10943.</li><li><a id="ref-19"></a>Hamilton, W. R. Letters on the discovery of quaternions: to John T. Graves, 17 October 1843; to P. G. Tait, 15 October 1858; and to his son Archibald, 5 August 1865.</li><li><a id="ref-20"></a>Frobenius, F. G. (1878). &quot;Über lineare Substitutionen und bilineare Formen.&quot; <em>Journal für die reine und angewandte Mathematik</em>, 84, 1–63. The only finite-dimensional associative division algebras over the real numbers are the reals, the complex numbers and the quaternions.</li><li><a id="ref-21"></a>Iacob, A., Jovanović, A., Shen, W. F., et al. (2026). &quot;The Red Queen Gödel Machine: Co-Evolving Agents and Their Evaluators.&quot; arXiv:2606.26294. Preprint.</li><li><a id="ref-22"></a>Lehman, J., &amp; Stanley, K. O. (2011). &quot;Abandoning Objectives: Evolution Through the Search for Novelty Alone.&quot; <em>Evolutionary Computation</em>, 19(2), 189–223.</li><li><a id="ref-23"></a>Brešar, M. (2024). &quot;Frobenius&#39; Theorem on Division Algebras.&quot; arXiv:2405.01876. Includes the elementary argument that a real division algebra of odd dimension greater than one cannot exist, whether or not its multiplication is associative.</li></ol>
+<hr>
+<p><em>This essay is part of the <a href="https://github.com/thememesofproduction/encode-reality" target="_blank" rel="noopener">Encode Reality</a> research project.</em></p>
+<script>(function plotEmbedRuntime(selfTest) {
+"use strict";
+var named = {}, probe = null;
+function parse(s) {
+if (typeof s !== "string") return null;
+s = s.trim().toLowerCase();
+var m = /^#([0-9a-f]{3,8})$/.exec(s);
+if (m) {
+var h = m[1];
+if (h.length < 5) h = h.replace(/./g, "$&$&");
+if (h.length !== 6 && h.length !== 8) return null;
+return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16),
+h.length === 8 ? parseInt(h.slice(6, 8), 16) / 255 : 1];
+}
+m = /^rgba?\(\s*([\d.]+)[\s,]+([\d.]+)[\s,]+([\d.]+)\s*(?:[,/]\s*([\d.]+)(%?)\s*)?\)$/.exec(s);
+if (m) {
+var a = m[4] === undefined ? 1 : parseFloat(m[4]) / (m[5] ? 100 : 1);
+return [+m[1], +m[2], +m[3], Math.max(0, Math.min(1, a))];
+}
+if (selfTest || typeof document === "undefined" || !/^([a-z]+|(hsla?|hwb|lab|lch|oklab|oklch|color)\(.*\))$/.test(s) || s === "currentcolor") return null;
+if (!Object.prototype.hasOwnProperty.call(named, s)) {
+if (!probe) probe = document.createElement("canvas").getContext("2d");
+named[s] = null;
+if (probe) {
+probe.fillStyle = "transparent";
+probe.fillStyle = s;
+var r = String(probe.fillStyle);
+named[s] = /^(#|rgba?\()/.test(r) ? parse(r) : null;
+}
+}
+return named[s] ? named[s].slice() : null;
+}
+function fmt(c) {
+var out = "#";
+for (var i = 0; i < 4; i++) {
+if (i === 3 && c[3] >= 1) break;
+var v = Math.round(i === 3 ? c[3] * 255 : Math.max(0, Math.min(255, c[i])));
+out += (v < 16 ? "0" : "") + v.toString(16);
+}
+return out;
+}
+function lum(c) { return (c[0] + c[1] + c[2]) / 765; }
+function neutral(c) { return Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) <= 24; }
+function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t, 1]; }
+function flip(c) {
+var r = c[0] / 255, g = c[1] / 255, b = c[2] / 255;
+var hi = Math.max(r, g, b), lo = Math.min(r, g, b), d = hi - lo, l = (hi + lo) / 2, h = 0, s = 0;
+if (d > 0) {
+s = d / (1 - Math.abs(2 * l - 1));
+h = hi === r ? (g - b) / d : hi === g ? (b - r) / d + 2 : (r - g) / d + 4;
+h = (h % 6 + 6) % 6;
+}
+l = 1 - l;
+var C = (1 - Math.abs(2 * l - 1)) * s, X = C * (1 - Math.abs(h % 2 - 1)), m = l - C / 2;
+var k = [[C, X, 0], [X, C, 0], [0, C, X], [0, X, C], [X, 0, C], [C, 0, X]][Math.floor(h) % 6];
+return [(k[0] + m) * 255, (k[1] + m) * 255, (k[2] + m) * 255, c[3]];
+}
+function ramp(stops, t) {
+for (var i = 1; i < stops.length; i++) {
+if (t <= stops[i][0]) return mix(stops[i - 1][1], stops[i][1], (t - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]));
+}
+return mix(stops[stops.length - 1][1], stops[stops.length - 1][1], 0);
+}
+function palette(get) {
+var names = ["surface", "rule", "muted", "ink"], at = [0, 0.15, 0.7, 1], stops = [];
+for (var i = 0; i < names.length; i++) {
+var c = parse(get("--er-" + names[i]));
+if (!c) return null;
+stops.push([at[i], c]);
+}
+return { stops: stops, dark: lum(stops[0][1]) < lum(stops[3][1]) };
+}
+function mapper(bg, fg, pal) {
+var b = parse(bg), f = parse(fg);
+if (!pal || !b || !f) return null;
+var lb = lum(b), lf = lum(f);
+if (Math.abs(lf - lb) < 0.25) return null;
+var flipped = (lb < lf) !== pal.dark;
+var map = function (s) {
+var c = parse(s), out;
+if (!c || c[3] === 0) return null;
+if (neutral(c)) out = ramp(pal.stops, Math.min(1, Math.max(0, (lum(c) - lb) / (lf - lb))));
+else if (flipped) out = flip(c);
+else return null;
+out[3] = c[3];
+return fmt(out);
+};
+map.flipped = flipped;
+return map;
+}
+function isObj(v) { return v !== null && typeof v === "object" && Object.prototype.toString.call(v) === "[object Object]"; }
+function deep(v, map, key, W) {
+var colorish = /colou?r$/i.test(key);
+if (typeof v === "string") return colorish ? map(v) || v : v;
+if (Array.isArray(v)) {
+if (colorish || (v.length && isObj(v[0]))) return v.map(function (x) { return deep(x, map, colorish ? key : "", W); });
+return v;
+}
+if (isObj(v)) {
+var o = W ? new W.Object() : {};
+for (var k in v) if (Object.prototype.hasOwnProperty.call(v, k)) o[k] = deep(v[k], map, k, W);
+return o;
+}
+return v;
+}
+function themedFigure(data, layout, pal, W, dflt) {
+layout = isObj(layout) ? layout : {};
+dflt = dflt || {};
+var font = isObj(layout.font) ? layout.font : {};
+var map = mapper(layout.paper_bgcolor || dflt.paper, font.color || dflt.font, pal);
+if (!map) return null;
+var l = deep(layout, map, "", W);
+if (!layout.paper_bgcolor) l.paper_bgcolor = map(dflt.paper);
+if (!layout.plot_bgcolor && dflt.plot) l.plot_bgcolor = map(dflt.plot);
+if (!font.color) {
+if (!isObj(l.font)) l.font = W ? new W.Object() : {};
+l.font.color = map(dflt.font);
+}
+return { data: Array.isArray(data) ? deep(data, map, "", W) : data, layout: l };
+}
+function prefilter(s) {
+var c = parse(s);
+if (!c) return null;
+var y2 = 2 * (0.213 * c[0] + 0.715 * c[1] + 0.072 * c[2]);
+return fmt([255 - y2 + c[0], 255 - y2 + c[1], 255 - y2 + c[2], c[3]].map(function (v, i) { return i < 3 ? Math.max(0, Math.min(255, v)) : v; }));
+}
+function hideFluid(doc) {
+var gds = doc.querySelectorAll(".js-plotly-plot"), undo = [], i, k;
+for (i = 0; i < gds.length; i++) {
+var gd = gds[i], c = gd._context, l = gd.layout;
+if (!c || !c.responsive || (l && l.width)) continue;
+for (k = 0; k < gd.children.length; k++) {
+var el = gd.children[k];
+undo.push([el, el.style.getPropertyValue("display"), el.style.getPropertyPriority("display")]);
+el.style.setProperty("display", "none", "important");
+}
+}
+return function () {
+for (var j = 0; j < undo.length; j++) {
+if (undo[j][1]) undo[j][0].style.setProperty("display", undo[j][1], undo[j][2]);
+else undo[j][0].style.removeProperty("display");
+}
+};
+}
+function selfThemed(doc) {
+var m = doc.querySelector("meta[name=er-embed]");
+return !!m && /(^|\s)self-themed(\s|$)/.test(m.getAttribute("content") || "");
+}
+function resolvedTheme(attr, dark) {
+return attr === "paper" || attr === "ink" ? attr : dark ? "ink" : "paper";
+}
+if (selfTest) return { parse: parse, fmt: fmt, flip: flip, palette: palette, mapper: mapper, themedFigure: themedFigure, prefilter: prefilter, hideFluid: hideFluid, selfThemed: selfThemed, resolvedTheme: resolvedTheme };
+var PLOT = /^\/plots\/[\w.\/-]+\.html$/;
+var SETTLE = 500;
+var SKIP = /^(script|style|link|meta|title|head|noscript|template)$/;
+var INHERITED = { color: 1, fill: 1, stroke: 1, "accent-color": 1 };
+var BORDERS = ["border-top-color", "border-right-color", "border-bottom-color", "border-left-color"];
+var root = document.documentElement, frames = [], pal = null;
+var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+function readPalette() {
+var cs = getComputedStyle(root);
+pal = palette(function (n) { return cs.getPropertyValue(n); });
+}
+function eligible(el) {
+return el.nodeType === 1 && !SKIP.test(el.localName) && !el.closest(".js-plotly-plot");
+}
+function record(st, el, late) {
+var win = st.win, cs = win.getComputedStyle(el), props = ["color", "background-color", "accent-color"], rec = {};
+if (el === st.doc.documentElement) props = ["background-color"];
+if (el instanceof win.SVGElement) props.push("fill", "stroke");
+var bw = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderRightWidth) + parseFloat(cs.borderBottomWidth) + parseFloat(cs.borderLeftWidth);
+if (bw > 0) props = props.concat(BORDERS);
+if (el.localName === "canvas") props.push("filter");
+var up = late && el.parentElement ? win.getComputedStyle(el.parentElement) : null;
+for (var i = 0; i < props.length; i++) {
+var p = props[i], natural = cs.getPropertyValue(p);
+if (up && INHERITED[p] && natural === up.getPropertyValue(p)) continue;
+if (late && BORDERS.indexOf(p) >= 0 && natural === cs.color) continue;
+rec[p] = { natural: natural, inline: el.style.getPropertyValue(p), prio: el.style.getPropertyPriority(p), set: null };
+}
+st.recs.set(el, rec);
+st.els.push(el);
+}
+function put(el, p, r, v) {
+if (v) el.style.setProperty(p, v, "important");
+else if (r.inline) el.style.setProperty(p, r.inline, r.prio);
+else el.style.removeProperty(p);
+r.set = el.style.getPropertyValue(p);
+}
+function paint(st, el) {
+var rec = st.recs.get(el), map = st.map, canvas = el.localName === "canvas";
+if (!rec) return;
+for (var p in rec) {
+if (p === "filter") continue;
+var v = map ? map(rec[p].natural) : null;
+if (canvas && p === "background-color" && v && map.flipped) v = prefilter(v);
+put(el, p, rec[p], v);
+}
+if (rec.filter) put(el, "filter", rec.filter, map && map.flipped ? "invert(1) hue-rotate(180deg)" : null);
+}
+function remember(st, gd, data, layout) {
+st.figs.set(gd, { data: data, layout: layout });
+}
+function wrap(st) {
+var P = st.win.Plotly;
+if (!P || typeof P.react !== "function") return;
+try {
+var la = P.PlotSchema.get().layout.layoutAttributes;
+st.dflt = { paper: la.paper_bgcolor.dflt, plot: la.plot_bgcolor.dflt, font: la.font.color.dflt };
+} catch (e) {
+st.dflt = null;
+}
+if (P.__erPlain) return;
+var plain = { react: P.react, newPlot: P.newPlot };
+try {
+["react", "newPlot"].forEach(function (name) {
+var orig = plain[name];
+if (typeof orig !== "function") return;
+P[name] = function (gd, data, layout, config) {
+var el = typeof gd === "string" ? st.doc.getElementById(gd) : gd;
+var fig = isObj(data) ? data : null, d = fig ? fig.data : data, l = fig ? fig.layout : layout;
+var t = null;
+if (el && el.nodeType === 1) {
+remember(st, el, d, l);
+t = themedFigure(d, l, pal, st.win, st.dflt);
+}
+if (t && fig) data = Object.assign(new st.win.Object(), fig, { data: t.data, layout: t.layout });
+else if (t) { data = t.data; layout = t.layout; }
+return orig.call(this, gd, data, layout, config);
+};
+});
+P.__erPlain = plain;
+} catch (e) {
+P.react = plain.react;
+P.newPlot = plain.newPlot;
+}
+}
+function replot(st) {
+var P = st.win.Plotly, plain = P && P.__erPlain;
+if (!plain) return;
+var gds = st.doc.querySelectorAll(".js-plotly-plot");
+for (var i = 0; i < gds.length; i++) {
+var gd = gds[i];
+if (!st.figs.has(gd)) {
+if (!gd.data || !gd.layout) continue;
+remember(st, gd, gd.data, gd.layout);
+}
+var f = st.figs.get(gd), t = themedFigure(f.data, f.layout, pal, st.win, st.dflt);
+try { plain.react.call(P, gd, t ? t.data : f.data, t ? t.layout : f.layout); } catch (e) { continue; }
+}
+}
+function theme(st) {
+if (st.self) {
+var want = resolvedTheme(root.getAttribute("data-theme"), !!(mq && mq.matches)), de = st.doc.documentElement;
+if (de.getAttribute("data-theme") !== want) de.setAttribute("data-theme", want);
+return;
+}
+st.map = mapper(st.bg, st.fg, pal);
+for (var i = 0; i < st.els.length; i++) paint(st, st.els[i]);
+replot(st);
+}
+function mutated(st, list) {
+for (var i = 0; i < list.length; i++) {
+var m = list[i];
+if (m.type === "attributes") {
+var rec = st.recs.get(m.target), changed = false;
+if (!rec) continue;
+for (var p in rec) {
+var now = m.target.style.getPropertyValue(p);
+if (now === rec[p].set) continue;
+rec[p].inline = now;
+rec[p].prio = m.target.style.getPropertyPriority(p);
+if (now && p !== "filter") rec[p].natural = now;
+changed = true;
+}
+if (changed) paint(st, m.target);
+} else {
+for (var j = 0; j < m.addedNodes.length; j++) {
+var n = m.addedNodes[j];
+if (n.nodeType !== 1 || !eligible(n)) continue;
+var all = [n].concat(Array.prototype.slice.call(n.querySelectorAll("*")));
+for (var k = 0; k < all.length; k++) {
+if (st.recs.has(all[k]) || !eligible(all[k])) continue;
+record(st, all[k], true);
+paint(st, all[k]);
+}
+}
+}
+}
+}
+function schedule(st) {
+if (st.raf) return;
+st.raf = requestAnimationFrame(function () { st.raf = 0; fit(st); });
+}
+function fit(st) {
+var fr = st.fr, doc = st.doc, box = fr.parentNode;
+if (!fr.isConnected || !doc.body || !box || fr.contentDocument !== doc) return;
+var avail = box.clientWidth;
+if (!avail) return;
+var de = doc.documentElement, b = doc.body, i;
+fr.style.removeProperty("width");
+fr.style.removeProperty("max-width");
+fr.style.removeProperty("transform");
+fr.style.removeProperty("transform-origin");
+var W = de.clientWidth, w = W, s = 1, now = Date.now();
+if (W !== st.W) {
+if (st.W) st.since = now;
+st.W = W;
+}
+var settling = now - st.since < SETTLE;
+var media = doc.querySelectorAll("canvas, img, video");
+for (i = 0; i < media.length; i++) {
+if (media[i].closest(".js-plotly-plot")) continue;
+if (media[i].getBoundingClientRect().right > W + 0.5) {
+media[i].style.setProperty("max-width", "100%");
+media[i].style.setProperty("height", "auto");
+}
+}
+var show = hideFluid(doc);
+var over = Math.max(de.scrollWidth - W, b.scrollWidth - b.clientWidth, 0);
+if (over > 1 && settling) {
+over = 0;
+clearTimeout(st.timer);
+st.timer = setTimeout(function () { st.timer = 0; fit(st); }, st.since + SETTLE - now + 20);
+}
+for (i = 0; over > 1 && i < 3; i++) {
+w += over;
+fr.style.setProperty("max-width", "none");
+fr.style.setProperty("width", w + "px");
+over = Math.max(de.scrollWidth - de.clientWidth, b.scrollWidth - b.clientWidth, 0);
+}
+show();
+if (w > W) {
+s = W / w;
+fr.style.setProperty("transform-origin", "0 0");
+fr.style.setProperty("transform", "scale(" + s + ")");
+}
+var cs = st.win.getComputedStyle(b);
+var h = Math.max(de.getBoundingClientRect().height, b.scrollHeight,
+b.getBoundingClientRect().height + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0));
+h = Math.min(Math.ceil(h), 10000);
+var cur = fr.offsetHeight;
+if (h > cur + 1) {
+st.grows = st.grows.filter(function (t) { return now - t < 1500; });
+if (st.grows.length >= 6) h = cur;
+else st.grows.push(now);
+}
+if (Math.abs(h - cur) > 1) fr.style.setProperty("height", h + "px");
+if (s < 1) {
+box.style.setProperty("height", Math.ceil(h * s) + "px");
+box.style.setProperty("overflow", "hidden");
+} else {
+box.style.removeProperty("height");
+box.style.removeProperty("overflow");
+}
+}
+function setup(fr) {
+var win, doc, i;
+try {
+win = fr.contentWindow;
+doc = fr.contentDocument;
+if (!win || !doc || !doc.body || doc.readyState !== "complete" || win.location.protocol === "about:") return;
+} catch (e) {
+return;
+}
+for (i = 0; i < frames.length; i++) {
+if (frames[i].fr !== fr) continue;
+if (frames[i].doc === doc) return;
+frames[i].stop();
+frames.splice(i, 1);
+break;
+}
+var st = { fr: fr, win: win, doc: doc, self: false, recs: new WeakMap(), els: [], figs: new WeakMap(), dflt: null, map: null, raf: 0, grows: [], W: 0, since: 0, timer: 0, stop: function () {} };
+st.self = selfThemed(doc);
+if (!st.self) {
+var all = [doc.documentElement, doc.body].concat(Array.prototype.slice.call(doc.body.querySelectorAll("*")));
+for (i = 0; i < all.length; i++) if (eligible(all[i])) record(st, all[i], false);
+var rb = st.recs.get(doc.body) || {}, rh = st.recs.get(doc.documentElement) || {};
+var bg = parse(rb["background-color"] ? rb["background-color"].natural : "");
+if (!bg || bg[3] === 0) bg = parse(rh["background-color"] ? rh["background-color"].natural : "");
+st.bg = bg && bg[3] > 0 ? fmt(bg) : fmt([255, 255, 255, 1]);
+st.fg = rb.color ? rb.color.natural : fmt([0, 0, 0, 1]);
+wrap(st);
+}
+frames.push(st);
+theme(st);
+var obs = [];
+if (win.ResizeObserver) {
+var ro = new win.ResizeObserver(function () { schedule(st); });
+ro.observe(doc.documentElement);
+ro.observe(doc.body);
+obs.push(ro);
+}
+if (win.MutationObserver && !st.self) {
+var mo = new win.MutationObserver(function (list) { mutated(st, list); });
+mo.observe(doc.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["style"] });
+obs.push(mo);
+}
+st.stop = function () { obs.forEach(function (o) { o.disconnect(); }); clearTimeout(st.timer); };
+fit(st);
+}
+function retheme() {
+readPalette();
+frames.forEach(theme);
+}
+readPalette();
+var list = document.querySelectorAll(".embed iframe");
+Array.prototype.forEach.call(list, function (fr) {
+if (!PLOT.test(fr.getAttribute("src") || "")) return;
+fr.addEventListener("load", function () { setup(fr); });
+setup(fr);
+});
+new MutationObserver(retheme).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+if (mq && mq.addEventListener) mq.addEventListener("change", retheme);
+window.addEventListener("resize", function () { frames.forEach(schedule); });
+})();</script></div></article></div>
+</main>
+<footer class="site-footer">
+<div class="wrap site-footer-inner">
+<span>Encode Reality research project</span>
+<span class="site-footer-links"><a href="/feed.xml">Feed</a><a href="https://github.com/thememesofproduction/encode-reality/tree/main" target="_blank" rel="noopener">Code ↗</a></span>
+</div>
+</footer>
+<script>
+(function () {
+  function shrink(box, inner, leftAlign) {
+    inner.style.transform = "";
+    inner.style.transformOrigin = "";
+    if (leftAlign) inner.style.textAlign = "";
+    box.style.height = "";
+    var contentW = inner.scrollWidth;
+    var boxW = box.clientWidth;
+    if (contentW <= boxW + 1) return;
+    var scale = Math.max(0.5, boxW / contentW);
+    if (leftAlign) inner.style.textAlign = "left";
+    inner.style.transformOrigin = "left top";
+    inner.style.transform = "scale(" + scale + ")";
+    box.style.height = inner.getBoundingClientRect().height + "px";
+  }
+  function fit() {
+    var m = document.querySelectorAll(".math-display");
+    for (var i = 0; i < m.length; i++) {
+      var k = m[i].querySelector(".katex-display");
+      if (k) shrink(m[i], k, true);
+    }
+    var t = document.querySelectorAll(".table-scroll");
+    for (var j = 0; j < t.length; j++) {
+      var tb = t[j].querySelector("table");
+      if (tb) shrink(t[j], tb, false);
+    }
+  }
+  var timer;
+  function schedule() { clearTimeout(timer); timer = setTimeout(fit, 150); }
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fit);
+  } else {
+    fit();
+  }
+  window.addEventListener("load", fit);
+  window.addEventListener("resize", schedule);
+  window.addEventListener("orientationchange", schedule);
+  if (document.fonts && document.fonts.ready) { document.fonts.ready.then(fit); }
+})();
+</script>
+</body>
+</html>

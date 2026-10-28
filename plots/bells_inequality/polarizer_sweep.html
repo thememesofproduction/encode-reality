@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Three-Polarizer Sweep</title>
+<script src="/assets/plotly/plotly.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow: hidden; }
+  body {
+    background: #1e1e1e; color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    padding: 20px; max-width: 900px; margin: 0 auto;
+  }
+  h2 { margin-bottom: 10px; font-size: 1.3em; }
+  .controls {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 16px; padding: 14px 20px;
+    background: #2a2a2a; border-radius: 8px;
+  }
+  .controls label { font-size: 0.95em; color: #aaa; white-space: nowrap; }
+  .controls .value { font-weight: bold; color: #e0e0e0; font-size: 1.1em; min-width: 32px; display: inline-block; }
+  input[type=range] { flex: 1; accent-color: #CC6666; cursor: pointer; }
+  .readout {
+    display: flex; justify-content: space-around; margin-bottom: 16px;
+    padding: 12px; background: #2a2a2a; border-radius: 8px;
+    text-align: center;
+  }
+  .readout .label { color: #aaa; font-size: 0.9em; }
+  .readout .val { font-weight: bold; font-size: 1.3em; margin-top: 4px; }
+  .quantum { color: #CC6666; }
+  canvas { display: block; margin: 0 auto 16px; border-radius: 8px; background: #2a2a2a; }
+  #plot { width: 100%; height: 340px; }
+</style>
+</head>
+<body>
+
+<h2>Middle-Filter Angle Sweep</h2>
+
+<div class="controls">
+  <label>Middle filter angle: <span class="value" id="v-angle">45</span>&deg;</label>
+  <input type="range" id="angle" min="0" max="90" value="45" step="1">
+</div>
+
+<div class="readout">
+  <div>
+    <div class="label">After V (0&deg;)</div>
+    <div class="val" id="r-v">50</div>
+  </div>
+  <div>
+    <div class="label">After middle (<span id="r-angle-label">45</span>&deg;)</div>
+    <div class="val quantum" id="r-mid">25</div>
+  </div>
+  <div>
+    <div class="label">After H (90&deg;)</div>
+    <div class="val quantum" id="r-h">12.5</div>
+  </div>
+</div>
+
+<canvas id="beam" width="660" height="140"></canvas>
+
+<div id="plot"></div>
+
+<script>
+const DEG = Math.PI / 180;
+
+function throughput(thetaDeg) {
+  const t = thetaDeg * DEG;
+  return 50 * Math.pow(Math.cos(t), 2) * Math.pow(Math.cos((90 - thetaDeg) * DEG), 2);
+}
+
+// ── Canvas beam diagram helpers ──
+
+function drawBeam(ctx, x1, x2, count) {
+  if (count <= 0) return;
+  var h = 80 * (count / 100);
+  var alpha = 0.3 + 0.7 * (count / 100);
+  var y = 70;
+  ctx.fillStyle = 'rgba(204,102,102,' + alpha + ')';
+  ctx.fillRect(x1, y - h / 2, x2 - x1, h);
+}
+
+function drawFilter(ctx, x, label, angleDeg) {
+  ctx.save();
+  ctx.setLineDash([6, 4]);
+  ctx.strokeStyle = '#6699CC';
+  ctx.lineWidth = 3;
+  ctx.globalAlpha = 0.8;
+  ctx.beginPath();
+  ctx.moveTo(x, 10);
+  ctx.lineTo(x, 130);
+  ctx.stroke();
+  ctx.restore();
+
+  // label above
+  ctx.fillStyle = '#e0e0e0';
+  ctx.font = 'bold 11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, x, 9);
+
+  // angle below
+  ctx.fillStyle = '#aaaaaa';
+  ctx.font = '9px sans-serif';
+  ctx.fillText(angleDeg + '\u00B0', x, 140);
+}
+
+function drawCount(ctx, x, count) {
+  ctx.fillStyle = '#e0e0e0';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(Math.round(count).toString(), x, 22);
+}
+
+function renderBeamDiagram(ctx, middleAngleDeg) {
+  ctx.clearRect(0, 0, 660, 140);
+
+  var afterV = 50;
+  var afterMid = 50 * Math.pow(Math.cos(middleAngleDeg * DEG), 2);
+  var afterH = afterMid * Math.pow(Math.cos((90 - middleAngleDeg) * DEG), 2);
+
+  // Positions: source | beam | V(120) | beam | Mid(290) | beam | H(460) | beam | end
+  var xSrc = 10, xV = 120, xMid = 290, xH = 460, xEnd = 640;
+
+  // Source label
+  ctx.fillStyle = '#e0e0e0';
+  ctx.font = 'bold 10px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('100', 55, 62);
+  ctx.fillText('photons', 55, 76);
+
+  // Beam: source → V (always 100)
+  drawBeam(ctx, xSrc + 70, xV, 100);
+
+  // Filter V
+  drawFilter(ctx, xV, 'V', '0');
+
+  // Beam: V → Mid (always 50)
+  drawBeam(ctx, xV, xMid, afterV);
+  drawCount(ctx, (xV + xMid) / 2, afterV);
+
+  // Filter Mid
+  drawFilter(ctx, xMid, '\u03B8', middleAngleDeg.toString());
+
+  // Beam: Mid → H
+  if (afterMid > 0.5) {
+    drawBeam(ctx, xMid, xH, afterMid);
+    drawCount(ctx, (xMid + xH) / 2, afterMid);
+  }
+
+  // Filter H
+  drawFilter(ctx, xH, 'H', '90');
+
+  // Beam: H → end
+  if (afterH > 0.5) {
+    drawBeam(ctx, xH, xEnd, afterH);
+    drawCount(ctx, (xH + xEnd) / 2, afterH);
+  } else {
+    // Show "0" after H when blocked
+    ctx.fillStyle = '#ff6666';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('0', (xH + xEnd) / 2, 75);
+  }
+}
+
+// ── Plotly chart ──
+
+// Precompute curve
+const angles = [], values = [];
+for (let d = 0; d <= 90; d++) {
+  angles.push(d);
+  values.push(throughput(d));
+}
+
+const layout = {
+  paper_bgcolor: '#1e1e1e', plot_bgcolor: '#2a2a2a',
+  font: { color: '#e0e0e0' },
+  xaxis: { title: 'Middle filter angle (\u00B0)', gridcolor: '#3a3a3a', range: [0, 90], dtick: 15 },
+  yaxis: { title: 'Photons through all 3 filters', gridcolor: '#3a3a3a', range: [0, 15] },
+  margin: { t: 30, b: 50, l: 60, r: 30 },
+  showlegend: false,
+  shapes: [{
+    type: 'line', x0: 45, x1: 45, y0: 0, y1: 14.5,
+    line: { color: '#66CC99', width: 1.5, dash: 'dash' }
+  }],
+  annotations: [{
+    x: 45, y: 14, text: 'Peak at 45\u00B0',
+    showarrow: false, font: { color: '#66CC99', size: 11 },
+    yanchor: 'bottom'
+  }, {
+    x: 3, y: 1.5, text: '0\u00B0 = redundant<br>(same as V)',
+    showarrow: false, font: { color: '#aaaaaa', size: 10 },
+    xanchor: 'left'
+  }, {
+    x: 87, y: 1.5, text: '90\u00B0 = redundant<br>(same as H)',
+    showarrow: false, font: { color: '#aaaaaa', size: 10 },
+    xanchor: 'right'
+  }]
+};
+
+// ── Combined update ──
+
+const canvas = document.getElementById('beam');
+const ctx = canvas.getContext('2d');
+
+function update() {
+  const deg = +document.getElementById('angle').value;
+  document.getElementById('v-angle').textContent = deg;
+  document.getElementById('r-angle-label').textContent = deg;
+
+  const afterMid = 50 * Math.pow(Math.cos(deg * DEG), 2);
+  const afterH = throughput(deg);
+
+  document.getElementById('r-mid').textContent = afterMid.toFixed(1);
+  document.getElementById('r-h').textContent = afterH.toFixed(1);
+
+  // Update beam diagram
+  renderBeamDiagram(ctx, deg);
+
+  // Update Plotly chart
+  const traces = [
+    { x: angles, y: values, mode: 'lines',
+      line: { color: '#CC6666', width: 2.5 },
+      name: 'Throughput' },
+    { x: [deg], y: [afterH], mode: 'markers',
+      marker: { color: '#CC6666', size: 12, symbol: 'diamond',
+                line: { color: '#fff', width: 2 } },
+      name: 'Current', showlegend: false },
+  ];
+
+  Plotly.react('plot', traces, layout, { responsive: true });
+}
+
+document.getElementById('angle').addEventListener('input', update);
+update();
+</script>
+</body>
+</html>

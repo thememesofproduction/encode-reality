@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="er-embed" content="self-themed">
+<title>The answer is off the line</title>
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem('er-theme');
+    if (t === 'paper' || t === 'ink') document.documentElement.dataset.theme = t;
+  } catch (e) {}
+})();
+</script>
+<link rel="stylesheet" href="/assets/er/tokens.css">
+<link rel="stylesheet" href="/assets/er/fonts.css">
+<style>
+/* FigKit: the instrument page. Colours and fonts are the design tokens (/assets/er/tokens.css); each
+   fallback is the paper value, so a page opened on its own still reads. No viewport units: the stage is
+   sized by its width and an aspect ratio, and the page height comes from its content. */
+[hidden] { display: none !important }
+body { margin: 0; background: var(--er-bg, #F4F2EC); color: var(--er-ink, #24262A);
+  font: 400 16px/1.5 var(--er-font-sans, system-ui, -apple-system, 'Segoe UI', sans-serif) }
+.fk { container-type: inline-size; max-width: 760px; margin: 0 auto; padding: 12px 6px 16px }
+.fk *, .fk *::before, .fk *::after { box-sizing: border-box }
+/* the band: one dark panel holds the stage, the controls and the readout; the caption sits below it */
+.fk-band { padding: 8px; border-radius: 10px; background: var(--er-band, #1D1F23); color: var(--er-band-text, #F4F2EC) }
+.fk-stage { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; touch-action: pan-y;
+  background: var(--er-band, #1D1F23); border: 1px solid var(--er-band-rule, #3A3D43); border-radius: 6px }
+@media (min-width: 640px) { .fk-stage { aspect-ratio: 16 / 10 } }
+/* a narrow column (the page's container under 560 px) gets a taller stage; the algebra map is square */
+@container (max-width: 559px) { .fk-stage { aspect-ratio: 4 / 3 } .fk-algebras .fk-stage { aspect-ratio: 1 / 1 } }
+.fk-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
+.fk-probe { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; cursor: grab; touch-action: none }
+.fk-probe::after { content: ""; position: absolute; left: 13px; top: 13px; width: 18px; height: 18px;
+  border: 2px solid var(--er-band-text, #F4F2EC); border-radius: 50%; box-shadow: 0 0 0 1px var(--er-band, #1D1F23) }
+/* the algebra probe is a white handle with a dark outline, so it reads on the orange region */
+.fk-algebras .fk-probe::after { background: var(--er-band-text, #F4F2EC); border-color: var(--er-band, #1D1F23);
+  box-shadow: none }
+.fk-probe:focus-visible { outline: 2px solid var(--er-band-pencil, #F0A35E); outline-offset: 2px }
+.fk-key { margin: 8px 0 0; color: var(--er-band-muted, #ADA9A0);
+  font: 400 12px/1.4 var(--er-font-mono, ui-monospace, Menlo, monospace) }
+.fk-key .fk-orange { color: var(--er-band-pencil, #F0A35E) }
+.fk-key .fk-white { color: var(--er-band-text, #F4F2EC) }
+.fk-controls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px }
+.fk-pills, .fk-buttons { display: flex; flex-wrap: wrap; gap: 6px }
+.fk-pill { position: relative; padding: 6px 12px; border: 1px solid var(--er-band-rule, #3A3D43); border-radius: 999px;
+  background: transparent; color: var(--er-band-muted, #ADA9A0); cursor: pointer;
+  font: 400 12px/1.2 var(--er-font-mono, ui-monospace, Menlo, monospace) }
+/* the visible pill stays compact; its touch target reaches 6 px past it, about 42 px tall in all */
+.fk-pill::before { content: ""; position: absolute; inset: -6px -3px }
+.fk-pill:hover { color: var(--er-band-text, #F4F2EC); border-color: var(--er-band-muted, #ADA9A0) }
+.fk-pill[aria-pressed="true"] { background: var(--er-band-text, #F4F2EC); color: var(--er-band, #1D1F23);
+  border-color: var(--er-band-text, #F4F2EC) }
+.fk-pill:focus-visible { outline: 2px solid var(--er-band-pencil, #F0A35E); outline-offset: 2px }
+.fk-readout { margin-top: 10px; min-height: 3.2em; color: var(--er-band-muted, #ADA9A0);
+  font: 400 14px/1.55 var(--er-font-mono, ui-monospace, Menlo, monospace); font-variant-numeric: tabular-nums }
+.fk-readout b { font-weight: 600; color: var(--er-band-text, #F4F2EC) }
+.fk-caption { margin: 12px 0 0; color: var(--er-muted, #595D65);
+  font: 400 15px/1.55 var(--er-font-serif, Georgia, 'Times New Roman', serif) }
+</style>
+</head>
+<body>
+<main class="fk fk-line" data-fk="root">
+  <div class="fk-band">
+    <div class="fk-stage" data-fk="stage" role="group" aria-label="Searchers on the real line and in the plane, with the lowest point on the line and the four roots">
+      <canvas class="fk-canvas" data-fk="canvas" aria-hidden="true"></canvas>
+      <button class="fk-probe" data-fk="probe" type="button"></button>
+    </div>
+    <p class="fk-key" data-fk="key" hidden></p>
+    <div class="fk-controls">
+      <div class="fk-pills" data-fk="pills"></div>
+      <div class="fk-buttons">
+        <button class="fk-pill" data-fk="action" type="button" hidden></button>
+        <button class="fk-pill" data-fk="run" type="button" hidden>Run</button>
+      </div>
+    </div>
+    <div class="fk-readout" data-fk="readout" aria-live="polite"></div>
+  </div>
+  <p class="fk-caption" data-fk="caption">Live: the searchers above run the experiment&#x27;s own step rule in your browser. On the line they pile up at the lowest point, and once a second direction is allowed they flow to the four roots. Recorded: the essay&#x27;s numbers come from 30 recorded runs of the same search.</p>
+</main>
+<script type="application/json" data-fk="data">{"coeffs":[4.0,-8.0,-7.0,20.0,25.0],"m":9.770194456419759,"minima":[[-0.9215148999043657,9.770194456419759],[1.5416222894447025,32.47859999360959]],"roots":[[1.9999999999999996,1.000000000000001],[1.9999999999999996,-1.000000000000001],[-0.9999999999999996,0.5],[-0.9999999999999996,-0.5]],"seed":20261026,"sigma":0.05,"start":[-3.0,4.0],"view":{"im":[-2.0,2.0],"re":[-3.0,4.0]},"walkers":128,"x_star":-0.9215148999043657}</script>
+<script>
+// The maths the instruments run (SPEC 10.2). A plain script with no imports: in a page its functions are
+// globals; under node it is loaded through module.exports. It mirrors number_systems.py: Horner's rule,
+// the same kind test (delta against 1e-12 times the larger of 1, beta^2 and |4 alpha|), and the residual
+// formula of each kind (dual: at beta/2; split: the larger of the two real roots; complex: the isomorphism).
+
+// |p(re + i im)| by Horner's rule in complex arithmetic. coeffs are highest degree first.
+function absPolyComplex(coeffs, re, im) {
+  var ar = 0, ai = 0;
+  for (var k = 0; k < coeffs.length; k++) {
+    var nr = ar * re - ai * im + coeffs[k];
+    ai = ar * im + ai * re;
+    ar = nr;
+  }
+  return Math.hypot(ar, ai);
+}
+
+// 'split', 'dual' or 'complex' for e^2 = alpha + beta e.
+function kindOf(alpha, beta) {
+  var delta = beta * beta + 4 * alpha;
+  var scale = Math.max(1, beta * beta, Math.abs(4 * alpha));
+  if (Math.abs(delta) <= 1e-12 * scale) return 'dual';
+  return delta < 0 ? 'complex' : 'split';
+}
+
+// The spectral radius of multiplication by p(z), for z = a + b e in the algebra e^2 = alpha + beta e.
+function rho(coeffs, alpha, beta, a, b) {
+  var kind = kindOf(alpha, beta);
+  var delta = beta * beta + 4 * alpha;
+  function real(t) {
+    var acc = 0;
+    for (var k = 0; k < coeffs.length; k++) acc = acc * t + coeffs[k];
+    return Math.abs(acc);
+  }
+  if (kind === 'dual') return real(a + b * (beta / 2));
+  if (kind === 'split') {
+    var s = Math.sqrt(delta);
+    return Math.max(real(a + b * ((beta + s) / 2)), real(a + b * ((beta - s) / 2)));
+  }
+  return absPolyComplex(coeffs, a + b * (beta / 2), b * (Math.sqrt(-delta) / 2));
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { absPolyComplex: absPolyComplex, rho: rho, kindOf: kindOf };
+}
+</script>
+<script>
+// FigKit: the controller for the instrument pages. A page holds one namespace, window.FigKit.
+// A system file registers a factory, FigKit.systems.<name> = function (kit) { ... return system; }.
+// The kit owns the canvas, the probe button, the readout, the key, the pills and the frame loop. The system owns
+// its state in model units and draws it. A resize or a theme change only redraws: state is kept. A system may
+// have key(), returning the HTML of the key in the band, or null for no key; the key is read with the readout.
+(function (win) {
+  'use strict';
+  var doc = win.document;
+  var FK = win.FigKit || (win.FigKit = {});
+  FK.systems = FK.systems || {};
+
+  var DPR_MAX = 2;
+  var SETTLE_STEPS = 300;     // steps run before a reduced-motion page shows its settled state
+  var READOUT_MS = 1000;      // the readout text is written at most this often, sooner on a verdict change
+  var REDUCED = !!(win.matchMedia && win.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  function el(root, name) { return root.querySelector('[data-fk="' + name + '"]'); }
+  function now() { return win.performance ? win.performance.now() : Date.now(); }
+  function cssVar(name, fallback) {
+    var v = win.getComputedStyle(doc.documentElement).getPropertyValue(name).trim();
+    return v || fallback;
+  }
+  // The stage is a dark band in both themes. The fallbacks are the paper values.
+  function readColours() {
+    return {
+      band: cssVar('--er-band', '#1D1F23'),
+      text: cssVar('--er-band-text', '#F4F2EC'),
+      muted: cssVar('--er-band-muted', '#ADA9A0'),
+      pencil: cssVar('--er-band-pencil', '#F0A35E'),
+      live: cssVar('--er-band-live', '#7BD3A0'),
+      rule: cssVar('--er-band-rule', '#3A3D43'),
+      accent: cssVar('--er-band-accent', '#8DB4F0')
+    };
+  }
+  // mulberry32: a small seeded generator, so the first frames are the same on every visit.
+  function rngFor(seed) {
+    var a = seed >>> 0;
+    function u() {
+      a = (a + 0x6D2B79F5) >>> 0;
+      var t = Math.imul(a ^ (a >>> 15), a | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    return {
+      u: u,
+      uniform: function (lo, hi) { return lo + (hi - lo) * u(); },
+      gauss: function () { var r = u() || 1e-12; return Math.sqrt(-2 * Math.log(r)) * Math.cos(2 * Math.PI * u()); }
+    };
+  }
+  function fmt(v, digits) { return v.toFixed(digits).replace('-', '−'); }
+  function grouped(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+  FK.mount = function mount(root, factory, data) {
+    var stage = el(root, 'stage'), canvas = el(root, 'canvas'), probe = el(root, 'probe');
+    var readoutEl = el(root, 'readout'), pillsEl = el(root, 'pills'), keyEl = el(root, 'key');
+    var actionEl = el(root, 'action'), runEl = el(root, 'run');
+    var ctx = canvas.getContext('2d');
+    var playing = !REDUCED, visible = true, rafId = 0, destroyed = false;
+    var lastText = null, lastVerdict = null, lastWrite = -Infinity, lastKey = null;
+    var drag = null, pillList = [];
+
+    var kit = {
+      ctx: ctx, W: 0, H: 0, dpr: 1, C: readColours(), plot: { l: 0, t: 0, r: 0, b: 0 },
+      reduced: REDUCED, rng: rngFor, fmt: fmt, grouped: grouped,
+      toPx: toPx, fromPx: fromPx, offscreen: offscreen
+    };
+    var sys = factory(kit);
+
+    // model units (sys.view) to stage pixels inside the plot box (kit.plot); y grows upwards
+    function toPx(x, y) {
+      var p = kit.plot, v = sys.view;
+      return [p.l + (x - v.x[0]) / (v.x[1] - v.x[0]) * (p.r - p.l),
+              p.b - (y - v.y[0]) / (v.y[1] - v.y[0]) * (p.b - p.t)];
+    }
+    function fromPx(px, py) {
+      var p = kit.plot, v = sys.view;
+      return { x: v.x[0] + (px - p.l) / (p.r - p.l) * (v.x[1] - v.x[0]),
+               y: v.y[0] + (p.b - py) / (p.b - p.t) * (v.y[1] - v.y[0]) };
+    }
+    // a pixel cache, drawn with drawImage at CSS size; it is rebuilt on resize and on a theme change
+    function offscreen(w, h) {
+      var c = doc.createElement('canvas');
+      c.width = Math.max(1, Math.round(w * kit.dpr));
+      c.height = Math.max(1, Math.round(h * kit.dpr));
+      var g = c.getContext('2d');
+      g.setTransform(kit.dpr, 0, 0, kit.dpr, 0, 0);
+      return { canvas: c, ctx: g, w: w, h: h };
+    }
+
+    function measure() {
+      var r = stage.getBoundingClientRect(), box = sys.box || { l: 0, t: 0, r: 1, b: 1 };
+      kit.dpr = Math.min(DPR_MAX, win.devicePixelRatio || 1);
+      kit.W = r.width;
+      kit.H = r.height;
+      kit.plot = { l: box.l * kit.W, t: box.t * kit.H, r: box.r * kit.W, b: box.b * kit.H };
+      canvas.width = Math.max(1, Math.round(kit.W * kit.dpr));
+      canvas.height = Math.max(1, Math.round(kit.H * kit.dpr));
+    }
+
+    function placeProbe() {
+      var p = sys.probe.get(), xy = toPx(p.x, p.y), a = sys.probe.aria();
+      probe.style.left = xy[0].toFixed(2) + 'px';
+      probe.style.top = xy[1].toFixed(2) + 'px';
+      var key = JSON.stringify(a);
+      if (key === placeProbe.last) return;
+      placeProbe.last = key;
+      probe.setAttribute('aria-label', a.label);
+      if (a.now !== undefined) {
+        probe.setAttribute('role', 'slider');
+        probe.setAttribute('aria-valuemin', a.min);
+        probe.setAttribute('aria-valuemax', a.max);
+        probe.setAttribute('aria-valuenow', a.now);
+        probe.setAttribute('aria-valuetext', a.label);
+      } else {
+        probe.removeAttribute('role');
+        ['aria-valuemin', 'aria-valuemax', 'aria-valuenow', 'aria-valuetext'].forEach(function (n) {
+          probe.removeAttribute(n);
+        });
+      }
+    }
+    placeProbe.last = null;
+
+    function syncControls() {
+      pillList.forEach(function (item) {
+        item.button.setAttribute('aria-pressed', item.pill.on ? 'true' : 'false');
+      });
+      var act = sys.action;
+      actionEl.hidden = !act;
+      if (act && actionEl.textContent !== act.label) actionEl.textContent = act.label;
+      runEl.hidden = !(REDUCED && !playing);
+    }
+
+    function syncKey() {
+      if (!keyEl) return;
+      var k = sys.key ? sys.key() : null;
+      if (k === lastKey) return;
+      lastKey = k;
+      keyEl.hidden = !k;
+      keyEl.innerHTML = k || '';
+    }
+
+    function writeReadout(force) {
+      var r = sys.readout(), verdict = r.verdict === undefined ? '' : r.verdict, t = now();
+      if (force || (r.text !== lastText && (verdict !== lastVerdict || t - lastWrite >= READOUT_MS))) {
+        readoutEl.innerHTML = r.html;
+        lastText = r.text;
+        lastVerdict = verdict;
+        lastWrite = t;
+      }
+      syncKey();
+      syncControls();
+    }
+
+    function drawNow() {
+      ctx.setTransform(kit.dpr, 0, 0, kit.dpr, 0, 0);
+      ctx.clearRect(0, 0, kit.W, kit.H);
+      sys.draw();
+      placeProbe();
+    }
+
+    function settle() { for (var i = 0; i < SETTLE_STEPS; i++) sys.step(); }
+
+    function schedule() {
+      if (!rafId && playing && visible && !destroyed) rafId = win.requestAnimationFrame(frame);
+    }
+    function frame() {
+      rafId = 0;
+      sys.step();
+      drawNow();
+      writeReadout(false);
+      schedule();
+    }
+
+    // a change the visitor made: show it at once
+    function afterChange() {
+      if (REDUCED && !playing) settle();
+      drawNow();
+      writeReadout(true);
+    }
+    function resize() {
+      measure();
+      if (sys.resize) sys.resize();
+      drawNow();
+      writeReadout(true);
+    }
+    function redraw() {
+      kit.C = readColours();
+      if (sys.resize) sys.resize();
+      drawNow();
+      writeReadout(true);
+    }
+    function play() { playing = true; syncControls(); schedule(); }
+    function pause() {
+      playing = false;
+      if (rafId) { win.cancelAnimationFrame(rafId); rafId = 0; }
+      syncControls();
+    }
+    function destroy() {
+      destroyed = true;
+      pause();
+      if (ro) ro.disconnect();
+      if (io) io.disconnect();
+      if (mo) mo.disconnect();
+      if (mq && mq.removeEventListener) mq.removeEventListener('change', redraw);
+    }
+
+    // pills, from the system's list; each pill reads its own `on` when the controls are synced
+    (sys.pills || []).forEach(function (pill) {
+      var b = doc.createElement('button');
+      b.type = 'button';
+      b.className = 'fk-pill';
+      b.textContent = pill.label;
+      b.addEventListener('click', function () { sys.onPill(pill.id); afterChange(); });
+      pillsEl.appendChild(b);
+      pillList.push({ button: b, pill: pill });
+    });
+    if (actionEl) actionEl.addEventListener('click', function () {
+      if (sys.action) { sys.action.run(); afterChange(); }
+    });
+    runEl.addEventListener('click', play);
+
+    // the probe: a 44px button. Dragging starts only on it; a tap on the stage moves it
+    function pointerXY(e) {
+      var r = stage.getBoundingClientRect();
+      return [e.clientX - r.left, e.clientY - r.top];
+    }
+    function moveProbe(px, py) {
+      if (sys.probe.pointer) {
+        sys.probe.pointer(px, py);
+      } else {
+        var m = fromPx(px, py);
+        sys.probe.set(m.x, m.y);
+      }
+      afterChange();
+    }
+    probe.addEventListener('pointerdown', function (e) {
+      e.stopPropagation();
+      var pt = pointerXY(e), p0 = sys.probe.get(), xy = toPx(p0.x, p0.y);
+      drag = { id: e.pointerId, dx: xy[0] - pt[0], dy: xy[1] - pt[1] };
+      probe.setPointerCapture(e.pointerId);
+    });
+    probe.addEventListener('pointermove', function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      var pt = pointerXY(e);
+      moveProbe(pt[0] + drag.dx, pt[1] + drag.dy);
+    });
+    function endDrag(e) { if (drag && e.pointerId === drag.id) drag = null; }
+    probe.addEventListener('pointerup', endDrag);
+    probe.addEventListener('pointercancel', endDrag);
+    stage.addEventListener('pointerdown', function (e) {
+      if (e.target === probe) return;
+      var pt = pointerXY(e);
+      moveProbe(pt[0], pt[1]);
+      probe.focus({ preventScroll: true });
+    });
+    probe.addEventListener('keydown', function (e) {
+      var dx = 0, dy = 0;
+      if (e.key === 'ArrowLeft') dx = -1;
+      else if (e.key === 'ArrowRight') dx = 1;
+      else if (e.key === 'ArrowUp') dy = 1;
+      else if (e.key === 'ArrowDown') dy = -1;
+      else return;
+      e.preventDefault();
+      sys.probe.keyStep(dx, dy, e.shiftKey);
+      afterChange();
+    });
+
+    // the system starts from its data; then the stage is measured, drawn, and (reduced) settled
+    sys.init(data);
+    measure();
+    if (sys.resize) sys.resize();
+    if (REDUCED) settle();
+    drawNow();
+    writeReadout(true);
+
+    var ro = null, io = null, mo = null;
+    var mq = win.matchMedia ? win.matchMedia('(prefers-color-scheme: dark)') : null;
+    if (win.ResizeObserver) { ro = new win.ResizeObserver(resize); ro.observe(stage); }
+    if (win.IntersectionObserver) {
+      io = new win.IntersectionObserver(function (entries) {
+        visible = entries[entries.length - 1].isIntersecting;
+        schedule();
+      });
+      io.observe(stage);
+    }
+    if (win.MutationObserver) {
+      mo = new win.MutationObserver(redraw);
+      mo.observe(doc.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+    if (mq && mq.addEventListener) mq.addEventListener('change', redraw);
+    schedule();
+
+    return { redraw: redraw, pause: pause, resume: play, destroy: destroy };
+  };
+
+  // Called by each page's last script: mounts the system the page was built for.
+  FK.start = function start(name) {
+    var root = doc.querySelector('[data-fk="root"]');
+    var block = doc.querySelector('script[data-fk="data"]');
+    var factory = Object.prototype.hasOwnProperty.call(FK.systems, name) ? FK.systems[name] : null;
+    if (!root || !block || typeof factory !== 'function') return null;
+    return FK.mount(root, factory, JSON.parse(block.textContent));
+  };
+})(window);
+</script>
+<script>
+// Instrument 1, "The answer is off the line" (SPEC 10.3). The searchers run the experiment's own rule
+// (experiment3.py, hc_fixed): propose x + N(0, sigma) and move only on a strict improvement in |p|. In the
+// plane each coordinate gets its own proposal. Everything is in model units; the essay's numbers come
+// from the recorded results, which the data carries.
+(function () {
+  'use strict';
+  var STEPS_PER_FRAME = 4;                    // sweeps of every walker per frame
+  var TRAIL = 6;                              // frames of trail kept for each walker
+  var SOLUTION = 1e-3;                        // "a solution" once the best distance from zero is below this times the floor
+  var AT_FLOOR = 1e-4;                        // "the lowest the line allows" once within this relative margin
+  var KEY_STEP = 0.05, KEY_BIG = 0.5;         // model units per arrow key; Shift moves ten times as far
+  var PLANE = { l: 0.035, t: 0.04, r: 0.965, b: 0.7 };
+  var STRIP = { t: 0.77, b: 0.94 };           // the strip along the line, as fractions of the stage height
+  var DIP_HEADROOM = 0.4;                     // log10 units the strip rises above the highest recorded dip
+  var SAMPLES = 320;
+  var FIELD_CELL = 2;                         // CSS px per cell of the cached |p| field, drawn up with smoothing
+  var FIELD_GAMMA = 1.5;                      // the plane's glows: a steeper curve, so the roots stand out
+
+  function clamp(v, range) { return Math.min(range[1], Math.max(range[0], v)); }
+  function short(v) {
+    var s = v.toFixed(2).replace(/\.?0+$/, '');
+    if (s === '-0') s = '0';
+    return s.replace('-', '−');
+  }
+  function loc(x, y) { return short(x) + (y < 0 ? ' − ' : ' + ') + short(Math.abs(y)) + 'i'; }
+  function valueText(v) {
+    if (v < 1e-6) return 'under 0.000001';
+    return v < 0.001 ? v.toPrecision(2) : v.toFixed(3);
+  }
+  var KEY = '<span class="fk-orange">○</span> orange: the four solutions · ' +
+            '<span class="fk-white">○</span> white: your probe (drag it)';
+  function plainText(html) { return html.replace(/<br>/g, '\n').replace(/<[^>]+>/g, ''); }
+
+  FigKit.systems.line = function (kit) {
+    var data, view, coeffs, m, sigma, start, roots, minima, second, N, rng, reseeds = 0;
+    var mode = 'line';
+    var X = [], Y = [], F = [], TR = [];
+    var best = null, bestLine = null;          // {v, x, y}: the lowest |p| seen, and the lowest on the real line
+    var guesses = 0;                           // every proposal so far, for the readout
+    var probe = { x: 0, y: 0 };
+    var logs = [], samples = [], lo = 0, hi = 1, field = null;
+
+    function absP(x, y) { return absPolyComplex(coeffs, x, y); }
+    function track(i) {
+      var v = F[i];
+      if (!best || v < best.v) best = { v: v, x: X[i], y: Y[i] };
+      if (Y[i] === 0 && (!bestLine || v < bestLine.v)) bestLine = { v: v, x: X[i], y: 0 };
+    }
+    function clampProbe() {
+      probe.x = clamp(probe.x, view.x);
+      probe.y = mode === 'line' ? 0 : clamp(probe.y, view.y);
+    }
+    function reseed() {
+      rng = kit.rng(data.seed + 1000003 * reseeds);
+      reseeds++;
+      for (var i = 0; i < N; i++) {
+        X[i] = rng.uniform(start[0], start[1]);
+        Y[i] = 0;
+        F[i] = absP(X[i], 0);
+        TR[i] = [];
+        track(i);
+      }
+    }
+    // the |p| field, cached as a picture. Brighter means closer to zero. It is computed on a grid of
+    // FIELD_CELL px cells and drawn up with smoothing, so it reads as a glow rather than a mosaic.
+    function buildField() {
+      var p = kit.plot, w = p.r - p.l, h = p.b - p.t, C = kit.C;
+      var nx = Math.max(24, Math.round(w / FIELD_CELL)), ny = Math.max(16, Math.round(h / FIELD_CELL));
+      var gamma = mode === 'plane' ? FIELD_GAMMA : 1;
+      var small = document.createElement('canvas');
+      small.width = nx;
+      small.height = ny;
+      var sg = small.getContext('2d');
+      sg.fillStyle = C.accent;
+      for (var j = 0; j < ny; j++) {
+        for (var i = 0; i < nx; i++) {
+          var x = view.x[0] + (i + 0.5) / nx * (view.x[1] - view.x[0]);
+          var y = view.y[1] - (j + 0.5) / ny * (view.y[1] - view.y[0]);
+          var base = clamp((2.2 - Math.log10(absP(x, y) + 1e-12)) / 3.2, [0, 1]);
+          sg.globalAlpha = Math.pow(base, gamma);
+          sg.fillRect(i, j, 1, 1);
+        }
+      }
+      field = kit.offscreen(w, h);
+      field.ctx.imageSmoothingEnabled = true;
+      field.ctx.drawImage(small, 0, 0, w, h);
+    }
+    function setMode(next) {
+      if (next === mode) return;
+      mode = next;
+      if (mode === 'line') {                    // projecting the searchers back onto the line
+        for (var i = 0; i < N; i++) {
+          Y[i] = 0;
+          F[i] = absP(X[i], 0);
+          TR[i] = [];
+          track(i);
+        }
+      }
+      buildField();
+      clampProbe();
+    }
+
+    var system = {
+      box: PLANE,
+      pills: [
+        { id: 'line', label: 'the real line', get on() { return mode === 'line'; } },
+        { id: 'plane', label: 'allow a second direction', get on() { return mode === 'plane'; } }
+      ],
+      onPill: function (id) { setMode(id === 'plane' ? 'plane' : 'line'); },
+      action: { label: 'release the searchers again', run: reseed },
+
+      init: function (d) {
+        data = d;
+        view = { x: d.view.re.slice(), y: d.view.im.slice() };
+        system.view = view;
+        coeffs = d.coeffs.slice();
+        m = d.m;
+        sigma = d.sigma;
+        start = d.start.slice();
+        roots = d.roots;
+        minima = d.minima;
+        var byHeight = minima.slice().sort(function (a, b) { return a[1] - b[1]; });
+        second = byHeight.length > 1 ? byHeight[1] : null;     // the lowest dip is the floor; this is the next one
+        N = d.walkers;
+        probe = { x: d.x_star, y: 0 };
+        for (var k = 0; k < SAMPLES; k++) {
+          var x = view.x[0] + k / (SAMPLES - 1) * (view.x[1] - view.x[0]);
+          samples.push(x);
+          logs.push(Math.log10(absP(x, 0)));
+        }
+        // the strip is log scaled, and it stops just above the highest dip, so the dips differ on screen; the
+        // curve is clipped at the top edge where it climbs above that
+        lo = Math.log10(m) - 0.25;
+        hi = Math.max.apply(null, minima.map(function (mn) { return Math.log10(mn[1]); })) + DIP_HEADROOM;
+        reseed();
+      },
+
+      resize: function () { buildField(); },
+
+      step: function () {
+        guesses += STEPS_PER_FRAME * N * (mode === 'plane' ? 2 : 1);
+        for (var s = 0; s < STEPS_PER_FRAME; s++) {
+          for (var i = 0; i < N; i++) {
+            var cx = X[i] + sigma * rng.gauss(), v = absP(cx, Y[i]);
+            if (v < F[i]) { X[i] = cx; F[i] = v; track(i); }
+            if (mode === 'plane') {
+              var cy = Y[i] + sigma * rng.gauss(), w = absP(X[i], cy);
+              if (w < F[i]) { Y[i] = cy; F[i] = w; track(i); }
+            }
+          }
+        }
+        for (var k = 0; k < N; k++) {
+          TR[k].push([X[k], Y[k]]);
+          if (TR[k].length > TRAIL) TR[k].shift();
+        }
+      },
+
+      draw: function () {
+        var c = kit.ctx, C = kit.C, p = kit.plot;
+        var y0 = kit.toPx(view.x[0], 0)[1];
+        var s0 = kit.H * STRIP.t, s1 = kit.H * STRIP.b;
+        function sy(lv) { return s1 - (lv - lo) / (hi - lo) * (s1 - s0); }
+
+        c.globalAlpha = mode === 'line' ? 0.35 : 1;
+        c.imageSmoothingEnabled = true;
+        c.drawImage(field.canvas, p.l, p.t, field.w, field.h);
+        c.globalAlpha = 1;
+
+        c.setLineDash([4, 5]);
+        c.strokeStyle = C.muted;
+        c.beginPath(); c.moveTo(p.l, y0); c.lineTo(p.r, y0); c.stroke();
+        c.setLineDash([]);
+        c.fillStyle = C.muted;
+        c.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+        c.textAlign = 'center';
+        for (var t = Math.ceil(view.x[0]); t <= view.x[1]; t++) {
+          c.fillText(String(t).replace('-', '−'), kit.toPx(t, 0)[0], y0 + 14);
+        }
+        c.textAlign = 'right';
+        c.fillText('the real line', p.r - 4, y0 - 6);
+
+        c.strokeStyle = C.pencil;
+        c.lineWidth = 1.5;
+        roots.forEach(function (r) {
+          var q = kit.toPx(r[0], r[1]);
+          c.beginPath(); c.arc(q[0], q[1], 5, 0, 2 * Math.PI); c.stroke();
+        });
+
+        c.lineWidth = 1.4;
+        for (var i = 0; i < N; i++) {
+          var on = Y[i] === 0, tr = TR[i];
+          c.strokeStyle = on ? C.accent : C.pencil;
+          c.globalAlpha = 0.5;
+          c.beginPath();
+          tr.forEach(function (pt, k) {
+            var q = kit.toPx(pt[0], pt[1]);
+            if (k) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]);
+          });
+          c.stroke();
+          c.globalAlpha = 1;
+          var h = kit.toPx(X[i], Y[i]);
+          c.fillStyle = on ? C.accent : C.pencil;
+          c.beginPath(); c.arc(h[0], h[1], 2.6, 0, 2 * Math.PI); c.fill();
+        }
+        c.lineWidth = 1;
+
+        c.strokeStyle = C.rule;
+        c.beginPath(); c.moveTo(p.l, s1 + 0.5); c.lineTo(p.r, s1 + 0.5); c.stroke();
+        c.strokeStyle = C.accent;
+        c.beginPath();
+        for (var k2 = 0; k2 < SAMPLES; k2++) {
+          var sx = kit.toPx(samples[k2], 0)[0], sv = sy(Math.min(logs[k2], hi));
+          if (k2) c.lineTo(sx, sv); else c.moveTo(sx, sv);
+        }
+        c.stroke();
+        var fy = sy(Math.log10(m));
+        c.setLineDash([5, 4]);
+        c.strokeStyle = C.muted;
+        c.beginPath(); c.moveTo(p.l, fy); c.lineTo(p.r, fy); c.stroke();
+        c.setLineDash([]);
+        c.fillStyle = C.muted;
+        c.textAlign = 'left';
+        c.fillText('floor ' + m.toFixed(2), p.l + 4, fy - 5);
+        c.fillStyle = C.text;
+        minima.forEach(function (mn) {
+          c.beginPath(); c.arc(kit.toPx(mn[0], 0)[0], sy(Math.log10(mn[1])), 3, 0, 2 * Math.PI); c.fill();
+        });
+        if (second) {
+          var dx = kit.toPx(second[0], 0)[0], dy = sy(Math.log10(second[1])) - 9;
+          c.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+          var dipText = 'second dip ' + second[1].toFixed(1), dw = c.measureText(dipText).width;
+          c.textAlign = 'center';
+          c.fillStyle = C.band;
+          c.globalAlpha = 0.85;
+          c.fillRect(dx - dw / 2 - 4, dy - 10, dw + 8, 14);
+          c.globalAlpha = 1;
+          c.fillStyle = C.text;
+          c.fillText(dipText, dx, dy);
+        }
+        if (mode === 'line') {
+          c.fillStyle = C.accent;
+          c.globalAlpha = 0.6;
+          for (var j = 0; j < N; j++) {
+            c.beginPath(); c.arc(kit.toPx(X[j], 0)[0], sy(Math.log10(F[j])), 2, 0, 2 * Math.PI); c.fill();
+          }
+          c.globalAlpha = 1;
+        }
+        var px = kit.toPx(probe.x, 0)[0];
+        c.setLineDash([2, 4]);
+        c.strokeStyle = C.text;
+        c.globalAlpha = 0.6;
+        c.beginPath(); c.moveTo(px, s0); c.lineTo(px, s1); c.stroke();
+        c.setLineDash([]);
+        c.globalAlpha = 1;
+        c.fillStyle = C.muted;
+        c.textAlign = 'left';
+        c.fillText('distance from zero, along the line', p.l + 4, s0 - 4);
+      },
+
+      probe: {
+        get: function () { return { x: probe.x, y: probe.y }; },
+        set: function (x, y) { probe.x = x; probe.y = y; clampProbe(); },
+        keyStep: function (dx, dy, big) {
+          var s = big ? KEY_BIG : KEY_STEP;
+          probe.x += dx * s;
+          probe.y += dy * s;
+          clampProbe();
+        },
+        aria: function () {
+          if (mode === 'line') {
+            return { label: 'probe on the real line at x = ' + short(probe.x) + ', distance from zero ' +
+                       kit.fmt(absP(probe.x, 0), 2),
+                     min: view.x[0], max: view.x[1], now: probe.x };
+          }
+          return { label: 'probe at ' + loc(probe.x, probe.y) + ', distance from zero ' +
+                     kit.fmt(absP(probe.x, probe.y), 2) };
+        }
+      },
+
+      readout: function () {
+        var line = mode === 'line', b = line ? bestLine : best;
+        var atFloor = line && b.v <= m * (1 + AT_FLOOR);
+        var solved = !line && best.v < SOLUTION * m;
+        var where = line ? 'x = ' + short(b.x) : loc(b.x, b.y);
+        var probeWhere = line ? 'x = ' + short(probe.x) : loc(probe.x, probe.y);
+        // a hill-climber with steps of sigma stops short of an exact root, so a near miss is not called a solution
+        var main = atFloor
+          ? 'best so far <b>' + valueText(b.v) + '</b> — the lowest the line allows'
+          : 'best so far <b>' + valueText(b.v) + '</b> at <b>' + where + '</b> — ' +
+            (solved ? 'right next to a solution (as close as steps of ' + short(sigma) + ' get)'
+                    : 'still searching');
+        var count = 0;
+        for (var i = 0; i < N; i++) {
+          if (line ? F[i] <= m * (1 + AT_FLOOR) : F[i] < SOLUTION * m) count++;
+        }
+        var html = main + '<br>probe: <b>' + probeWhere + '</b>, distance from zero <b>' +
+                   kit.fmt(absP(probe.x, probe.y), 2) + '</b><br>searchers ' +
+                   (line ? 'at the lowest point' : "at a solution's doorstep") + ': <b>' + count + '</b> of ' + N +
+                   ', guesses so far <b>' + kit.grouped(guesses) + '</b>';
+        return { html: html, text: plainText(html),
+                 verdict: (line ? 'line:' : 'plane:') + (atFloor || solved ? 'done' : 'searching') };
+      },
+
+      key: function () { return KEY; }
+    };
+    return system;
+  };
+})();
+</script>
+<script>
+FigKit.start("line");
+</script>
+</body>
+</html>
