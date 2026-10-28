@@ -1,0 +1,44 @@
+/* FigKit: the instrument page. Colours and fonts are the design tokens (/assets/er/tokens.css); each
+   fallback is the paper value, so a page opened on its own still reads. No viewport units: the stage is
+   sized by its width and an aspect ratio, and the page height comes from its content. */
+[hidden] { display: none !important }
+body { margin: 0; background: var(--er-bg, #F4F2EC); color: var(--er-ink, #24262A);
+  font: 400 16px/1.5 var(--er-font-sans, system-ui, -apple-system, 'Segoe UI', sans-serif) }
+.fk { container-type: inline-size; max-width: 760px; margin: 0 auto; padding: 12px 6px 16px }
+.fk *, .fk *::before, .fk *::after { box-sizing: border-box }
+/* the band: one dark panel holds the stage, the controls and the readout; the caption sits below it */
+.fk-band { padding: 8px; border-radius: 10px; background: var(--er-band, #1D1F23); color: var(--er-band-text, #F4F2EC) }
+.fk-stage { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; touch-action: pan-y;
+  background: var(--er-band, #1D1F23); border: 1px solid var(--er-band-rule, #3A3D43); border-radius: 6px }
+@media (min-width: 640px) { .fk-stage { aspect-ratio: 16 / 10 } }
+/* a narrow column (the page's container under 560 px) gets a taller stage; the algebra map is square */
+@container (max-width: 559px) { .fk-stage { aspect-ratio: 4 / 3 } .fk-algebras .fk-stage { aspect-ratio: 1 / 1 } }
+.fk-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
+.fk-probe { position: absolute; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0;
+  border: 0; border-radius: 50%; background: transparent; cursor: grab; touch-action: none }
+.fk-probe::after { content: ""; position: absolute; left: 13px; top: 13px; width: 18px; height: 18px;
+  border: 2px solid var(--er-band-text, #F4F2EC); border-radius: 50%; box-shadow: 0 0 0 1px var(--er-band, #1D1F23) }
+/* the algebra probe is a white handle with a dark outline, so it reads on the orange region */
+.fk-algebras .fk-probe::after { background: var(--er-band-text, #F4F2EC); border-color: var(--er-band, #1D1F23);
+  box-shadow: none }
+.fk-probe:focus-visible { outline: 2px solid var(--er-band-pencil, #F0A35E); outline-offset: 2px }
+.fk-key { margin: 8px 0 0; color: var(--er-band-muted, #ADA9A0);
+  font: 400 12px/1.4 var(--er-font-mono, ui-monospace, Menlo, monospace) }
+.fk-key .fk-orange { color: var(--er-band-pencil, #F0A35E) }
+.fk-key .fk-white { color: var(--er-band-text, #F4F2EC) }
+.fk-controls { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 8px }
+.fk-pills, .fk-buttons { display: flex; flex-wrap: wrap; gap: 6px }
+.fk-pill { position: relative; padding: 6px 12px; border: 1px solid var(--er-band-rule, #3A3D43); border-radius: 999px;
+  background: transparent; color: var(--er-band-muted, #ADA9A0); cursor: pointer;
+  font: 400 12px/1.2 var(--er-font-mono, ui-monospace, Menlo, monospace) }
+/* the visible pill stays compact; its touch target reaches 6 px past it, about 42 px tall in all */
+.fk-pill::before { content: ""; position: absolute; inset: -6px -3px }
+.fk-pill:hover { color: var(--er-band-text, #F4F2EC); border-color: var(--er-band-muted, #ADA9A0) }
+.fk-pill[aria-pressed="true"] { background: var(--er-band-text, #F4F2EC); color: var(--er-band, #1D1F23);
+  border-color: var(--er-band-text, #F4F2EC) }
+.fk-pill:focus-visible { outline: 2px solid var(--er-band-pencil, #F0A35E); outline-offset: 2px }
+.fk-readout { margin-top: 10px; min-height: 3.2em; color: var(--er-band-muted, #ADA9A0);
+  font: 400 14px/1.55 var(--er-font-mono, ui-monospace, Menlo, monospace); font-variant-numeric: tabular-nums }
+.fk-readout b { font-weight: 600; color: var(--er-band-text, #F4F2EC) }
+.fk-caption { margin: 12px 0 0; color: var(--er-muted, #595D65);
+  font: 400 15px/1.55 var(--er-font-serif, Georgia, 'Times New Roman', serif) }
